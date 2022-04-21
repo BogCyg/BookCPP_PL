@@ -96,31 +96,31 @@ int main( void )
 		switch( my_chapter )
 		{
 			// ----------------------------------------
-			// Run examples of chapter 1 "Introduction"
+			// Uruchom przykłady z Rozdziału 1 "Wstęp"
 			case EBCppBookChapters::k_1_Intro:
 			{
 
-				// Display a message in the terminal window 
-				// Prefix std:: tells to use objects from the standard library (SL). 
-				std::cout << "Good day to you!" << std::endl;  
+				// Wyświetl komunikat w oknie terminala.
+				// Prefiks std:: mówi, by korzystać z obiektów z biblioteki standardowej (SL).
+				std::cout << "Miłego dnia!" << std::endl;  
 
 			}
 			break;
 
 			// -------------------------------------------------------
-			// Run examples of chapter 2 "Introduction to Programming"
+			// Uruchom przykłady z rodziału 2 "Wprowadzenie do programowania"
 			case EBCppBookChapters::k_2_IntroToProgramming:
 			{
 				{
-					double x { 0.0 };			// Define and initialize a variable x 
+					double x { 0.0 };			// Zdefiniuj i zainicjuj zmienną x
 					        
-					std::cout << "Enter x=";	// Print a message 
-					std::cin >> x;				// Enter value of x from the keyboard 
+					std::cout << "Wprowadź x=";	// Wyświetl komunikat
+					std::cin >> x;				// Wprowadź z klawiatury wartość zmiennej x
 					
-					if( x >= 0.0 )				// Check if x is positive 
-						std::cout << "\nSqrt(" << x << ") = " << std::sqrt( x ) << std::endl; 
+					if( x >= 0.0 )				// Sprawdź czy x jest dodatnie
+						std::cout << "\nPierwiastek kwadratowy z (" << x << ") = " << std::sqrt( x ) << std::endl; 
 					else 
-						std::cout << "\nWrong value - cannot compute Sqrt\n"; 	
+						std::cout << "\nNieprawidłowa wartość - nie można obliczyć pierwiastka kwadratowego.\n"; 
 				}
 
 				letter_histogram();
