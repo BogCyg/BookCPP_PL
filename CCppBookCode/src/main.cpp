@@ -108,19 +108,19 @@ int main( void )
 			break;
 
 			// -------------------------------------------------------
-			// Uruchom przykłady z rodziału 2 "Wprowadzenie do programowania"
+			// Uruchom przykłady z rozdziału 2 "Wprowadzenie do programowania"
 			case EBCppBookChapters::k_2_IntroToProgramming:
 			{
 				{
 					double x { 0.0 };			// Zdefiniuj i zainicjuj zmienną x
 					        
 					std::cout << "Wprowadź x=";	// Wyświetl komunikat
-					std::cin >> x;				// Wprowadź z klawiatury wartość zmiennej x
+					std::cin >> x;				// Wprowadź z klawiatury wartość x
 					
-					if( x >= 0.0 )				// Sprawdź czy x jest dodatnie
+					if( x >= 0.0 )				// Sprawdź czy x jest nieujemne
 						std::cout << "\nPierwiastek kwadratowy z (" << x << ") = " << std::sqrt( x ) << std::endl; 
 					else 
-						std::cout << "\nNieprawidłowa wartość - nie można obliczyć pierwiastka kwadratowego.\n"; 
+						std::cout << "\nNieprawidłowa wartość - nie można obliczyć pierwiastka kwadratowego\n"; 
 				}
 
 				letter_histogram();
