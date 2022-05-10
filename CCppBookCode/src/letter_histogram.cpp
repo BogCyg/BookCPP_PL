@@ -23,7 +23,7 @@
 
 
 
-// Listing them here allows omitting std::
+// Wylistowanie ich w tym miejscu pozwala pominąć std::
 using std::cout, std::cin, std::endl;
 using std::string, std::vector;
 
@@ -33,8 +33,8 @@ using std::string, std::vector;
 
 void  letter_histogram( void )
 {
-	// Make slot for each letter, from 'a' to 'z'
-	// Initial count set to 0 for each.
+	// Utwórz slot dla każdej litery, od ’a’ to ’z’. 
+	// Początkowo dla każdej z nich ustaw licznik na 0. 
 	std::vector histogram( 'z' - 'a' + 1, 0 );
 
 	std::string in_str;
@@ -49,12 +49,12 @@ void  letter_histogram( void )
 	cout << endl;  
 
 	for( auto k { 'a' }; k <= 'z'; ++ k )
-		cout << k << " ";		// Print all characters �a� to �z�
+		cout << k << " ";		// Wypisz wszystkie znaki od ’a’ do ’z’
 
 	cout << endl;  
 
 	for( auto h : histogram )
-		cout << h << " ";		// Print histogram values
+		cout << h << " ";		// Wypisz wartości histogramu
 
 	cout << endl;  
 }
