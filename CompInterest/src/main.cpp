@@ -25,46 +25,46 @@ int main()
 {
 
 	// ----------------------------------------------------
-	cout << "Wprowadź początkową kwotę jaką chcesz zainwestować: " << endl;
+	cout << "Enter the initial amount to invest: " << endl;
 	double C_0 {};
 	cin >> C_0;
 
 
 	if( C_0 <= 0.0 )
 	{
-		cout << "Nieprawidłowa wartość, kończę działanie..." << endl;
+		cout << "Wrong value, exiting..." << endl;
 		return -1;
 	}
 
 	// -------------------------------------------
-	cout << "Wprowadź roczne oprocentowanie [% na 12 miesięcy]: " << endl;
+	cout << "Enter the annual rate [% per 12 months]: " << endl;
 	double r {};
 	cin >> r;
 	if( r <= 0.0 || r >= 100.0 )
 	{
-		cout << "Nieprawidłowa wartość, kończę działanie..." << endl;
+		cout << "Wrong value, exiting..." << endl;
 		return -1;
 	}
 
 	// -------------------------------------------
-	cout << "Okres kapitalizacji to wyrażony w miesiącach czas pomiędzy naliczeniami odsetek" << endl;
-	cout << "(np. jeśli naliczenie ma miejsce 2 razy do roku, wprowadź 6)" << endl;
-	cout << "Jeśli nie wiesz, wprowadź 12 dla rocznego okresu kapitalizacji." << endl;
-	cout << "Wprowadź okres kapitalizacji [w miesiącach, od 1 do 72]: " << endl;
+	cout << "Compound frequency is a period in months between computing interest" << endl;
+	cout << "(e.g. if 2 times a year, enter 6)" << endl;
+	cout << "If you don't know, enter 12 for a yearly compound frequency." << endl;
+	cout << "Enter the compound frequency [months 1-72]: " << endl;
 	double t {};
 	cin >> t;
 	if( t <= 0.0 || t > 72.0 )
 	{
-		cout << "Nieprawidłowa wartość, kończę działanie..." << endl;
+		cout << "Wrong value, exiting..." << endl;
 		return -1;
 	}
 	// ---------------------------------------------------
-	cout << "Wprowadź czas inwestycji [w miesiącach, od 1 do 100]: " << endl;
+	cout << "Enter the investment time [months 1-100]: " << endl;
 	double m {};
 	cin >> m;
 	if( m <= 0.0 || m >= 100 )
 	{
-		cout << "Nieprawidłowa wartość, kończę działanie..." << endl;
+		cout << "Wrong value, exiting..." << endl;
 		return -1;
 	}
 
@@ -78,14 +78,14 @@ int main()
 
 	double C_i = C_0 * std::pow( ( 1.0 + ( r / kPercentageDiv ) / kMontsPerYear * t ), i );
 
-	cout << "Twoje saldo przed opodatkowaniem po " << m;
-	cout << " miesiącach inwestycji wynosi: " << C_i << endl;
+	cout << "Your balance before tax, after " << m;
+	cout << " months of investment is: " << C_i << endl;
 
 	// Oblicz dochód netto
 	double income = C_i - C_0;
-	cout << "Twój dochód wynosi " << income << endl;
+	cout << "Your income is " << income << endl;
 	const double kIncomeTax = 19.0;		// 19%
-	cout << "Po potrąceniu " << kIncomeTax << "% podatku dochód wynosi: ";
+	cout << "After " << kIncomeTax << "% tax deduction you get: ";
 	cout << ( 1.0 - kIncomeTax / kPercentageDiv ) * income << endl;
 
 	return 0;
