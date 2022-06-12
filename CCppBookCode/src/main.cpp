@@ -102,7 +102,7 @@ int main( void )
 
 				// Wyświetl komunikat w oknie terminala.
 				// Prefiks std:: mówi, by korzystać z obiektów z biblioteki standardowej (SL).
-				std::cout << "Miłego dnia!" << std::endl;  
+				std::cout << "Good day to you!" << std::endl; 
 
 			}
 			break;
@@ -114,13 +114,13 @@ int main( void )
 				{
 					double x { 0.0 };			// Zdefiniuj i zainicjuj zmienną x
 					        
-					std::cout << "Wprowadź x=";	// Wyświetl komunikat
+					std::cout << "Enter x=";		// Wyświetl komunikat
 					std::cin >> x;				// Wprowadź z klawiatury wartość x
 					
 					if( x >= 0.0 )				// Sprawdź czy x jest nieujemne
-						std::cout << "\nPierwiastek kwadratowy z (" << x << ") = " << std::sqrt( x ) << std::endl; 
+						std::cout << "\nSqrt(" << x << ") = " << std::sqrt( x ) << std::endl; 
 					else 
-						std::cout << "\nNieprawidłowa wartość - nie można obliczyć pierwiastka kwadratowego\n"; 
+						std::cout << "\nWrong value - cannot compute Sqrt\n"; 	
 				}
 
 				letter_histogram();
