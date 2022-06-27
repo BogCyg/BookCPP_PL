@@ -19,7 +19,7 @@
 #include <cassert>
 #include <cstring>	// for memset
 #include <string>
-#include <limits>	// for basic types' limits
+#include <limits>	// dla limitów typów prostych
 
 #include <cmath>	// for math function
 
@@ -101,20 +101,20 @@ using std::wcout, std::endl, std::wstring, std::vector, std::make_unique;
 
 void MoreOnBasicTypes( void )
 {
-	// Print basic facts about char
+	// Wypisz podstawowe fakty na temat typu char
 	cout << "bytes of char = " << sizeof( char ) << endl; 
 	cout << "char lowest = " << +numeric_limits< char >::lowest() << endl; 
 	cout << "char min = " << +numeric_limits< char >::min() << endl; 
 	cout << "char max = " << +numeric_limits< char >::max() << endl; 
 
 
-	// Print basic facts about int
+	// Wypisz podstawowe fakty na temat typu int
 	cout << "bytes of int = " << sizeof( int ) << endl; 
 	cout << "int lowest = " << numeric_limits< int >::lowest() << endl; 
 	cout << "int min = " << numeric_limits< int >::min() << endl; 
 	cout << "int max = " << numeric_limits< int >::max() << endl; 
 
-	// Check whether long is long enough to store 11 digits values
+	// Sprawdź czy long jest wystarczająco długi do przechowywania 11-cyfrowych wartości
 	const int bits_in_byte = 8;
 	bool longFitFlag = ( std::log( 99999999999.0 ) / std::log( 2.0 ) + 1 ) 
 						< sizeof( long ) * bits_in_byte - 1;
@@ -127,12 +127,12 @@ void MoreOnBasicTypes( void )
 	auto old_console_mode =	_setmode( _fileno(stdout), _O_U16TEXT );
 #endif
 
-	wchar_t pl_letter = L'�';
+	wchar_t pl_letter = L'¥';
 	wcout << pl_letter << L" needs " << sizeof( pl_letter ) << L" bytes." << endl;
 	
-	wstring holiday_pl( L"�wi�to" );
+	wstring holiday_pl( L"œwiêto" );
 
-	// We cannot use sizeof here - we need to call size()
+	// Nie możemy tu użyć sizeof - musimy wywołać size()
 	size_t holiday_pl_len = holiday_pl.size();
 
 	wcout << holiday_pl << L" has " << holiday_pl_len << L" characters\n";
