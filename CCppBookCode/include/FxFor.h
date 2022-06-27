@@ -26,11 +26,11 @@
 
 
 ///////////////////////////////////////////////////////////
-// Class for fixed-point data types. 
-// No saturation, no overflow control
-// SupportType - defines an UNSIGNED integer type for the whole number
-// Prec - defines a number of fractional bits
-// ACC_TYPE - Accumulator type (for intermediate results)
+// Klasa do reprezentacji liczb stałoprzecinkowych. 
+// Brak saturacji, brak kontroli przepełnienia.
+// SupportType ‐ definiuje typ całkowity BEZ ZNAKU dla całej liczby
+// Prec ‐ definiuje liczbę bitów ułamkowych
+// ACC_TYPE - Typ akumulatora (dla wyników pośrednich)
 ///////////////////////////////////////////////////////////
 template< typename ST, int Prec, typename ACC_TYPE = unsigned long long >
 //template< typename ST, typename ST Prec, typename ACC_TYPE = unsigned long long >
@@ -38,16 +38,16 @@ class FxFor
 {
 private:
 
-	// Stores the whole number
+	// Przechowuje całą liczbę
 	ST	fValue {};
 
 public:
 
-	// Returns an internal representation in Sign/Magnitude format
+	// Zwraca wewnętrzną reprezentację w formacie ZM (znak/moduł)
 	constexpr ST GetInternalValue( void ) const 
 		{ return fValue; }		
 
-	// Returns an internal representation in the two's complement (C2) format
+	// Zwraca wewnętrzną reprezentacją w formacie U2
 	constexpr ST GetInternalValue_in_C2( void ) const 
 		{ return IsPositive() ? fValue : ( ~fValue | kSignMask ) + 1; }
 
@@ -57,44 +57,44 @@ public:
 
 public:
 	
-	// Local const for precision
+	// Lokalna stała dla precyzji
 	enum : ST	{ kPrec = Prec };
 
 private:
 
-	// Let's define some useful flags
+	// Zdefiniujmy pewne przydatne flagi
 	enum : ST	{	
-				kSignMask	= ST(1) << ( 8 * sizeof( ST ) - 1 ),		// sign bit (integer MSB)
-				kIntegerLSB = ST(1) << kPrec,							// LSB of the integer part
-				kFractMSB	= kPrec > 0 ? ST(1) << kPrec - ST(1) : 0	// MSB of the fract part
+				kSignMask	= ST(1) << ( 8 * sizeof( ST ) - 1 ),		// bit znaku (całkowity najbardziej znaczący bit)
+				kIntegerLSB = ST(1) << kPrec,							// najmniej znaczący bit części całkowitej
+				kFractMSB	= kPrec > 0 ? ST(1) << kPrec - ST(1) : 0	// najbardziej znaczący bit części ułamkowej
 			};
 
 
-	// A shortcut to this type
+	// Skrót do tego typu
 	using FxType = FxFor< ST, Prec, ACC_TYPE >;
 
 public:
 
-	// Some raw data manipulators
-	constexpr ST DataValueAbs( void ) const { return fValue & ~kSignMask; }	// Return the absolute value (always positive)
+	// Pewne manipulatory danych surowych
+	constexpr ST DataValueAbs( void ) const { return fValue & ~kSignMask; }	// Zwróć wartość bezwzględną (zawsze dodatnia)
 																		 
 	constexpr ST GetMagnitudeOfIntegerPart( void ) const 
 		{ return DataValueAbs() >> kPrec; }
 
-	constexpr ST GetFractionalPart( void ) const { return fValue & ( kIntegerLSB - 1 ); }
-
+	constexpr ST GetFractionalPart( void ) const { return fValue & ( kIntegerLSB - 1 ); } 
+								    // ( kIntegerLSB ‐ 1 ) ustawia wszystkie bity części ułamkowej
 public:
 
 	// ===================================================
-	// Class default constructor
+	// Domyślny konstruktor klasy
 	constexpr FxFor( void ) : fValue( 0 ) 					
 	{
 		static_assert( sizeof( ST ) * 8 > kPrec );
-		//static_assert( fValue >= 0 );		will not compile since fValue is not known during compilation
+		//static_assert( fValue >= 0 );		nie skompiluje się, bo fValue nie jest znana
 		assert( sizeof( ST ) * 8 > kPrec );
 	}
 
-	// Type converting constructors
+	// Konstruktory konwersji typu
 	constexpr FxFor( int x )
 	{
 		assert( sizeof( ST ) * 8 > kPrec );
@@ -120,18 +120,18 @@ public:
 	}
 
 
-	constexpr FxFor( double x );							// class constructor
+	constexpr FxFor( double x );							// konstruktor klasy
 
 
 	template< typename D, int P, typename A >
-	constexpr FxFor( const FxFor< D, P, A > & f )			// mixed copy constructor
+	constexpr FxFor( const FxFor< D, P, A > & f )			// mieszany konstruktor kopiujący
 	{
-		// At first copy the integer part not to loose the MSB
+		// Najpierw skopiuj część całkowitą, aby nie stracić najbardziej znaczącego bitu
 		fValue = f.GetMagnitudeOfIntegerPart() << kPrec;
-		// Then copy the most significant part of the fractional part
+		// Następnie skopiuj najbardziej znaczącą część części ułamkowej
 		fValue |= f.kPrec > kPrec ? f.GetFractionalPart() >> f.kPrec - kPrec 
 									: f.GetFractionalPart() << kPrec - f.kPrec;
-		// Finally set the sign
+		// Na koniec ustaw znak
 		if( f.IsNegative() )
 			MakeNegative();
 	}
@@ -139,17 +139,17 @@ public:
 	// ===================================================
 
 	template< class D, int P, typename A >
-	constexpr FxType & operator = ( const FxFor< D, P, A > & f )	// mixed assignement
+	constexpr FxType & operator = ( const FxFor< D, P, A > & f )	// mieszane przypisanie
 	{
-		// For different types, it can cause loss of data
-		if( (void*)& f != (void*)this )		// self-assignment protection
+		// Dla różnych typów może powodować utratę danych
+		if( (void*)& f != (void*)this )		// ochrona przed samoprzypisaniem
 		{
-			// At first copy the integer part not to loose the MSB
+			// Najpierw skopiuj część całkowitą, aby nie stracić najbardziej znaczącego bitu
 			fValue = f.GetMagnitudeOfIntegerPart() << kPrec;
-			// Then copy the most significant part of the fractional part
+			// Następnie skopiuj najbardziej znaczący fragment części ułamkowej
 			fValue |= f.kPrec > kPrec ? f.GetFractionalPart() >> f.kPrec - kPrec 
 										: f.GetFractionalPart() << kPrec - f.kPrec;
-			// Finally, set the sign
+			// Na koniec ustaw znak
 			if( f.IsNegative() )
 				MakeNegative();
 		}
@@ -159,7 +159,7 @@ public:
 
 
 
-	// Conversion operators:
+	// Operatory konwersji:
 
 	constexpr operator char()			const;
 	constexpr operator short()			const;
@@ -169,28 +169,28 @@ public:
 	constexpr operator double()			const;
 
 	// ===================================================
-	// Helpers:
+	// Funkcje pomocnicze:
 
 	constexpr bool IsNegative( void ) const 
 		{ return ( fValue & kSignMask ) == 0 ? false : true; }
 	constexpr bool IsPositive( void ) const 
-		{ return ( fValue & kSignMask ) != 0 ? false : true; }		// 0 is also positive
+		{ return ( fValue & kSignMask ) != 0 ? false : true; }		// 0 również jest dodatnie
 	 
-	constexpr void ChangeSign( void ) { fValue ^= kSignMask; }		// Simple XOR will do this nicely
+	constexpr void ChangeSign( void ) { fValue ^= kSignMask; }		
 
 	constexpr void MakeNegative( void ) 
-		{ assert( fValue != 0 ); fValue |= kSignMask; }				// Turn the sign bit ON
+		{ assert( fValue != 0 ); fValue |= kSignMask; }				// Włącz bit znaku
 
-	constexpr void MakePositive( void ) { fValue &= ~kSignMask; }	// Turn the sign bit OFF
+	constexpr void MakePositive( void ) { fValue &= ~kSignMask; }	// Wyłącz znak
 
-	constexpr void MakeAbs( void ) { MakePositive(); }				// Get rid of the sign, i.e. make it positive
+	constexpr void MakeAbs( void ) { MakePositive(); }				// Pozbądź się znaku
 
 	constexpr FxType GetAbs( void ) const 
-		{ FxType tmp( * this ); tmp.MakeAbs(); return tmp; }		// Return the absolute value
+		{ FxType tmp( * this ); tmp.MakeAbs(); return tmp; }		// Zwróć wartość bezwzględną
 
 
 	// ===================================================
-	// Basic library of operations:
+	// Podstawowa biblioteka działań:
 
 	constexpr FxType operator + ( FxType f ) const;
 	constexpr FxType operator - ( FxType f ) const;
@@ -218,11 +218,11 @@ public:
 
 	// ===================================================
 
-	constexpr FxType operator ++ ( int );	// postfix
-	constexpr FxType & operator ++ ();		// prefix
+	constexpr FxType operator ++ ( int );	// przyrostkowa
+	constexpr FxType & operator ++ ();		// przedrostkowa
 	 
-	constexpr FxType operator -- ( int );	// postfix
-	constexpr FxType & operator -- ();		// prefix
+	constexpr FxType operator -- ( int );	// przyrostkowa
+	constexpr FxType & operator -- ();		// przedrostkowa
 	 
 	// ===================================================
 	 
@@ -233,7 +233,7 @@ public:
 	constexpr FxType & operator >>= ( int shift );
 
 	// ===================================================
-	// Comparators:
+	// Operatory porównywania:
 
 	constexpr bool operator ==	( FxType f ) const;
 	constexpr bool operator !=	( FxType f ) const;
@@ -255,7 +255,7 @@ public:
 
 
 // ===================================================
-// The type converting constructor: float to fixed
+// Konstruktor konwersji typu: zmiennoprzecinkowy na stałoprzecinkowy
 //template< typename ST, int Prec, typename ACC_TYPE >
 template< typename ST, int Prec, typename ACC_TYPE >
 constexpr FxFor< ST, Prec, ACC_TYPE >::FxFor( double x ) : fValue( 0 )
@@ -263,42 +263,42 @@ constexpr FxFor< ST, Prec, ACC_TYPE >::FxFor( double x ) : fValue( 0 )
 	bool minus_sign { false };
 	if( x < 0.0 )
 	{
-		minus_sign = true;		// remember the sign,
-		x = -x;					// then take the absolute value
+		minus_sign = true;		// pamiętaj znak,
+		x = -x;					// astępnie weź wartość bezwzględną
 	}
 
 
-	ST int_part = static_cast< ST >( x );	// here we use the standard conversion from the double
-											// which cuts off the fraction
+	ST int_part = static_cast< ST >( x );	// tutaj używamy konwersji standardowej
+						// z double, która przycina ułamek
 
 	fValue = int_part;
-	fValue <<= kPrec;		// put integer part into its place
+	fValue <<= kPrec;		// umieść część całkowitą na swoim miejscu
 
 	double fract_part = x - int_part;
 
 	double scaled_fraction = fract_part * static_cast< double >( kIntegerLSB );
 	ST fraction = static_cast< ST >( scaled_fraction );
 
-	fValue |= fraction;			// join the two together
+	fValue |= fraction;			// połącz dwie wartości
 
 	if( minus_sign == true && fValue != 0 )		
-		MakeNegative();			// finally consider the sign
+		MakeNegative();			// na koniec weź pod uwagę znak
 
 }			
 
 
 
 
-// We repeat the same code as for the "double" conversion to
-// avoid implicit conversion from "float" to "double" if a additional 
-// function were used.
+// Powtarzamy ten sam kod, co dla konwersji "double", w celu uniknięcia
+// niejawnej konwersji z "float" na "double", gdy używane są 
+// dodatkowe funkcje.
 template< typename ST, int Prec, typename ACC_TYPE >
 constexpr FxFor< ST, Prec, ACC_TYPE >::operator double() const
 { 
-	// Start from the fraction
+	// Zacznij od ułamka
 	double retVal = static_cast< double >( GetFractionalPart() ) / static_cast< double >( kIntegerLSB );
 
-	retVal += GetMagnitudeOfIntegerPart();	// now add the integer part
+	retVal += GetMagnitudeOfIntegerPart();	// teraz dodaj część całkowitą
 	return IsNegative() ? - retVal : retVal;
 }
 
@@ -357,7 +357,7 @@ constexpr FxFor< ST, Prec, ACC_TYPE >::operator long() const
 
 // ===================================================
 
-// prefix
+// przedrostkowa
 template< typename ST, int Prec, typename ACC_TYPE >
 typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator ++ ()
 {
@@ -371,18 +371,18 @@ typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TY
 	return * this;
 }
 
-// postfix
+// przyrostkowa
 template< typename ST, int Prec, typename ACC_TYPE >
 typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator ++ ( int )
 {
-	FxType tmp( * this );	// this unfortunately requires a temporary copy
+	FxType tmp( * this );	// to niestety wymaga tymczasowej kopii
 	* this += 1;
 	return tmp;
 }
 template< typename ST, int Prec, typename ACC_TYPE >
 typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator -- ( int )
 {
-	FxType tmp( * this );	// this unfortunately requires a temporary copy
+	FxType tmp( * this );	// to niestety wymaga tymczasowej kopii
 	* this -= 1;
 	return tmp;
 }
@@ -463,7 +463,7 @@ typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE
 template< typename ST, int Prec, typename ACC_TYPE >
 typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator += ( FxType f )
 {
-	// We perform the sign-magnitude arithmetic
+	// Wykonujemy arytmetykę znak-moduł
 	bool first_is_negative	= IsNegative();
 	bool second_is_negative = f.IsNegative();
 
@@ -471,34 +471,34 @@ typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TY
 	{
 		if( second_is_negative )
 		{
-			// Both are negative
+			// Obie są ujemne
 
-			MakeAbs();				// Take the absolute value of the first operand
-			f.MakeAbs();			// Take the absolute value of the second operand
-
-
-			fValue += f.fValue;		// Add the bare magnitudes;
+			MakeAbs();				// Weź wartość bezwzględną pierwszego operandu
+			f.MakeAbs();			// Weź wartość bezwzględną drugiego operandu
 
 
-			MakeNegative();			// And negate the result
+			fValue += f.fValue;		// Dodaj same moduły;
+
+
+			MakeNegative();			// Odwróć znak wyniku
 		}
 		else
 		{
-			// The first is negative, the second is positive
+			// Pierwsza jest ujemna, druga jest dodatnia
 
-			MakeAbs();	// simply operate on magnitue (disregarding the sign bit)
+			MakeAbs();	// po prostu wykonuj na module (nie zwracając uwagi na bit znaku)
 
-			// Here we compare only the magnitudes; The second is positive, so there is no need to get its abs
-			if( fValue <= f.fValue )		// "soft" to make 0 positive		
+			// Tutaj porównujemy tylko moduły; Pierwsza jest dodatnia, więc nie trzeba pobierać wartość bezwzględnej
+			if( fValue <= f.fValue )		// słaba nierówność, aby 0 było dodatnie		
 			{
-				fValue = f.fValue - fValue;	// and we do NOT change the sign
+				fValue = f.fValue - fValue;	// i NIE zmieniamy znaku
 			}
 			else
 			{
 				fValue -= f.fValue;
 				assert( IsPositive() );
 				if( fValue != 0 )
-					MakeNegative();					// and negate the result
+					MakeNegative();					// odwracamy znak wyniku
 			}
 		}
 	}
@@ -506,27 +506,27 @@ typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TY
 	{
 		if( second_is_negative )
 		{
-			// The first is positive, the second is negative
+			// Pierwsza jest dodatnia, druga jest ujemna
 
-			f.MakeAbs();	// simply operate on magnitue (disregarding the sign bit)
+			f.MakeAbs();	// po prostu wykonuj na module (nie zwracając uwagi na bit znaku)
 
-			// Here we compare only the magnitudes; 
-			// The first is positive, so there is no need to get its abs
-			if( fValue >= f.fValue )	// "soft" to make 0 positive		
+			// Tutaj porównujemy tylko moduły;
+			// Pierwsza jest dodatnia, więc nie trzeba pobierać wartość bezwzględnej
+			if( fValue >= f.fValue )	// słaba nierówność, aby 0 było dodatnie	
 			{
-				fValue -= f.fValue;		// and we do NOT change the sign
+				fValue -= f.fValue;		// i NIE zmieniamy znaku
 			}
 			else
 			{
 				fValue = f.fValue - fValue;
 				assert( IsPositive() );
 				if( fValue != 0 )
-					MakeNegative();			// and negate the result
+					MakeNegative();			// i odwracamy znak wyniku
 			}
 		}
 		else
 		{
-			// Both are positive
+			// Obie są dodatnie
 
 			fValue += f.fValue;
 		}
@@ -546,28 +546,28 @@ typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TY
 template< typename ST, int Prec, typename ACC_TYPE >
 typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator *= ( FxType f )
 {
-	// We perform the sign-magnitude arithmetic
+	// Wykonujemy arytmetykę znak-moduł
 	bool first_is_negative	= IsNegative();
 	bool second_is_negative = f.IsNegative();
 
-	// First we need an accumulator that is long enough to store the result.
+	// Potrzebny nam jest wystarczająco długi akumulator do przechowania rezultatu.
 	ACC_TYPE theAccumulator = DataValueAbs();		
-	// we load here a value which is then shifted, e.g. if we
-	// load a fixed 1.0 then this value in acc is NOT a unit 
-	// but the value shifted to the left by kPrec
+	// Wczytujemy tu wartość bezwzględną, która zostaje przesunięta, np. jeśli 
+	// wczytamy stałoprzecinkową 1.0, wartość ta w akumulatorze NIE jest jednostką,
+	// lecz wartością przesuniętą w lewo o kPrec
 	assert( sizeof( theAccumulator ) >= 2 * sizeof( ST ) );
 
-	theAccumulator *= f.DataValueAbs();		// multiply the POSITIVE magnitudes 
+	theAccumulator *= f.DataValueAbs();		// pomnóż DODATNIE moduły 
 	
-	// Now we need to shift the result right by the Prec 
-	// to cut off the least-significant kPrec bits (will be lost!).
-	// What is left fits well into the fixed format: int.frac
+	// Teraz musimy przesunąć wynik w prawo o kPrec,
+	// aby uciąć kPrec najmniej znaczących bitów (zostaną utracone!).
+	// Pozostałość dobrze pasuje do formatu stałoprzecinkowego: int.frac
 	theAccumulator >>= kPrec;
 
-	// Copy the shifted accumulator to the return object
+	// Skopiuj przesunięty akumulator do obiektu zwracanego
 	fValue = static_cast< ST >( theAccumulator );
 
-	// Finally, set the sign of the result
+	// Na koniec ustaw znak wyniku
 	if( ( first_is_negative ^ second_is_negative ) && fValue != 0 )
 		MakeNegative();
 
@@ -742,26 +742,26 @@ auto & operator >> ( const std::istream & i, FxFor< D, P, A > & f )
 ///////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////
-// This function returns the difference in representations
-// between double and FxFor<> 
+// Ta funkcja zwraca różnicę w reprezentacjach
+// między double i FxFor<>
 ///////////////////////////////////////////////////////////
 //		
-// INPUT:
-//			d - an input double value
-//			f - FxFor<> to be checked
+// WEJŚCIE:
+//			d - wartość wejściowa double
+//			f - FxFor<> do sprawdzenia
 //		
-// OUTPUT:
-//			difference (as a double value) between pure double
-//			and fixed representation of this number
+// WYJŚCIE:
+//			różnica (jako wartość double) między double
+//			i reprezentacją stałoprzecinkową tej liczby
 //		
-// REMARKS:
+// UWAGI:
 //		
 //		
 template< typename D, int P, typename A >
 constexpr auto ComputeRoundingError( const double d, const FxFor< D, P, A > f )
 {
 	auto diff( d - static_cast< double >( f ) );
-	return diff < 0.0 ? - diff: diff;		// std::fabs failed to be constexpr friendly
+	return diff < 0.0 ? - diff: diff;		// std::fabs nie jest przyjazna constexpr
 }
 
 template< typename D, int P, typename A >
@@ -775,16 +775,16 @@ constexpr auto ComputeRoundingError( const FxFor< D, P, A > f, const double d )
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 
-// Here we define the specific data types. Be careful, however,
-// to check the size of built-in types on your machine!
+// Definiujemy tu konkretne typy danych. Postępuj ostrożnie
+// i sprawdź rozmiary typów wbudowanych na swoim komputerze!
 
 using FX_8_8	= FxFor< unsigned short, 8  >;
 using FX_16_16	= FxFor< unsigned int,	16 >;
 using FX_24_8	= FxFor< unsigned int,	8 >;
 using FX_8_24	= FxFor< unsigned int,	24 >;
 
-// The following types are for normalized numbers
-// for which their magnitude is less than 1.0.
+// Poniższe typy są znormalizowanymi liczbami,
+// dla których ich moduł jest mniejszy niż 1.0.
 using FX_PURE_FRACT_15 = FxFor< unsigned short,	15 >;
 using FX_PURE_FRACT_31 = FxFor< unsigned int,	31 >;
 
