@@ -22,7 +22,7 @@ namespace CppBook
 
 #include <vector>
 #include <cassert>
-#include <stdexcept>	// for std::out_of_range
+#include <stdexcept>	// dla std::out_of_range
 
 
 
@@ -51,16 +51,16 @@ class range
      public:
 
 		///////////////////////////////////////////////////////////
-		// Class constructor 
+		// Konstruktor
 		///////////////////////////////////////////////////////////
 		//
-		// INPUT:
-		//		from - Starting number of the sequence.
-		//		end - Generate numbers up to, but not including this number.
-		//		step - Difference between each number in the sequence (must not be 0).
+		// WEJŚCIE:
+		//		from - Liczba rozpoczynająca ciąg.
+		//		end - eneruj liczby do, ale z pominięciem tej liczby.
+		//		step - Różnica między każdą kolejną liczbą w ciągu (nie może być 0).
 		//
-		// REMARKS:
-		//		If step is 0 then the std::out_of_range is thrown
+		// UWAGI:
+		//		Jeśli step = 0, zgłaszany jest wyjątek std::out_of_range
 		//
 		range( const T from, const T end, const T step = 1 ) 
 			: kFrom( from ), kEnd( end ), kStep( step ) 
@@ -70,7 +70,7 @@ class range
 				throw std::out_of_range( "step param must not be 0" );
 		}
 
-		// Default from==0, step==1
+		// Domyślnie from==0, step==1
 		range( const T end ) 
 			: kFrom( 0 ), kEnd( end ), kStep( 1 ) 
 		{
@@ -98,10 +98,10 @@ class range
 
 			bool operator != ( const range_iter & ri ) const
 			{	
-				// This is a tricky part - when working with iterators
-				// it checks only once for != which must be a hit to stop;
-				// However, simple != does not work if increasing 
-				//	kStart by N times kSteps skips over kEnd. Therefore this condition:
+				// To jest podchwytliwa część – podczas pracy z iteratorami
+				// tylko raz sprawdza !=, więc musi to być traf w celu zatrzymania;
+				// Proste != nie zadziała, gdy podczas zwiększania kStart N razy o kSteps
+				// przekroczy wartość kEnd. Stąd też poniższy warunek:
 				return kStep > 0 ? fVal < ri.fVal : fVal > ri.fVal;	
 			}      											
 		};													
@@ -113,7 +113,7 @@ class range
 
     public:
 
-		// Conversion to any vector< T >
+		// Konwersja do dowolnego vector< T >
 		operator std::vector< T > ( void ) 
 		{
 			//std::vector< T > retRange;
@@ -122,7 +122,7 @@ class range
 			//else
 			//	for( T i { kFrom }; i > kEnd; i += kStep ) retRange.push_back( i );
 
-			//return retRange;	// use RVO here
+			//return retRange;	// użyj tutaj RVO
 
 
 			auto p = [this]( auto v ){ for( T i {kFrom}; i<kEnd; i+=kStep ) v.push_back(i); return v; };
