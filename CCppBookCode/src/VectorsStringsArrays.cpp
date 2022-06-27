@@ -255,14 +255,14 @@ void String_Test_2( void )
 
 void ConstSizeArrayTest_1( void )
 {
-	// Create a fixed-size array - its first two
-	// elements will get 1, 2,
-	// the rest will be set to 0.
+	// Utwórz tablicę o stałym rozmiarze – jej dwa pierwsz
+	// elementy otrzymają wartości 1, 2,
+	// teszta zostanie ustawiona na 0.
 	array< int, 10 > arr = { 1, 2 };
 
 	assert( sizeof( arr ) == arr.size() * sizeof( arr[ 0 ] ) );
 
-	// Traverse and print all elements of array
+	// Przejdź po wszystkich elementach tablicy i wypisz je
 	for( size_t i = 0; i < arr.size(); ++ i )
 		cout << arr[ i ] << " ";
 
@@ -275,7 +275,7 @@ void ConstSizeArrayTest_2( void )
 	array< unsigned int, kArrSize > theArray {};
 
 
-	// Put some random values 
+	// Wstaw jakieś losowe wartości 
 	generate( theArray.begin(), theArray.end(),  std::mt19937( std::random_device{}() ) );
 
 	sort( theArray.begin(), theArray.end() );
@@ -286,7 +286,7 @@ void ConstSizeArrayTest_2( void )
 	cout << endl;
 
 
-	// Make the same size as theArray
+	// Skopiuj i skonwertuj int na double
 	array< double, theArray.size() > theDbArray;
 
 	// Copy and convert int to double
@@ -341,35 +341,35 @@ void ConstSizeArrayTest_4( void )
 {
 
 
-	enum ArrayDims { kCols = 3, kRows = 2 };
+	enum ArrayDims { kCols = 3, kRows = 2 }; // Zdefiniuj dwie stałe
 
 	using ArrayElem = double;
 
-	// Declare a single array of kCols elems
+	// Zadeklaruj pojedynczą tablicę z kCols elementów
 	using _1D_Array = std::array< ArrayElem, ArrayDims::kCols >;
 
-	// Declare a matrix with kRows
+	// Zadeklaruj macierz z kRows elementami
 	using _2D_Array = std::array< _1D_Array, ArrayDims::kRows >;
 
 
-	_2D_Array	matrix { 0.0 };		// Create a matrix and init with zeros
+	_2D_Array	matrix { 0.0 };		// Utwórz macierz i zainicjalizuj ją zerami
 
-	double val { 0.0 };		// Initial value
+	double val { 0.0 };		// Wartość początkowa
 
-	// Initialize matrix with increasing values
+	// Zainicjalizuj macierz rosnącymi wartościami
 	for( auto & r : matrix )
 		for( auto & c : r )
-			c = val ++;		// Each element gets 1 higher value
+			c = val ++;		// Każdy element otrzymuje wartość o 1 większą
 
-	val = 0.0;				// Reset
+	val = 0.0;				// Zresetuj
 
-	// Make the same initialization with subscripts
+	// Dokonaj takiej samej inicjalizacji z użyciem indeksów dolnych
 	for( _2D_Array::size_type r = 0; r < matrix.size(); ++ r )
 		for( _2D_Array::size_type c = 0; c < matrix[ 0 ].size(); ++ c )
 			matrix[ r ][ c ] = val ++;
 
 
-	// Display the matrix
+	// Wyświetl macierz
 	for( const auto & r : matrix )
 	{
 		for( const auto & c : r )
