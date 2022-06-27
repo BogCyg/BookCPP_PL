@@ -175,7 +175,7 @@ namespace CppBook
 
 
 
-// Stack specialization to operate with std::unique_ptr
+// Specjalizacja stosu do operowania z użyciem std::unique_ptr
 template < typename T, auto MaxElems >
 class TStackFor< std::unique_ptr< T >, MaxElems >
 {
@@ -197,7 +197,7 @@ class TStackFor< std::unique_ptr< T >, MaxElems >
 
 	public:
 
-		// Here we need an additional typename
+		// Tutaj potrzebujemy dodatkowego słowa typename
 		using size_type = typename DataContainer::size_type;
 
 	public:
@@ -208,17 +208,17 @@ class TStackFor< std::unique_ptr< T >, MaxElems >
 
 
 		///////////////////////////////////////////////////////////
-		// This functions puts an element onto the stack
+		// Ta funkcja umieszcza elementy na stosie
 		///////////////////////////////////////////////////////////
 		//		
-		// INPUT:	new_elem - a reference to the element to
-		//				be put. Actually its copy is put onto
-		//				the stack.
+		// WEJŚCIE:	new_elem - inteligentny wskaźnik do obiektu, który
+		//				ma zostać przeniesiony 
+		//				na stos.
 		//		
-		// OUTPUT:	true - if operation successful,
-		//			false - failure, due to insufficient
-		//				space on the stack (e.g. too many 
-		//				elements)
+		// WYJŚCIE:	true – gdy operacja zakończy się sukcesem,
+		//			false – błąd, z powodu niewystarczającej
+		//				ilości miejsca na stosie (np. za dużo 
+		//				elementów)
 		//		
 		bool Push( value_type new_elem )
 		{
@@ -226,7 +226,7 @@ class TStackFor< std::unique_ptr< T >, MaxElems >
 				return false;
 
 			fData.emplace_back( std::move( new_elem ) );
-			// new_elem is empty now
+			// new_elem jest teraz pusty
 
 			return true;
 		}
@@ -234,24 +234,24 @@ class TStackFor< std::unique_ptr< T >, MaxElems >
 
 
 		///////////////////////////////////////////////////////////
-		// This functions takes and removes an element from the stack
+		// Ta funkcja pozyskuje i usuwa element ze stosu
 		///////////////////////////////////////////////////////////
 		//		
-		// INPUT:	new_elem - a reference to the object which
-		//				will be copied with a topmost element
-		//				from the stack. Then the topmost element
-		//				is removed from the stack.
+		// WEJŚCIE:	new_elem – referencja do obiektu, który
+		//				zostanie skopiowany za pomocą elementu na
+		//				szczycie stosu. Następnie element ten
+		//				zostaje usunięty ze stosu.
 		//		
-		// OUTPUT:	true - if operation successful,
-		//			false - failure, due to empty stack
+		// WYJŚCIE:	true – gdy operacja zakończy się sukcesem,
+		//			false – błąd, z powodu pustego stosu
 		//		
 		bool Pop( value_type & ret_elem )
 		{
 			if( GetStackSize() == 0 )
 				return false;
 
-			ret_elem.reset( fData.back().release() );	// re-connect pointers
-			fData.pop_back();		// get rid of the last (empty) element
+			ret_elem.reset( fData.back().release() );	// ponownie podłącz wskaźniki
+			fData.pop_back();		// pozbądź się ostatniego (pustego) elementu
 
 			return true;
 		}
