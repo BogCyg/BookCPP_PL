@@ -59,28 +59,28 @@ using RealMatrix = std::vector< RealVec >;
 
 
 
-// EMatrix is a wrapper to RealMatrix. 
-// A role of a wrapper is to facilitate some actions.
+// EMatrix jest opakowaniem dla obiektu RealMatrix. 
+// Rolą otoki jest dostarczenie pewnych akcji.
 struct EMatrix
 {
 
 
-	RealMatrix	fData;	// data structure
+	RealMatrix	fData;	// struktura danych
 
 
-	// A parametric constructor
-	// rows, cols – number of rows and columns of a matrix (should be > 0)
-	// initVal – an initial value of elements of a matrix
+	// Konstruktor parametryczny
+	// rows, cols – liczba wierszy i kolumn macierzy (powinny być > 0)
+	// initVal – wartość początkowa elementów macierzy
 	EMatrix( Dim rows, Dim cols, DataType initVal = 0.0 )
 		: fData( rows, RealVec( cols, initVal ) )
 	{	
-		// matrix == a vector of vectors of double
+		// macierz == wektor wektorów typu double
 		assert( cols > 0 );
 		assert( rows > 0 );
 	}
 
 
-	// Helpers
+	// Funkcje pomocnicze
 	auto	GetCols( void ) const { return fData[ 0 ].size(); }
 	auto	GetRows( void ) const { return fData.size(); }
 
