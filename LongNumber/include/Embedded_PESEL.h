@@ -20,12 +20,12 @@
 
 
 /////////////////////////////////////////////////////////////////////////////////
-// The "has-a" version
+// Wersja "ma"
 class PESEL
 {
 	private:
 
-		// Some constants specific to the Polish PESEL number
+		// Pewne stałe specyficzne dla polskiego numeru PESEL
 		enum { kBirthYear_Dec = 10, kBirthYear_Sngl = 9, kSex = 1 };
 
 	public:
