@@ -26,24 +26,24 @@ bool	XML_CurrencyExchanger::FillCurrencyTableFrom( const wstring & currencyFile 
 	wifstream	inFile( currencyFile );
 
 	if( ! inFile.is_open() )
-		return false;				// cannot open the input file
+		return false;				// nie można otworzyć pliku wejściowego
 
 
-	// Read line by line and look for patterns
+	// Czytaj linia po linii i szukaj wzorców
 
 
 	ESearchStates	state = ESearchStates::kIdle;
 
-	// Stores currently processed line of the XML 
+	// Przechowuje obecnie przetwarzaną linię XML
 	wstring line;
 
-	// Stores current match and sub-matches of the regex
+	// Przechowuje obecne dopasowanie i poddopasowania regex
 	wsmatch	match_res;
 
-	// These will gather partial matches of the currency record
+	// Tu zostaną zebrane częściowe dopasowania dla rekordu waluty
 	wstring curr_code, curr_name, buy_rate_str, sell_rate_str;
 
-	// Read params one-by-one
+	// Czytaj parametry jeden po drugim
 	while( getline( inFile, line ) )
 	{
 
@@ -53,14 +53,14 @@ bool	XML_CurrencyExchanger::FillCurrencyTableFrom( const wstring & currencyFile 
 
 				if( regex_search( line, match_res, f_curr_name_pat ) && match_res.size() > 1 )
 				{
-					// Ok, a currency code was found, let's store it
-					// require at least one subexpression
-					curr_name = match_res[ 1 ];		// take the first sub-match
+					// Ok, kod waluty znaleziony. Zachowajmy go
+					// wymagaj przynajmniej jednego podwyrażenia
+					curr_name = match_res[ 1 ];		// weź pierwsze poddopasowanie
 					
-					// For easier processing replace white characters
+					// Dla łatwiejszego przetwarzania, zamień znaki białe
 					replace( curr_name.begin(), curr_name.end(), L' ', L'-');
 
-					state = ESearchStates::k_Name_Processed;	// change the state 
+					state = ESearchStates::k_Name_Processed;	// zmień stan 
 				}				
 				
 				break;
@@ -69,49 +69,49 @@ bool	XML_CurrencyExchanger::FillCurrencyTableFrom( const wstring & currencyFile 
 
 				if( regex_search( line, match_res, f_curr_code_pat ) && match_res.size() > 1 )
 				{
-					// Ok, a currency code found, let's store it
-					// require at least one subexpression
-					curr_code = match_res[ 1 ];		// take the first sub-match
+					// Ok, kod waluty znaleziony. Zachowajmy go
+					// wymagaj przynajmniej jednego podwyrażenia
+					curr_code = match_res[ 1 ];		// weź pierwsze poddopasowanie
 
-					state = ESearchStates::k_Code_Processed;	// change the state 
+					state = ESearchStates::k_Code_Processed;	// zmień stan 
 				}				
 				
 				break;
 
 			case ESearchStates::k_Code_Processed:
 
-				// Try to match the buying option
+				// Spróbuj dopasować opcję kupna
 				if( regex_search( line, match_res, f_buy_rate_pat ) && match_res.size() > 2 )
 				{
-					// Ok, a currency code found, let's store it
-					// require at least one subexpression
-					buy_rate_str = wstring( match_res[ 1 ] ) + wstring( L"." ) + wstring( match_res[ 2 ] );		// assembly the sub-match'es
+					// Ok, kod waluty znaleziony. Zachowajmy go
+					// wymagaj przynajmniej jednego podwyrażenia
+					buy_rate_str = wstring( match_res[ 1 ] ) + wstring( L"." ) + wstring( match_res[ 2 ] );		// złącz poddopasowania
 
-					state = ESearchStates::k_BuyingRate_Processed;	// change the state 
+					state = ESearchStates::k_BuyingRate_Processed;	// zmień stan
 				}		
 
 				break;
 
 			case ESearchStates::k_BuyingRate_Processed:
 
-				// Try to match the selling option
+				// Spróbuj dopasować opcję sprzedaży
 				if( regex_search( line, match_res, f_sell_rate_pat ) && match_res.size() > 2 )
 				{
-					// Ok, a currency code found, let's store it
-					// require at least one subexpression
-					sell_rate_str = wstring( match_res[ 1 ] ) + wstring( L"." ) + wstring( match_res[ 2 ] );		// assembly the sub-match'es
+					// Ok, kod waluty znaleziony. Zachowajmy go
+					// wymagaj przynajmniej jednego podwyrażenia
+					sell_rate_str = wstring( match_res[ 1 ] ) + wstring( L"." ) + wstring( match_res[ 2 ] );	// złącz poddopasowania
 
-					state = ESearchStates::k_SellingRate_Processed;	// change the state 
+					state = ESearchStates::k_SellingRate_Processed;	// zmień stan
 				}	
 
 				break;
 
 			case ESearchStates::k_SellingRate_Processed:
 
-				// Ok, we are ready to insert the new currency record
+				// Jesteśmy gotowi do wstawienia nowego rekordu waluty
 				try
 				{	
-					// can throw an exception e.g. on empty string, wrong format, etc.
+					// oże zgłosić wyjątek, np. pusty ciąg znaków, zły format itd.
 					AddCurrency( { curr_code, curr_name, stod( buy_rate_str ), stod( sell_rate_str ) } );
 				}
 				catch( ... )
@@ -119,12 +119,12 @@ bool	XML_CurrencyExchanger::FillCurrencyTableFrom( const wstring & currencyFile 
 					;
 				}
 
-				state = ESearchStates::kIdle;		// enter the basic state
+				state = ESearchStates::kIdle;		// przejdź do podstawowego stanu
 
 				break;
 
 			default:
-				assert( false );	// shouldn't be here
+				assert( false );	// nie powinniśmy tu być
 				break;
 		}
 
