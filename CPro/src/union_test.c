@@ -26,27 +26,27 @@ void C_UnionTest( void )
 	{
 		long	fLongVal;
 		double	fDoubleVal;
-	} LF_Obj = { 0 }; /* Create LF_obj and init to 0 */
+	} LF_Obj = { 0 }; /* utwórz obiekt LF_obj i zainicjalizuj wartością 0 */
 
-	/* With a union we gain size */
+	/* Dzięki unii oszczędzamy na rozmiarze */
 	printf( "s_long = %d, s_float = %d, s_LFValue = %d\n", sizeof( long ), sizeof( double ), sizeof( union LFValue ) );
 
-	/* From LF_Obj we can use only one field at a time */
+	/* Możemy używać tylko jednego pola obiektu LF_Obj na raz */
 	LF_Obj.fLongVal = 120; /* now we use LF_Obj as long */
 
-	/* Print the bytes */
+	/* Wypisz bajty */
 	int i = 0;
 	printf( "\nBytes of LF_Obj.fLongVal = 120\n" );
 	for( i = 0; i < sizeof( union LFValue ); ++ i )
 		printf( "%x\t", * ( (unsigned char*)& LF_Obj + i ) );
 
-	LF_Obj.fDoubleVal = 120.0; /* Now we use LF_Obj as a float */
+	LF_Obj.fDoubleVal = 120.0; /* teraz używamy LF_Obj jako float */
 
 	printf( "\nBytes of LF_Obj.fDoubleVal = 120.0\n" );
 	for( i = 0; i < sizeof( union LFValue ); ++ i )
 		printf( "%x\t", * ( (unsigned char*)& LF_Obj + i ) );
 
-	/* However, type punning through a union is not recommended */
+	/* Konwertowanie typów poprzez użycie unii nie jest zalecane */
 	/*printf( "\nfLongVal = %ld, fDoubleVal = %lf\n", LF_Obj.fLongVal, LF_Obj.fDoubleVal );*/
 
 }
