@@ -43,7 +43,7 @@ void SimpleExpression_Test( void )
 												"2++3*(7+3)"
 											};
 
-	// Check syntax of each expression string
+	// Sprawdź składnię każdego ciągu wyrażenia
 	for( const auto & expr : expr_vec )
 		cout << expr << " is " << ( theInterpreter( expr ) ? "OK\n" : "not OK\n" );
 
@@ -63,14 +63,14 @@ void SyntaxTree_Test( void )
 
 	ExpressionTreeBuilderInterpreter		exprParser;
 
-	//string good_expr( "2+3*4" );		// this string is hard coded - make it user entered
-	//string good_expr( "2+3*7+3" );		// this string is hard coded - make it user entered
-	//string good_expr( "2/3+(7+3)" );		// this string is hard coded - make it user entered
-	//string good_expr( "5*(3+2*5)/(2/3+(7+3))" );		// this string is hard coded - make it user entered
-	//string good_expr( "(2+3)*(4+5)*(6+7)" );		// this string is hard coded - make it user entered
-	//string good_expr( "2*3*4" );		// this string is hard coded - make it user entered
-	//string good_expr( "(1+2)*(3+4+5)/(6-7)" );		// this string is hard coded - make it user entered
-	string good_expr( "(1+2)*(3+(4+5))/(6-7)" );		// this string is hard coded - make it user entered
+	//string good_expr( "2+3*4" );		// ten tekst jest trwale zakodowany - spraw, by wprowadził go użytkownik
+	//string good_expr( "2+3*7+3" );		// ten tekst jest trwale zakodowany - spraw, by wprowadził go użytkownik
+	//string good_expr( "2/3+(7+3)" );		// ten tekst jest trwale zakodowany - spraw, by wprowadził go użytkownik
+	//string good_expr( "5*(3+2*5)/(2/3+(7+3))" );		// ten tekst jest trwale zakodowany - spraw, by wprowadził go użytkownik
+	//string good_expr( "(2+3)*(4+5)*(6+7)" );		// ten tekst jest trwale zakodowany - spraw, by wprowadził go użytkownik
+	//string good_expr( "2*3*4" );		// tten tekst jest trwale zakodowany - spraw, by wprowadził go użytkownik
+	//string good_expr( "(1+2)*(3+4+5)/(6-7)" );		// ten tekst jest trwale zakodowany - spraw, by wprowadził go użytkownik
+	string good_expr( "(1+2)*(3+(4+5))/(6-7)" );		// ten tekst jest trwale zakodowany - spraw, by wprowadził go użytkownik
 
 	if( exprParser( good_expr ) == false )
 	{
@@ -81,36 +81,36 @@ void SyntaxTree_Test( void )
 
 
 
-	// Here we can do something with the tree e.g. launch a visitor
+	// Tutaj możemy zrobić coś z drzewem, np. uruchomić wizytatora
 
-	// Take a pointer to the root of the tree
+	// Pozyskaj wskaźnik do korzenia drzewa
 	NodePtr		theRoot { exprParser.GetRoot() };
 	assert( theRoot );
 
 
-	// Print structure of the parsing tree
-	theRoot->Accept( PrintVisitor() );	// Pass a temporary object as an argument
+	// Wypisz strukturę drzewa parsowania
+	theRoot->Accept( PrintVisitor() );	// Przekaż tymczasowy obiekt jako argument
 
 
 
 	// ------------------------------
-	// How to copy the tree?
+	// Jak skopiować drzewo?
 	PlusOperator	p1, p2;		// ok
-	//PlusOperator	p3( p2 );	// error, no copy constructable
-	//p1 = p2;					// error, no copy by assignment
+	//PlusOperator	p3( p2 );	// błąd, nie da się skonstruować kopii
+	//p1 = p2;					// błąd, brak kopii poprzez przypisanie
 
 
 
-	// Let's make a clone of the tree - e.g. we can run
-	// it in a separate thread.
+	// Sklonujmy drzewo, aby przykładowo użyć go 
+	// w osobnym wątku.
 	Node_UP	theSecondTree { theRoot->Clone() };
 
 
-	// Evaluate the expression
+	// Dokonaj ewaluacji wyrażenia
 	EvalVisitor		evalVisitor;
 	try
 	{
-		theSecondTree->Accept( evalVisitor );		// Can throw on zero division
+		theSecondTree->Accept( evalVisitor );		// Może zgłosić dzielenie przez zero
 		std::cout << "Val = " << evalVisitor.GetValue() << endl;
 	}
 	catch( std::exception & e )
