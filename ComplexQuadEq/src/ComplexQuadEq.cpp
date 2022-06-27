@@ -32,7 +32,7 @@ TComplexQuadEq::EEqType TComplexQuadEq::GetNumOfRoots( const double delta ) cons
 	}
 	else
 	{
-		return delta == 0.0 ? EEqType::kOne : EEqType::kTwo;	// In this class the sign of delta is not important
+		return delta == 0.0 ? EEqType::kOne : EEqType::kTwo;	// W tej klasie znak delty nie jest istotny
 	}
 }
 
@@ -54,23 +54,23 @@ TComplexQuadEq::EEqType TComplexQuadEq::GetNumOfRoots( const double delta ) cons
 //	
 TQuadEq::EEqType TComplexQuadEq::GetRoots( TComplex & root_1, TComplex & root_2 ) const
 {
-	auto delta( ComputeDelta() );		// call a constructor for the built-in type
+	auto delta( ComputeDelta() );		// Wywołaj konstruktor dla typu wbudowanego
 
-	const auto kDivThresh { 1e-36 };		// Used in assert to verify divisions
+	const auto kDivThresh { 1e-36 };		// Używane w assert do sprawdzania dzielenia
 
 	EEqType equationTypeFlag = GetNumOfRoots( delta );
 
-	// It is a good idea to explicitly place ALL the cases here (to be sure)
+	// Dobrym pomysłem jest jawne umieszczenie tutaj WSZYSTKICH przypadków (dla pewności)
 	switch( equationTypeFlag )
 	{
 		case EEqType::kNone:
 
-			assert( false );		// should not happen
+			assert( false );		// nie powinno się zdarzyć
 			break;					
 
 		case EEqType::kLinContra:
 
-			break;					// if none, then do nothing
+			break;					// nic nie rób
 
 		case EEqType::kLinOne:
 
@@ -82,12 +82,12 @@ TQuadEq::EEqType TComplexQuadEq::GetRoots( TComplex & root_1, TComplex & root_2 
 
 			root_1 = root_2 = - Get_c() / Get_b();
 
-			break;					// return with one root
+			break;					// powrót z jednym pierwiastkiem
 		
-		case EEqType::kOne:			// no break here - for these two cases, one solution
+		case EEqType::kOne:			// tutaj bez break – dla tych dwóch przypadków mamy jedno rozwiązanie
 		case EEqType::kTwo:
 
-			{	// We need a block {} here for local variables
+			{	// Potrzebujemy tu bloku {} dla zmiennych lokalnych
 
 				bool negative_delta = delta < 0.0 ? true : false;
 
@@ -102,7 +102,7 @@ TQuadEq::EEqType TComplexQuadEq::GetRoots( TComplex & root_1, TComplex & root_2 
 
 				if( negative_delta )
 				{
-					// Negative delta requires a complex domain
+					// Ujemna delta wymaga dziedziny liczb zespolonych
 					root_1.SetRe( - Get_b() / denominator );
 					root_1.SetIm( - delta_root / denominator );
 
@@ -111,7 +111,7 @@ TQuadEq::EEqType TComplexQuadEq::GetRoots( TComplex & root_1, TComplex & root_2 
 				}
 				else
 				{
-					// Positive delta means only real roots
+					// Dodatnia delta oznacza tylko pierwiastki rzeczywiste
 					root_1.SetRe( ( - Get_b() - delta_root ) / denominator );
 					root_1.SetIm( 0.0 );
 
@@ -125,7 +125,7 @@ TQuadEq::EEqType TComplexQuadEq::GetRoots( TComplex & root_1, TComplex & root_2 
 
 		default :
 
-			assert( false );		// this should not happen - an error in programming?
+			assert( false );		// To nie powinno się zdarzyć – błąd w programowaniu?
 			break;
 	}
 
