@@ -17,15 +17,15 @@
 
 
 
-// Joins two different objects under one roof
+// Łączy dwa różne obiekty pod jednym dachem
 struct MonthDays
 {
-	std::string		fName {};	// Always use {} to initialize data members.
-	int				fDays {};	// Empty {} initialize to 0.
+	std::string		fName {};	// Użyj {} do zainicjalizowania danych składowych.
+	int				fDays {};	// Puste nawiasy klamrowe {} do zainicjalizowania wartością 0.
 };
 
 
-// Creates and displays a simple calendar
+// Tworzy i wyświetla prosty kalendarz
 void SimpleCalendar( void )
 {
 	const std::vector< MonthDays >	calendar {	
@@ -44,7 +44,7 @@ void SimpleCalendar( void )
 
 										};
 
-	// Print them on the screen
+	// Wypisz je na ekran
 	auto sum_days { 0 };
 	for( auto month : calendar )
 	{
