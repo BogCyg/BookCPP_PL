@@ -102,20 +102,20 @@ class EMatrix
 
 private:
 
-	RealMatrix	fData;	// data structure (encapsulation)
+	RealMatrix	fData;	// prywatna struktura danych (hermetyzacja)
 
 public:
 
-	// A parametric constructor
+	// Konstruktor parametryczny
 	EMatrix( Dim rows, Dim cols, DataType initVal = 0.0 )
 		: fData( rows, RealVec( cols, initVal ) )
-	{	// matrix == a vector of vectors of double
+	{	// macierz == wektor wektorów danych typu double
 		assert( cols > 0 );
 		assert( rows > 0 );
 	}
 
 
-	// Helpers
+	// Funkcje pomocnicze
 	auto	GetCols( void ) const { return fData[ 0 ].size(); }
 	auto	GetRows( void ) const { return fData.size(); }
 
@@ -123,12 +123,12 @@ public:
 	// -----------------------------------------------------------
 	// Ver. 2.0
 
-	// As a result of overloaded subscript operators 
-	// instead of m.fData[2][3] we can write directly m[2][3] 
+	// Z powodu przeciążonych operatorów indeksu 
+	// zamiast m.fData[2][3] możemy napisać bezpośrednio m[2][3] 
 	auto &			operator[] ( Dim idx ) { return fData[ idx ]; }			
 	const auto &	operator[] ( Dim idx ) const { return fData[ idx ]; }
 
-	// We need only these two pairs of functions to have a range-based for loop
+	// Potrzebujemy tylko tych dwóch par funkcji do uzyskania zakresowej pętli for
 	auto			begin() { return fData.begin(); }
 	auto			end()	{ return fData.end(); }
 
@@ -138,13 +138,13 @@ public:
 
 
 
-	// Let add some overloaded arithmetical operators
-	EMatrix &		operator += ( const EMatrix & b );	// this will probably change this object
+	// Dodajmy pewne przeciążone operatory arytmetyczne
+	EMatrix &		operator += ( const EMatrix & b );	// to może zmienić ten obiekt
 	EMatrix			operator + ( const EMatrix & b ) const;
-	// We can add other operators here ...
+	// Tutaj możemy dodać inne operatory...
 
 
-	// friends are functions that can freely access fData
+	// Funkcje zaprzyjaźnione mogą uzyskiwać swobodny dostęp do fData
 	friend std::ostream & operator << ( std::ostream & o, const EMatrix & matrix );
 	friend std::istream & operator >> ( std::istream & i, EMatrix & matrix );
 
