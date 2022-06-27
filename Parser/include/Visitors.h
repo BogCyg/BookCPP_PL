@@ -30,7 +30,7 @@ class MultOperator;
 class DivOperator;
 
 
-// Abstract base class for all visitors
+// Abstrakcyjna klasa bazowa dla wszystkich wizytatorów
 class TVisitor
 {
 
@@ -41,7 +41,7 @@ public:
 
 public:
 
-	// Pure virtual function to visit the constructible nodes
+	// Czysto wirtualna funkcja do odwiedzania tworzonych węzłów
 	virtual void Visit( const NumberLeafNode & n ) = 0;
 	virtual void Visit( const PlusOperator & n ) = 0;
 	virtual void Visit( const MinusOperator & n ) = 0;
@@ -51,7 +51,7 @@ public:
 };
 
 
-// Expression evaluating visitor
+// Wizytator dokonujący ewaluacji wyrażenia
 class EvalVisitor : public TVisitor
 {
 private:
@@ -70,25 +70,25 @@ protected:
 	using LR_Pair = std::tuple< double, double >;
 
 	///////////////////////////////////////////////////////////
-	// Auxiliary function to process the left and right nodes.
+	// Pomocnicza funkcja do przetwarzania lewego i prawego węzła.
 	///////////////////////////////////////////////////////////
 	//
-	// INPUT:	n - a reference to a binary node 		
+	// WEJŚCIE: 	n – referencja do węzła binarnego 		
 	//
-	// OUTPUT:	a pair of values of the left and right node
+	// WYJŚCIE: 	para wartości dla lewego i prawego węzła
 	//
 	EvalVisitor::LR_Pair LeftRightValues( const BinOperator & n );
 
 
 public:
 
-	// Set of overloaded functions for each node in the parsing tree
+	// Zestaw przeciążonych funkcji dla każdego węzła w drzewie parsowania
 	void Visit( const NumberLeafNode & n ) override;
 	void Visit( const PlusOperator & n ) override;
 	void Visit( const MinusOperator & n ) override;
 	void Visit( const MultOperator & n ) override;
-	void Visit( const DivOperator & n ) noexcept( false ) override;	// Can throw 
-																	// - indicated by the specifier noexcept( false )
+	void Visit( const DivOperator & n ) noexcept( false ) override;	// może zgłosić wyjątek 
+									// - wskazywane przez specyfikator noexcept( false )
 };
 
 
