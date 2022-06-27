@@ -33,67 +33,67 @@ void tuple_vs_struct( void )
 {
 	// -----------------------------
 	{
-		// Let's store a date in a tuple
-		//     day   month  year
+		// Przechowajmy datę w krotce
+		// dzień miesiąc rok
 		tuple< int, string, int >	t_date( 27, "June", 2019 );
 
-		// It can be easier with make_tuple
+		// Łatwiej będzie za pomocą make_tuple
 		auto t_date_2 = make_tuple( 27, "June", 2019 );
 
-		// tuple_size<>::value returns the number of elements
+		// uple_size<>::value zwraca liczbę elementów
 		cout << "t_date has " << tuple_size< decltype(t_date) >::value 
 			<< " elems" << endl;
 
-		// Print the elements 
+		// Wypisz elementy – nie zaburzaj porządku 
 		cout << "D/M/Y:" << get< 0 >( t_date ) << "/" << 
 			get< 1 >( t_date ) << "/" << 
 			get< 2 >( t_date ) << endl;
 
-		// Retrieve the elements to separate objects
-		// with the structured binding
+		// Pobierz elementy do osobnych obiektów
+		// bez powiązania strukturalnego
 		const auto [ d, m, y ] = t_date;	
 
-		// Print the elements 
+		// Wypisz elementy 
 		cout << "D/M/Y:" << d << "/" << 
 			m << "/" << y << endl;
 
-		// Use tie with ingore to retrieve a few elements
+		// Użyj tie z parametrem ignore do pozyskania kilku elementów
 		int dd {};
 		string mm {};
 
-		// Retrieve only day and month, ignore the year
+		// Pobierz tylko dzień i miesiąc, ignorując rok
 		tie( dd, mm, ignore ) = t_date;
 
-		// Print the elements 
+		// Wypisz elementy 
 		cout << "D/M:" << dd << "/" << mm << endl;
 
 	}
 
 	// ------------------------------
 	{
-		// The same with struct with no name
+		// To samo za pomocą struktury bez nazwy
 		struct 
 		{
-			// Each field has its name
+			// Każde pole na swoją nazwę
 			int		fDay	{ 27 };
 			string	fMonth	{ "June" };
 			int		fYear	{ 2019 };
 		} s_date;
 
-		// We cannot enumerate a struct, 
-		// just provide its field names.
+		// Nie możemy wyliczać struktury, 
+		// podajemy jedynie nazwy jej pól
 
-		// Print the elements 
+		// Wypisz elementy 
 		cout << "D/M/Y:" << s_date.fDay << "/" << 
 			s_date.fMonth << "/" << 
 			s_date.fYear << endl;
 
 
-		// Retrieve the elements to separate objects
-		// with the structured binding
+		// Pobierz elementy do osobnych obiektów
+		// bez powiązania strukturalnego
 		const auto [ d, m, y ] = s_date;
 
-		// Print the elements 
+		// Wypisz elementy 
 		cout << "D/M/Y:" << d << "/" << 
 			m << "/" << y << endl;
 
