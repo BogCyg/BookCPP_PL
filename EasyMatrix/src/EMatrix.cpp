@@ -22,50 +22,50 @@
 
 #if EM_VER > 1
 
-// Stream out a matrix to the stream out. Assume text mode.
+// Prześlij matrix do strumienia wyjściowego. Zakładamy tu tryb tekstowy.
 std::ostream & operator << ( std::ostream & out, const EMatrix & matrix )
 {
-	for( const auto & row : matrix/*.fData*/ )	// go row-by-row
+	for( const auto & row : matrix/*.fData*/ )	// przejdź wiersz po wierszu
 	{
-		for( const auto & data : row )	// go through the data in single row
+		for( const auto & data : row )	// dane w pojedynczym wierszu
 			out << data << "\t";
 
-		out << std::endl;		// print new line
+		out << std::endl;		
 	}
 
-	return out;		// return the stream, so they can be chained
+	return out;		// zwróć strumień, aby można je było łączyć
 }
 
-// Stream in a matrix from the stream in. Assume text mode.
+// Pozyskaj matrix ze strumienia wejściowego. Zakładamy tu tryb tekstowy.
 std::istream & operator >> ( std::istream & in, EMatrix & matrix )
 {
-	// Dimensions have to be determined from the data layout.
-	// Each new line constitutes a new row of a matrix.
-	// So, we have to read strings line by line, and
-	// from each string read item by data item.
+	// Wymiary muszą być ustalone na podstawie układu danych.
+	// Każda nowa linia stanowi nowy wiersz macierzy.
+	// Musimy więc odczytywać ciągi znaków wiersz po wierszu, 
+	// a z każdego ciągu czytać kolejno dane.
 
-	matrix.fData.clear();		// get rid of whatever was there 
+	matrix.fData.clear();		// pozbądź się tego, co tam było
 
-	std::string str;	// an empty string
-	while( getline( in, str ) )	// read the entire line into the string
+	std::string str;	// pusty ciąg znaków
+	while( getline( in, str ) )	// wczytaj całą linię do ciągu znaków
 	{
-		// Create a string-stream from a string
+		// Utwórz strumień ciągów znaków z ciągu znaków
 		std::istringstream istr( str );
 
 #define SIMPLE 1
 #if SIMPLE 
 
-		DataType	data {};		// temporary data
-		RealVec		one_row;		// at first, create the empty row
-		while( istr >> data )		// read from the string-stream to data
-			one_row.push_back( data );	// fill one row
+		DataType	data {};		// dane tymczasowe
+		RealVec		one_row;		// najpierw utwórz pusty wiersz
+		while( istr >> data )		// wczytaj ze strumienia do data
+			one_row.push_back( data );	// wypełnij jeden wiersz
 
-		matrix.fData.emplace_back( one_row );	// emplace the row into the matrix
+		matrix.fData.emplace_back( one_row );	// umieść wiersz w macierzy
 
 #else
 		using DType_Iter = std::istream_iterator< DataType >;
 
-		// Here we move 
+		// Tutaj przenosimy 
 		matrix.fData.emplace_back(	std::make_move_iterator( DType_Iter{ istr } ), 
 									std::make_move_iterator( DType_Iter{} ) );
 
@@ -73,7 +73,7 @@ std::istream & operator >> ( std::istream & in, EMatrix & matrix )
 
 	}
 
-	return in;		// return the stream, so they can be chained
+	return in;		// zwróć strumień, aby można je było łączyć
 }
 
 
