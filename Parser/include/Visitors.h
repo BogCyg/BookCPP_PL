@@ -95,31 +95,31 @@ public:
 
 // -------------------------------------------------------------
 
-// A visitor to print structure of the tree
+// Wizytator do wypisywania struktury drzewa
 class PrintVisitor : public TVisitor
 {
 private:
 
-	int		fDepthLevel {};		// current indentation value
+	int		fDepthLevel {};		// Bieżąca wartość wcięcia
 
-	const int fDL_Step { 3 };	// indentation step
+	const int fDL_Step { 3 };	// krok wcięcia
 
 protected:
 
 	///////////////////////////////////////////////////////////
-	// Auxiliary function to print a bin operator.
+	// Pomocnicza funkcja do wypisywania operatora binarnego.
 	///////////////////////////////////////////////////////////
 	//
-	// INPUT:	n - a reference to a binary node 	
-	//			op - operator symbol character
+	// WEJŚCIE: 	n – referencja do węzła binarnego	
+	//		op – znak symbolu operatora
 	//
-	// OUTPUT:	none
+	// WYJŚCIE: 	brak
 	//
 	void LeftRightProcess( const BinOperator & n, char op );
 
 public:
 
-	// Set of overloaded functions for each node in the parsing tree
+	// Zestaw przeciążonych funkcji dla każdego węzła w drzewie parsowania
 	void Visit( const NumberLeafNode & n ) override;
 	void Visit( const PlusOperator & n ) override;
 	void Visit( const MinusOperator & n ) override;
