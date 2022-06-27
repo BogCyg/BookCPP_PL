@@ -27,7 +27,7 @@ void Easy_Matrix_First_Test( void )
 {
 
 	// -------------------------
-	// Using RealMatrix as it is
+	// Korzystanie z RealMatrix w bieżącej postaci
 
 	RealMatrix		m = {
 							{ 2, 2, 0, 11 },
@@ -35,10 +35,10 @@ void Easy_Matrix_First_Test( void )
 							{ -1, 2, -1, 7 }
 						};
 
-	// Add next row
+	// Dodaj kolejny wiersz
 	m.push_back( { 5, 3, 5, -3 } );
 
-	// Accumulate elements except the diagonal
+	// Posumuj elementy z wyjątkiem diagonali
 	double non_diagonal_sum {};
 
 	for( Dim r = 0; r < m.size(); ++ r )
