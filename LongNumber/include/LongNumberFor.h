@@ -182,13 +182,13 @@ class TLongNumberFor
 		}
 
 #define TURN_ON_PROXY
-#ifdef TURN_ON_PROXY
+#ifdef TURN_ON_PROXY   // Poniższy kod jest kompilowany, gdy zdefiniowana jest flaga TURN_ON_PROXY
 	private:
 
-		// The proxy pattern private area
+		// Prywatny obszar wzorca pełnomocnika
 
 		// -------------------------------------------------------------------
-		// This nested class realized the PROXY pattern
+		// Ta zagnieżdżona klasa realizuje wzorzec PEŁNOMOCNIKA
 		class RetObjProxy
 		{
 			public:
@@ -209,15 +209,15 @@ class TLongNumberFor
 				// This does not work for us - we need a copy assignment. 
 
 				//MotherClass & fMyMother;	// A reference to the mother TLongNumberFor class
-				MotherClass * fMyMother {};	// A pointer to the mother TLongNumberFor class
+				MotherClass * fMyMother {};	// Wskaźnik do klasy matki
 					
-				int fPosition {};			// Local index storage for the operator []
+				int fPosition {};			// Lokalne przechowywanie indeksu dla operatora []
 
 			public:
 
-				// Constructor
-				// myMother - a TLongNumberFor class we connect to
-				// position - index position
+				// Konstruktor
+				// myMother - klasa TLongNumberFor, z którą się łączymy
+				// position - pozycja indeksu
 				RetObjProxy( MotherClass * myMother, int position )
 					: fMyMother( myMother ), fPosition( position )
 				{
@@ -226,7 +226,7 @@ class TLongNumberFor
 				}
 
 
-				// Forbidden default constructor
+				// Zabroniony konstruktor domyślny
 				RetObjProxy( void ) = delete;
 
 				RetObjProxy & operator = ( const RetObjProxy & r )
@@ -236,16 +236,16 @@ class TLongNumberFor
 		
 		public:
 
-				// Called when: int x = id[ 8 ]
-				// Right side (read) operation
-				// Conversion operator to int - for read operations
+				// Wywoływany, gdy: int x = id[ 8 ]
+				// Operacja prawostronna (odczyt)
+				// Operator konwersji do int – dla operacji odczytu
 				operator int () const
 				{
 					assert( fMyMother != nullptr );
 					return fMyMother->GetNumberAt( fPosition );
 				}
 
-				// Called when: id[ 8 ] = 5
+				// Wywoływany, gdy: id[ 8 ] = 5
 				RetObjProxy & operator = ( int val )
 				{
 					assert( fMyMother != nullptr );
@@ -253,7 +253,7 @@ class TLongNumberFor
 					return * this;
 				}
 
-				// Called when: id[ 8 ] = id[ 7 ]
+				// Kolejny operator przypisania: id[ 8 ] = id[ 7 ]
 				RetObjProxy & operator = ( RetObjProxy & r )
 				{
 					assert( fMyMother != nullptr );
@@ -262,23 +262,23 @@ class TLongNumberFor
 				}
 
 		};
-		// End of proxy
+		// Koniec pełnomocnika
 		// -------------------------------------------------------------------
 
 
 	public:
 
 
-		// The main idea behind the subscript operator in TLongNumberFor (this is not a proxy)
-		// is to return a proxy object rather than any value. 
-		// The returned proxy will behave differently being on the left 
-		// or right side of the assignment operator. 
+		// Głównym celem operatora indeksu w TLongNumberFor
+		// jest zwrócenie obiektu pełnomocnika zamiast dowolnej wartości.
+		// Zwrócony pełnomocnik będzie zachowywał się inaczej po stronie lewej
+		// niż po stronie prawej operatora przypisania.
 		RetObjProxy operator [] ( int position )
 		{
 			assert( position < kMaxNumbers );
-			// Here we create the proxy object providing "this" 
-			// as its "mother" class.
-			// Return by value (copy elision, guaranteed in C++17)
+			// Tutaj tworzymy obiekt pełnomocnika dostarczającego "this"
+			// jako jego klasę "matkę".
+			// Zwróć przez wartość (unikanie kopii, gwarantowane w C++17)
 			return RetObjProxy( this, position );
 		}
 	// -------------------------------------------------------------------
