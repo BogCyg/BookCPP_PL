@@ -11,14 +11,14 @@
 
 
 
-// Template members within a template class example
+// Szablonowe składowe w przykładowej klasie szablonowej
 template < typename T >
 class TPointFor
 {
 
 private:
 
-	T	fx {}, fy {};	// Two coordinates of T type
+	T	fx {}, fy {};	// Dwie współrzędne typu T
 
 
 public:
@@ -32,29 +32,29 @@ public:
 public:
 
 
-	// A template member copy constructor to initialize
-	// from a point with different coordinate types.
-	// To be general must call Get_x and Get_y
-	// Direct access possible only if T == U
+	// Szablonowy składowy konstruktor kopiujący do inicjalizowania
+	// z punktu współrzędnych różnego rodzaju.
+	// Aby był ogólny, musi wywoływać Get_x i Get_y
+	// Dostęp bezpośredni możliwy tylko, gdy T == U
 	template < typename U >
 	TPointFor< T >( const TPointFor< U > & pt ) : fx( pt.Get_x() ), fy( pt.Get_y() ) {}
 
-	// A template member assignment operator to to initialize
-	// from a point with different coordinate types.
+	// Szablonowy składowy operator przypisania do inicjalizowania
+	// z punktu współrzędnych różnego rodzaju.
 	template < typename U >
 	TPointFor< T > & operator = ( const TPointFor< U > & pt )
 	{
-		//fx = pt.fx;		these two work only 
-		//fy = pt.fy;		if T == U
-		fx = pt.Get_x();		// allow conversion
+		//fx = pt.fx;		te dwie linie działają tylko wtedy,
+		//fy = pt.fy;		gdy T == U
+		fx = pt.Get_x();		// zezwól na konwersję
 		fy = pt.Get_y();
 		return * this;
 	}
 
 
-	// A default constructor needs to be explicitly coded
-	// since the copy constructor and the assignment were added
-	// (otherwise could be skipped).
+	// Konstruktor domyślny musi być jawnie zakodowany, 
+	// sponieważ został dodany konstruktor kopiujący i przypisanie
+	// (w innym przypadku można go było pominąć).
 	//TPointFor( void ) : fx( T() ), fy( T() ) {}
 	TPointFor( void ) = default;
 };
@@ -69,18 +69,17 @@ inline void PointTest( void )
 	using IntPoint = TPointFor< int >;
 
 
-	RealPoint rp1, rp2;		// Calls default constructor
+	RealPoint rp1, rp2;		// Wywołuje konstruktor domyślny
 
-	IntPoint ip1, ip2;		// Calls default constructor
+	IntPoint ip1, ip2;		// Wywołuje konstruktor domyślny
 
+	rp1 = rp2;		// Przypisanie w tej samej klasie
+					// - nie jest wymagane specjalne przypisanie szablonowe
 
-	rp1 = rp2;		// Assignment within the same clas
-					// - no special template assignment needed
+	rp1 = ip2;		// Przypisanie między różnymi klasami
+					// - konieczne specjalne szablonowe przypisanie
 
-	rp1 = ip2;		// Assignment across different classes
-					// - special template assignment necessary
-
-	RealPoint rp3( ip1 );	// Also copy construction across the different classes
+	RealPoint rp3( ip1 );	// Również konstrukcja kopiująca między różnymi klasami
 }
 
 
