@@ -18,8 +18,8 @@ using std::ofstream, std::ifstream;
 
 
 
-// A function that checks main functionality 
-// of the TLongNumberFor class
+// Funkcja, która sprawdza główną funkcjonalność
+// klasy TLongNumberFor
 void LongNumbers_Test( void )
 {
 	try
@@ -33,12 +33,12 @@ void LongNumbers_Test( void )
 		assert( pesel.GetNumberAt( 8 ) == 8 );
 
 
-		// Try conversions
+		// Spróbuj wykonać konwersję
 		TLongNumberFor< 5 > number_1(  "1234" );
 
-		std::string str { "--" };	// Create std::string from number_1
-		str += number_1;		// Convert number_1 to std::string and concatenate with str
-		std::cout << str << endl;	// Let's see it
+		std::string str { "--" };	// Utwórz std::string z number_1
+		str += number_1;		// Skonwertuj number_1 na std::string i złącz z str
+		std::cout << str << endl;	// Pokaż rezultat
 
 		{
 
@@ -57,7 +57,7 @@ void LongNumbers_Test( void )
 
 		assert( number_1 == number_2 );
 
-		// Now let's try to access at the wrong position
+		// Teraz spróbujmy uzyskać dostęp na złej pozycji
 		//cout << number_1[ 33 ];
 	}
 	catch( const std::exception & e )
