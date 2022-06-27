@@ -29,7 +29,7 @@ namespace CppBook
 
 // ==============================================================================================
 
-// Definition of the stack data structure
+// Definicja struktury danych stosu
 template < typename T, auto MaxElems = 1000 >
 class TStackFor
 {
@@ -45,7 +45,7 @@ class TStackFor
 
 	public:
 
-		// Here we need an additional typename
+		// Potrzebujemy tu dodatkowego słowa typename
 		using size_type = typename DataContainer::size_type;
 
 
@@ -57,21 +57,21 @@ class TStackFor
 
 
 		///////////////////////////////////////////////////////////
-		// This function puts an element onto the stack
+		// Ta funkcja umieszcza element na stosie
 		///////////////////////////////////////////////////////////
 		//		
-		// INPUT:
-		//			new_elem - a reference to the element to
-		//				be put. Actually its copy is put onto
-		//				the stack.
+		// WEJŚCIE:
+		//			new_elem - referencja do elementu do umieszczenia.
+		//				Tak naprawdę na stosie umieszczana jest
+		//				jego kopia.
 		//		
-		// OUTPUT:
-		//			true - if operation successful,
-		//			false - failure, due to insufficient
-		//				space on the stack (e.g. too many 
-		//				elements)
+		// WYJŚCIE:
+		//			true - jeśli operacja wykona się pomyślnie,
+		//			false - błąd z powodu niewystarczającego
+		//				miejsca na stosie (np. zbyt wiele 
+		//				elementów)
 		//		
-		// REMARKS:
+		// UWAGI:
 		//		
 		//		
 		bool Push( const value_type & new_elem );
@@ -79,18 +79,18 @@ class TStackFor
 
 
 		///////////////////////////////////////////////////////////
-		// This function removes an element from the stack
+		// Ta funkcja usuwa element ze stosu
 		///////////////////////////////////////////////////////////
 		//		
-		// INPUT:
-		//			ret_elem - a reference to the object which
-		//				will be copied with the topmost element
-		//				from the stack. Then the topmost element
-		//				is removed from the stack.
+		// WEJŚCIE:
+		//			ret_elem - referencja do obiektu, który 
+		//				zostanie skopiowany z górnego elementu
+		//				na stosie. Następnie ten górny element stosu
+		//				zostanie z niego usunięty.
 		//		
 		// OUTPUT:
-		//			true - if operation successful,
-		//			false - failure, due to empty stack
+		//			true - gdy operacja zakończy się sukcesem,
+		//			false - błąd z powodu pustego stosu
 		//		
 		// REMARKS:
 		//		
@@ -155,13 +155,13 @@ bool TStackFor< T, MaxElems >::Pop( value_type & ret_elem )
 	if( GetStackSize() == 0 )
 		return false;
 
-	ret_elem = fData.back();	// Copy the top element
-	fData.pop_back();			// Get rid of the last element
+	ret_elem = fData.back();	// Skopiuj górny element
+	fData.pop_back();			// Pozbądź się ostatniego elementu
 
 	return true;
 }
 
-}		// End of the CppBook namespace
+}		// Koniec przestrzeni nazw CppBook
 
 
 
