@@ -184,16 +184,16 @@ using CppBook::HTTP_File_Handle, CppBook::TCurrency;
 namespace CurrExchanger
 {
 
-// A version that can load from a HTTP downloaded XML file.
+// Wersja, która może wczytywać z pliku XML pobranego przez HTTP
 namespace OnLine_CurrExchanger
 {
-	// Internet address of an external xml file
+	// Adres internetowy zewnętrznego pliku XML
 	wstring nbp_addr { L"http://www.nbp.pl/kursy/xml/LastC.xml" };	
 	
-	// Name of a temporary local XML file
+	// Nazwa tymczasowego lokalnego pliku XML
 	wstring local_xml_file_name { L"LastC.xml" };		
 	
-	// A flag indicating the current OS
+	// Flaga wskazująca bieżący system operacyjny
 	HTTP_File_Handle::EHandledSystems kMyOS { HTTP_File_Handle::EHandledSystems::kWindows };
 
 
@@ -207,8 +207,8 @@ namespace OnLine_CurrExchanger
 
 	void CurExchanger_SaveInitFile( const XML_CurrencyExchanger & obj, const wstring & initFileFullPath )
 	{
-		// Save to the init file
-		// Use default file to load currencies
+		// Zapisz do pliku inicjalizacji
+		// Użyj domyślnego pliku do wczytania walut
 		wofstream	outFile( initFileFullPath );
 		const XML_CurrencyExchanger::CurrencyMap & cur_map = obj.GetCurrencyMap();
 		transform(	cur_map.cbegin(), cur_map.cend(), 
@@ -222,41 +222,41 @@ namespace OnLine_CurrExchanger
 
 
 
-	// There are two options for the return object:
-	// - It is either TCurrencyExchanger if properly built
-	// - or empty CurrExch_Optional if cannot create 
+	// Istnieją dwie opcje zwracania obiektu:
+	// - albo XML_CurrExch_Optional zawierający poprawnie zbudowany TCurrencyExchanger
+	// - albo pusty XML_CurrExch_Optional, gdy nie można utworzyć TCurrencyExchanger 
 	auto CreateCurExchanger( const wstring & http_XML_FileName, const wstring & initFileFullPath ) -> XML_CurrExch_Optional
 	{
 		XML_CurrencyExchanger	currencyExchangerObj;
 
 		namespace fs = std::filesystem;		
 
-		// Create name of a local XML file - its parent is from initFileFullPath 
+		// Utwórz nazwę lokalnego pliku XML – jego rodzic jest z initFileFullPath
 		wstring local_xml_full_path( fs::path( initFileFullPath ).parent_path() / local_xml_file_name );
 
 		if( CurExchanger_DownloadCurrencies( http_XML_FileName, local_xml_full_path ) == true &&
 			currencyExchangerObj.FillCurrencyTableFrom( local_xml_full_path ) == true )
 		{
-			// Success, object initialized from Internet
+			// Sukces, obiekt zainicjalizowany z internetu
 				
-			// Add the reference currency (PLN) (0xB3 is Polish letter "l-crossed")
+			// Dodaj walutę referencyjną (PLN) (0xB3 to polska litera ł)
 			currencyExchangerObj.AddCurrency( { L"PLN", L"z\xB3oty-polski", 1.0, 1.0 } );
 			//currencyExchangerObj.AddCurrency( { L"PLN", L"zloty-polski", 1.0, 1.0 } );
 
-			// Update the ini file with new data
+			// Zaktualizuj plik inicjalizacji przy użyciu nowych danych
 			CurExchanger_SaveInitFile( currencyExchangerObj, initFileFullPath );
 		}
 		else
 		{
-			// Cannot initialize from the Internet, 
-			// so, as a last resort, let's look for a local ini file
+			// Nie można zainicjalizować z internetu,
+			// więc, jako ostatnia deska ratunku, poszukajmy pliku inicjalizacji
 			
 			wifstream	inFile( initFileFullPath );
 
 			if( inFile.is_open() == false )
-				return XML_CurrExch_Optional();	// no init file, no object, what to return?
+				return XML_CurrExch_Optional();	// brak pliku inicjalizacji, zwróć pusty obiekt optional
 
-			// Read data from the file
+			// Wczytaj dane z pliku
 			inFile >> currencyExchangerObj;
 		}
 
@@ -264,18 +264,18 @@ namespace OnLine_CurrExchanger
 	}
 
 
-	// All actions
+	// Wszystkie akcje
 	void Run( void )
 	{
 		namespace fs = std/*::experimental*/::filesystem;
 
 		wstring iniPath( fs::current_path() / fs::path( initDefaultFileName ) );
 
-		// First try to get the currency object
+		// Najpierw spróbuj uzyskać obiekt waluty
 		if( XML_CurrExch_Optional all_my_options { CreateCurExchanger( nbp_addr, iniPath ) }; all_my_options )
 		{
-			CurrExchanger::Run( * all_my_options );		// functions do not overload over namespaces
-		}												// so we have to use CurrExchanger::
+			CurrExchanger::Run( * all_my_options );		// Funkcje nie przeciążają się między przestrzeniami nazw
+		}												// więc musimy użyć CurrExchanger::
 		else
 		{
 			wcout	<< L"Error, check Currency.txt file." << endl
@@ -283,8 +283,8 @@ namespace OnLine_CurrExchanger
 		}
 	}
 
-}	// end of OnLine_CurrExchanger
+}	// koniec przestrzeni nazw OnLine_CurrExchanger
 
-}	// end of CurrExchanger
+}	// koniec przestrzeni nazw CurrExchanger
 
 
