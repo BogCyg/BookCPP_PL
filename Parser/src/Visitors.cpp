@@ -31,21 +31,21 @@ void EvalVisitor::Visit( const NumberLeafNode & n )
 void EvalVisitor::Visit( const PlusOperator & n )
 {
 	auto [ l, r ] = LeftRightValues( n );
-	fValue = l + r;	// current value is the sum of left and right
+	fValue = l + r;	// bieżąca wartość jest sumą lewego i prawego węzła
 }
 
 
 void EvalVisitor::Visit( const MinusOperator & n )
 {
 	auto [ l, r ] = LeftRightValues( n );
-	fValue = l - r;	// current value is the diff of left and right
+	fValue = l - r;	// cbieżąca wartość jest różnicą lewego i prawego węzła
 }
 
 
 void EvalVisitor::Visit( const MultOperator & n )
 {
 	auto [ l, r ] = LeftRightValues( n );
-	fValue = l * r;	// current value is the product of left and right
+	fValue = l * r;	// bieżąca wartość jest iloczynem lewego i prawego węzła
 }
 
 
@@ -56,25 +56,25 @@ void EvalVisitor::Visit( const DivOperator & n )
 	if( std::fabs( r ) < kDivThresh )
 		throw std::overflow_error( "Div by 0" );
 
-	fValue = l / r;	// current value is the div of left and right
+	fValue = l / r;	// bieżąca wartość jest ilorazem lewego i prawego węzła
 }
 
 
 ///////////////////////////////////////////////////////////
-// Auxiliary function to process the left and right nodes.
+// Pomocnicza funkcja do przetwarzania lewego i prawego węzła.
 ///////////////////////////////////////////////////////////
 //
-// INPUT:	n - a reference to a binary node 		
+// WEJŚCIE: 	n – referencja do węzła binarnego		
 //
-// OUTPUT:	a pair of values of the left and right node
+// WYJŚCIE: 	para wartości dla lewego i prawego węzła
 //
 EvalVisitor::LR_Pair EvalVisitor::LeftRightValues( const BinOperator & n )
 {
-	n.GetLeftChild()->Accept( * this );
-	auto left_val { fValue };		// store the left value
+	n.GetLeftChild()->Accept( * this ); // Najpierw lewy – ma to znaczenie (łącz. lewos.).
+	auto left_val { fValue };		// Zachowaj wartość lewego
 
 	n.GetRightChild()->Accept( * this );
-	auto right_val { fValue };	// store the right value
+	auto right_val { fValue };	// Zachowaj wartość prawego
 
 	return std::make_tuple( left_val, right_val );
 }
