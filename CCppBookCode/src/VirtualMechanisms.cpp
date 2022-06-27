@@ -30,32 +30,32 @@ class TCircle
 
 private:
 
-	double	fRadius {};	// private data to hold circle radius
+	double	fRadius {};	// dane prywatne do przechowywania promienia koła
 
 public:
 
-	// this is declared "const" since it does not change anything
+	// Zadeklarowana jako "const", ponieważ niczego nie zmienia
 	double GetRadius( void ) const { return fRadius; }
 
-	// Thanks to having fRadius private we can check its initialization
+	// Dzięki prywatnej danej fRadius możemy sprawdzić jej inicjalizację
 	void SetRadius( double v ) { assert( v >= 0.0 ); fRadius = v; }
 
 public:	
 
-	// Default and parametric constructor in one
+	// Konstruktor domyślny i parametryczny w jednym
 	TCircle( double r = 0.0 ) : fRadius( r )
 	{
 		cout << "Constr TCircle called (@" << this << ")" << endl;
 	}
 
-	virtual ~TCircle()
+	virtual ~TCircle() // virtual bo będziemy z tej klasy dziedziczyć
 	{
 		cout << "Destr TCircle called (@" << this << ")" << endl;	
 	}
 
 private:
 
-	// Basic version of GetPi (not too precise)
+	// Podstawowa wersja GetPi (niezbyt dokładna)
 	virtual double GetPi( void ) const 
 	{
 		cout << "TCircle::pi" << endl;
@@ -64,7 +64,7 @@ private:
 
 public:
 
-	// There is only one version of ComputeArea
+	// Istnieje tylko jedna wersja funkcji ComputeArea
 	double ComputeArea( void ) const 
 	{
 		return GetPi() * fRadius * fRadius;
@@ -72,7 +72,7 @@ public:
 };
 
 
-// Slightly more precise for computations
+// Nieco bardziej dokładne obliczenia
 class PrecCircle : public TCircle
 {
 
@@ -90,8 +90,8 @@ public:
 
 private:
 
-	// In this class we wish to improve GetPi (increase precision).
-	// Place override at the end, skip virtual in front.
+	// W tej klasie chcemy usprawnić GetPi (zwiększyć precyzję)
+	// Umieść override na końcu, pomiń virtual na początku.
 	double GetPi( void ) const override
 	{
 		cout << "PrecCircle::pi" << endl;
@@ -101,8 +101,8 @@ private:
 };
 
 
-// This function uses C++ polymorphism to print the radius and area of TCircle object
-// and ANY other object derived from TCircle.
+// Ta funkcja używa polimorfizmu C++ do wypisywania promienia i pola obiektu TCircle
+// oraz DOWOLNEGO innego obiekty pochodnego od TCircle.
 void PrintInfoFor( const TCircle & circ )
 {
 	double radius	{ circ.GetRadius() };
@@ -124,7 +124,7 @@ void CircleTest( void )
 		PrecCircle	pc1( 1.23 );
 		PrintInfoFor( pc1 );
 
-		// Here, delete all objects
+		// Tutaj usuwamy wszystkie obiekty
 	}
 
 	// --------------------------------------------------------------------
@@ -132,15 +132,15 @@ void CircleTest( void )
 	cout << "----------------------------------------------------" << endl;
 
 	{
-		using TC_UP = unique_ptr< TCircle >;	// TC_UP is a smart pointer
+		using TC_UP = unique_ptr< TCircle >;	// TC_UP jest inteligentnym wskaźnikiem
 
-		TC_UP	c1_ptr( make_unique< TCircle >( 1.23 ) );	// create TCircle on heap
+		TC_UP	c1_ptr( make_unique< TCircle >( 1.23 ) );	// utwórz TCircle na stercie
 		PrintInfoFor( * c1_ptr );
 
-		TC_UP	pc1_ptr( make_unique< PrecCircle >( 1.23 ) );	// create TCircle on heap
+		TC_UP	pc1_ptr( make_unique< PrecCircle >( 1.23 ) );	// utwórz TCircle na stercie
 		PrintInfoFor( * pc1_ptr );
 
-		// Here, delete all objects
+		// Tutaj usuń wszystkie obiekty
 	}
 
 
@@ -167,12 +167,12 @@ namespace CRTP_Test
 
 	public:
 
-		// No virtual
+		// Brak virtual
 		void DAction( void )
 		{
 			D & deriv_part = static_cast< D & >( * this );
 
-			// Do action on a derived class whatever it is ...
+			// Wykonaj akcję na klasie pochodnej, bez względu na to czym jest...
 			deriv_part.Work();
 		}
 
@@ -184,15 +184,15 @@ namespace CRTP_Test
 	{
 	public:
 
-		// No virtual
+		// Brak virtual
 		void Work( void )
 		{
-			// Do something specific to Derived ...
+			// Zrób coś specyficznego dla Derived ...
 		}
 
 	};
 
-
+	// Użyj Derived w akcji
 	void DerivedTest( void )
 	{
 		Derived d;
@@ -239,7 +239,7 @@ namespace CRTP_Test
 
 	};
 
-	// Don't confuse
+	// Nie pomylmy się i nie napiszmy:
 	// class PrecCircle : TBaseCircle< SimpleCircle >
 	class PrecCircle : public TBaseCircle< PrecCircle >
 	{
@@ -305,7 +305,7 @@ class E : public C, public D	// multiple inheritance - diamond structure
 template < typename Base >
 class MMixin : public Base 
 {
-	// Can use members of Base ...
+	// Może używać składowych Base ...
 };
 
 
@@ -321,7 +321,7 @@ struct TDate
 template < typename B >
 struct MPrint_Date_US : public B
 {
-	// US date print format
+	// Amerykański format daty
 	void Print( void )
 	{
 		std::cout << fMonth << "/" << fDay << '/' << fYear << '\n';
@@ -331,7 +331,7 @@ struct MPrint_Date_US : public B
 template < typename B >
 struct MPrint_Date_Eu : public B
 {
-	// European date print format
+	// Europejski format daty
 	void Print( void )
 	{
 		std::cout << fDay << "/" << fMonth << '/' << fYear << '\n';
@@ -341,7 +341,7 @@ struct MPrint_Date_Eu : public B
 
 void MixinTest( void )
 {
-	// Alias is useful with mixins
+	// Alias przydaje się przy domieszkach
 	using Date_US = MPrint_Date_US< TDate >;
 	using Date_Eu = MPrint_Date_Eu< TDate >;
 
