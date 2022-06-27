@@ -29,7 +29,7 @@
 
 #include "range.h"
 
-using namespace std;	// Open the whole std since we use many objects in this source
+using namespace std;	// Otwórz całą przestrzeń std z uwagi na użycie wielu obiektów
 
 
 using CppBook::range;
@@ -41,9 +41,9 @@ using CppBook::range;
 void SimpleLambda_TestFun( void )
 {
 
-	// This is lambda closure
+	// To jest domknięcie lambda
 	auto cm_2_in = 
-		// This is lambda expression
+		// To jest wyrażenie lambda
 		[] ( const double cm ) { return 2.54 * cm; };
 
 
@@ -53,7 +53,7 @@ void SimpleLambda_TestFun( void )
 	double val {};
 	cin >> val;
 
-	// Call lambda expression
+	// Wywołaj wyrażenie lambda
 	cout << " = " << cm_2_in( val ) << " in" << endl;
 
 }
@@ -230,23 +230,23 @@ void LambdaTestFun_3( void )
 
 ///////////////////////////////////////////////////////////////////////////////////
 
-// SCUBA classes student information
+// Informacje o uczestnikach kursu nurkowania
 struct StudentInfo
 {
-	wstring		fFirstName;	
-	wstring		fFamilyName;
+	wstring		fFirstName;	// zostanie automatycznie zainicjalizowana
+	wstring		fFamilyName;    // pusty ciąg znaków dwubajtowych
 
-	int			fAge {};
+	int			fAge {};  // {} oznacza inicjalizację domyślną wartością 0
 
 	enum class SCUBA_Cert { kOpenWater, kAdvanced, kMaster, kInstructor };
 
-	SCUBA_Cert	fCert { SCUBA_Cert::kOpenWater };
+	SCUBA_Cert	fCert { SCUBA_Cert::kOpenWater };  // zainicjalizuj wartością kOpenWater
 };
 
 
 
 
-// We need to tell how to display StudentInfo
+// Musimy zdefiniować sposób wyświetlania danych z klasy StudentInfo
 wostream & operator << ( wostream & o, const StudentInfo & s )
 {
 	const vector< wstring > SCUBA_Cert_Names { L"OpenWater", L"Advanced", L"Master", L"Instructor" };	
@@ -260,7 +260,7 @@ wostream & operator << ( wostream & o, const StudentInfo & s )
 }
 
 
-// Let's create a SCUBA class 
+// Utwórz klasę ze studentami 
 vector< StudentInfo >		SCUBA_Class {
 
 	{ L"Phil", L"Curtis",	18,  StudentInfo::SCUBA_Cert::kAdvanced },
@@ -279,7 +279,7 @@ void SCUBA_Course( void )
 	wcout << endl << L"Sorted by family name:" << endl;
 
 	// -------------------
-	// Sort by family name
+	// Posortuj według nazwiska
 	sort( SCUBA_Class.begin(), SCUBA_Class.end(), 
 		[] ( const StudentInfo & a, const StudentInfo & b ) { return a.fFamilyName < b.fFamilyName; } );
 	// Print them on the screen
@@ -289,19 +289,19 @@ void SCUBA_Course( void )
 	wcout << endl << L"Sorted by age:" << endl;
 
 	// -----------
-	// Sort by age
+	// Posortuj według wieku
 	sort( SCUBA_Class.begin(), SCUBA_Class.end(), 
 		[] ( const auto & a, const auto & b ) { return a.fAge < b.fAge; } );
-	// Print them on the screen
+	// Wypisz je na ekran
 	copy( SCUBA_Class.begin(), SCUBA_Class.end(), 
 		ostream_iterator< StudentInfo, wchar_t >( wcout, L"\n" ) );
 
 	wcout << endl << L"Instructors in the group:" << endl;
 
-	// Find all with a given certificate
+	// Znajdź wszystkich z podanym certyfikatem
 	const auto cert = StudentInfo::SCUBA_Cert::kInstructor;
 	copy_if( SCUBA_Class.begin(), SCUBA_Class.end(), 
-		// [ cert ] caption to access a copy of cert
+		// przechwycenie [ cert ] w celu uzyskania dostępu do kopii obiektu cert
 		ostream_iterator< StudentInfo, wchar_t >( wcout, L"\n" ), 
 		[ cert ] ( const auto & a ) { return a.fCert == cert; } );
 
