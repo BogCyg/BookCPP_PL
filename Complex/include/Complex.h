@@ -21,84 +21,84 @@
 
 
 ///////////////////////////////////////////
-// Our own namespace to uniquely identify
-// contained classes
+// Nasza własna przestrzeń nazw do jednoznacznego
+// identyfikowania zawartych w niej klas
 ///////////////////////////////////////////
 namespace CppBook
 {
 
 
 ////////////////////////////////////////////
-// A class to represent complex numbers
+// Klasa do reprezentowania liczb zespolonych
 ////////////////////////////////////////////
 class TComplex
 {
 	private:
 
-		// Data members should be in the private section of the class
+		// Dane składowe powinny być w sekcji prywatnej klasy
 
-		double fRe {};		// real part
-		double fIm {};		// imaginary part
+		double fRe {};		// część rzeczywista
+		double fIm {};		// część urojona
 
 	public:
 
 
 		///////////////////////////////////////////////////////////
-		// Default constructor
+		// Konstruktor domyślny
 		///////////////////////////////////////////////////////////
 		TComplex( void ) 
-			: fRe( 0.0 ), fIm( 0.0 )	// special data intialization
+			: fRe( 0.0 ), fIm( 0.0 )	// specjalna inicjalizacja danych
 		{
-			fRe = 0;					// such initialization is possible but 
-		}								// the above is better
+			fRe = 0;					// taka inicjalizacja jest możliwa,  
+		}								// ale ta powyższa jest lepsza
 
 
 		///////////////////////////////////////////////////////////
-		// A parametric constructor 
+		// Konstruktor parametryczny 
 		///////////////////////////////////////////////////////////
 		TComplex( double re, double im ) : fRe( re ), fIm( im ) {}
 		
 		///////////////////////////////////////////////////////////
-		// Copy constructor - make this object and make its state
-		// the same as the supplied one (i.e. "c"). 
-		// default means to copy fRe and fIm from "c".
+		// Konstruktor kopiujący – utwórz ten obiekt i ustaw jego stan
+		// na taki sam, jak obiekt dostarczony (tj. "c"). 
+		// default oznacza skopiuj fRe i fIm z "c".
 		///////////////////////////////////////////////////////////
 		TComplex( const TComplex & c ) = default;
 
 		///////////////////////////////////////////////////////////
-		// Overloaded assignment operator - default means to 
-		// copy fRe and fIm.
+		// rzeciążony operator przypisania – default oznacza kopiowanie 
+		// fRe i fIm.
 		///////////////////////////////////////////////////////////
 		TComplex & operator = ( const TComplex & c ) = default;
 
 		///////////////////////////////////////////////////////////
-		// Destructor, does nothing, but stated explicitly
+		// Destruktor nic nie robi, ale zdefiniowany jest jawnie
 		///////////////////////////////////////////////////////////
 		~TComplex() = default;			
 
 	public:
 
 		///////////////////////////////////////////////////////////
-		// Converting constructor - allows the creation of TComplex
-		// from a double type object (i.e. it is a conversion 
-		// from double to TComplex).
+		// Konstruktor konwertujący – pozwala na tworzenie obiektu TComplex
+		// z obiektu typu double (tj. jest to konwersja 
+		// z double do TComplex).
 		///////////////////////////////////////////////////////////
 		TComplex( double re ) : fRe( re ), fIm( 0.0 ) {}
 
 
 	public:
 
-		// Getters & Setters to access data members of the class
-		double GetRe( void ) const { return fRe; }	// "const" since we only read 
-		double GetIm( void ) const { return fIm; }	// data, not changing the state
+		// Gettery i setery do uzyskiwania dostępu do składowych klasy
+		double GetRe( void ) const { return fRe; }	// "const", ponieważ tylko odczytujemy
+		double GetIm( void ) const { return fIm; }	// dane, bez zmieniania stanu
 		
-		void SetRe( double re ) { fRe = re; }		// here we change the state
-		void SetIm( double im ) { fIm = im; }		// so it is not "const"
+		void SetRe( double re ) { fRe = re; }		// tutaj zmieniamy stan
+		void SetIm( double im ) { fIm = im; }		// więc nie używamy "const"
 
 	public:
 
 		///////////////////////////////////////////////////////////
-		// Overloaded "equal" compare operator
+		// Przeciążony operator porównywania "równości"
 		///////////////////////////////////////////////////////////
 		bool operator == ( const TComplex & c ) const
 		{
@@ -108,7 +108,7 @@ class TComplex
 	public:
 
 		///////////////////////////////////////////////////////////
-		// Overloaded arithmetic operators
+		// Przeciążone operatory arytmetyczne
 		///////////////////////////////////////////////////////////
 
 		// +
@@ -129,7 +129,7 @@ class TComplex
 		TComplex & operator *= ( const TComplex & second_op );
 
 
-		// div - can throw and exception of division by zero
+		// dzielenie – może zgłosić wyjątek dzielenia przez zero
 		TComplex operator / ( const TComplex & second_op ) const;
 
 		TComplex & operator /= ( const TComplex & second_op );
@@ -138,7 +138,7 @@ class TComplex
 
 
 ///////////////////////////////////////////////////////////////
-// Overloaded streaming operators - always outside the class
+// Przeciążone operatory strumieniowania – zawsze poza klasą
 
 std::istream & operator >> ( std::istream & i, TComplex & complex );
 
@@ -146,10 +146,10 @@ std::ostream & operator << ( std::ostream & o, const TComplex & complex );
 
 ///////////////////////////////////////////////////////////////
 
-// Returns module of a TComplex
+// Zwraca moduł TComplex
 double abs( const TComplex & c );
 
-}		// end of the CppBook
+}		// koniec CppBook
 
 
 /////////////////////////////////////////////////////////
