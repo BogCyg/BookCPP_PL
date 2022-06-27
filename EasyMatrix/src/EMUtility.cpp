@@ -142,15 +142,15 @@ void RandInit( EMatrix & m )
 
 
 
-// Overloaded operators 
+// Przeciążone operatory
 
-// It can be used as follows: c = a + b;
+// Można używać następująco: c = a + b;
 EMatrix		operator + ( const EMatrix & a, const EMatrix & b )
 {
-	assert( a.GetRows() == b.GetRows() );	// dim must be the same
+	assert( a.GetRows() == b.GetRows() );	// wymiary muszą być takie same
 	assert( a.GetCols() == b.GetCols() );
 
-	EMatrix	c { a };	// Make c the same as a
+	EMatrix	c { a };	// Uczyń c takim samym jak a
 
 	for( Dim row = 0; row < b.GetRows(); ++ row )
 		for( Dim col = 0; col < b.GetCols(); ++ col )
