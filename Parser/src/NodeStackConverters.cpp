@@ -36,47 +36,47 @@ using NodeVec = ExpressionTreeBuilderInterpreter::NodeStack::DataContainer;
 using LeafValType = double;
 
 
-// Computes value of the stack
+// Oblicza wartość stosu
 LeafValType ComputeValueFrom( const NodeVec & node_vec )
 {
 	auto retVal { 0.0 };
 
 	const auto kNumOfElems = node_vec.size();
 	if( kNumOfElems == 0 )
-		return retVal;		// Empty node_vec, return zero & exit
+		return retVal;		// Pusty node_vec, zwróć zero i zakończ
 
 
-	// The algorithm is as follows:
-	// - The node stack is traversed:
-	// -	if a leaf is encountered, then push its value on auxStack
-	// -	if a bin operator is encountered, take two topmost values,
-	//		perform the operation, and push back the result on auxStack
+	// Algorytm jest następujący:
+	// - Przechodzimy po stosie węzłów:
+	// -	po napotkaniu liścia umieszczamy jego wartość na stosie auxStack
+	// -	po napotkaniu operatora bierzemy dwie odgórne wartości, wykonujemy
+	//	działanie i rezultat umieszczamy z powrotem na stosie auxStack
 	CppBook::TStackFor< LeafValType, 1000 >		auxStack;
 
 
 
-	// Traverse all nodes, starting at index 0
+	// Przejdź po wszystkich węzłach, zaczynając od indeksu 0
 	for( const auto & node : node_vec )
 	{
 		assert( node );
 
 		if( typeid( * node ) == typeid( NumberLeafNode ) )
 		{
-			// A NumberLeafNode
+			// Węzeł liścia NumberLeafNode
 			auxStack.Push( dynamic_cast< NumberLeafNode & >( * node ).GetValue() );
 		}
 		else
 		{
-			// A binary operator - but we don't know yet which one
+			// Operator binarny – ale nie wiemy jeszcze który
 
 			assert( auxStack.GetStackSize() >= 2 );	
 
 			LeafValType leftNumVal {}, rightNumVal {};
 
-			auxStack.Pop( rightNumVal );	// Get top values
+			auxStack.Pop( rightNumVal );	// Pobierz wartości z samej góry
 			auxStack.Pop( leftNumVal );
 
-			// Check what type of operation is in the node
+			// Sprawdź, jakiego rodzaju operacja znajduje się w węźle
 			if( dynamic_cast< PlusOperator * >( node.get() ) )
 				auxStack.Push( leftNumVal + rightNumVal );
 			else
@@ -92,13 +92,13 @@ LeafValType ComputeValueFrom( const NodeVec & node_vec )
 							else 
 								throw std::overflow_error( "Div by 0" );
 						else
-							assert( false ); // Must not happen - check in debug
+							assert( false ); // Nie może się zdarzyć – sprawdzamy w wersji debug
 		}
 
 
 	}
 
-	// Take over the last node from the stack or return empty.
+	// Przejmij ostatni węzeł ze stosu lub zwróć pusty.
 	assert( auxStack.GetStackSize() == 1 );
 	auxStack.Pop( retVal );
 
@@ -110,21 +110,21 @@ LeafValType ComputeValueFrom( const NodeVec & node_vec )
 
 
 // ------------------------------------------
-// Evaluates the value from the node stack.
-// This works when compiling with
-// BUILD_THE_TREE set to 0
-// (in ExpressionTreeBuilderInterpreter.h)
+// Oblicza wartość ze stosu węzłów.
+// Działa podczas kompilowania z parametrem
+// BUILD_THE_TREE ustawionym na 0
+// (w ExpressionTreeBuilderInterpreter.h)
 void RPN_Value_Test( void )
 {
 #if BUILD_THE_TREE == 1
-	assert( false );		// A fuse to ensure we compiled with the proper parameter
+	assert( false );		// Bezpiecznik gwarantujący kompilację z odpowiednim parametrem
 #endif
 
 	ExpressionTreeBuilderInterpreter		exprParser;
 
-	string good_expr( "(1+2)*(3+(4+5))/(6-7)" );		// Expression string
+	string good_expr( "(1+2)*(3+(4+5))/(6-7)" );		// Ciąg wyrażeń
 
-	// Let's call only the base class operator ()
+	// Wywołajmy tylko operator () z klasy bazowej
 	//if( exprParser.BaseClass::operator()( good_expr ) )
 	if( ( & exprParser )->BaseClass::operator()( good_expr ) )
 	{
