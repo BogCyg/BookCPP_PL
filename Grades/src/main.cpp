@@ -26,7 +26,7 @@ int main()
 
 	cout << "Enter your grades" << endl;
 
-	vector< double >		studentGradeVec;	// Posty wektor wartości double
+	vector< double >		studentGradeVec;	// Pusty wektor wartości double
 
 	// Zbierz oceny studentów
 	for( ;; )
