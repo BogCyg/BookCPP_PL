@@ -247,10 +247,10 @@ namespace BCpp_Simple_Derivatives
 	}
 
 
-		// Define a square function (lambda expression)
+		// Zdefiniuj funkcję kwadratową (wyrażenie lambda)
 	Real_Fun	x2_fun = [] ( double x ) { return pow( x, 2.0 ); };
 
-	// Define a compound function ("normal" function definition)
+	// Zdefiniuj funkcję złożoną ("normalna" definicja funkcji)
 	double fun_tan( double x )
 	{
 		return tanh( pow( x, 3.0 ) );
@@ -261,7 +261,7 @@ namespace BCpp_Simple_Derivatives
 	{
 
 
-		// Fill vectors with argument, value of x2_fun, derivatives of the two functions
+		// Wypełnij wektory argumentami, wartością funkcji x2_fun i pochodnymi dwóch funkcji
 		vector< double >	x, fx, dfx_1, dfx_2, d2fx;
 		for( auto arg : range( -3.0, +3.0, 0.1 ) )
 		{
@@ -271,10 +271,10 @@ namespace BCpp_Simple_Derivatives
 			dfx_2.	push_back( deriv( fun_tan, arg ) );
 		}
 
-		// Store results in one file
+		// Przechowaj rezultaty w jednym pliku
 		ofstream outFile( "x_fun_plot.txt" );
 
-		// Copy each vector to the outFile
+		// Skopiuj każdy wektor do outFile
 		copy( 	x.begin(), x.end(), ostream_iterator< double >( outFile, " " ) ); 
 		outFile << endl;
 		copy( 	fx.begin(), fx.end(), ostream_iterator< double >( outFile, " " ) ); 
@@ -299,12 +299,12 @@ namespace BCpp_Derivatives
 	using Real_Fun = std::function< double( double ) >;
 
 
-	// Derivative is also a 1D real function
+	// Pochodna również jest jednowymiarową funkcją rzeczywistą
 
 
 	auto deriv( const Real_Fun & fun, double x0, double eps = 1e-5 )
 	{
-		// Let's use the definition of a derivative
+		// Skorzystajmy z definicji pochodnej
 		return ( fun( x0 + eps ) - fun( x0 ) ) / eps;
 	}
 
