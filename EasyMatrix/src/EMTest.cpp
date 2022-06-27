@@ -57,9 +57,9 @@ void Easy_Matrix_First_Test( void )
 #if EM_VER == 1
 
 
-// To use a function we only need to provide its declaration.
-// However, to make a full program, function definitions must
-// be added in some of the source files.
+// Aby użyć jakiejś funkcji, musimy jedynie podać jej deklarację.
+// Żeby jednak napisać pełny program, definicja funkcji musi
+// zostać dodana w którymś z plików źródłowych.
 void		AskUserForMatrixData( EMatrix & m );
 void		ShowMatrix( const EMatrix & m );
 EMatrix		MultMatrix( const EMatrix & a, const EMatrix & b );
@@ -67,7 +67,7 @@ EMatrix		MultMatrix( const EMatrix & a, const EMatrix & b );
 
 
 
-// Here we show how to use EMatrix wrapper
+// Tutaj pokazujemy, jak używać EMatrix
 void Easy_Matrix_Second_Test( void )
 {
 	std::cout << "--------------------------------------------------------------" << std::endl;
