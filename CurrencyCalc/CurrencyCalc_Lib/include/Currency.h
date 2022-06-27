@@ -10,7 +10,7 @@
 // ==========================================================================
 
 
-#pragma once		// include this header in the translation unit only once
+#pragma once		// dołącz ten nagłówek tylko raz w jednostce translacji
 
 #include <iostream>
 #include <string>
@@ -30,15 +30,15 @@ class TCurrency
 {
 	private:
 
-		wstring		fCurrKey;		// a 3-letter code, such as USD, EUR, PLN
-		wstring		fCurrName;		// a unique name of a currency to be displayed
+		wstring		fCurrKey;		// 3-literowy kod, taki jak USD, EUR, PLN
+		wstring		fCurrName;		// unikatowa nazwa waluty do wyświetleniad
 
-		double		fSellRate {};		// selling rate � always add {} to stand. types
-		double		fBuyRate {};		// buying rate
+		double		fSellRate {};		// kurs sprzedaży – zawsze dodawaj {} do standardowych typó
+		double		fBuyRate {};		// kurs kupna
 
 	public:
 
-		// Two constructors in one
+		// Dwa konstruktory w jednym (domyślny i parametryczny)
 		TCurrency(	const wstring & currCode = L"", const wstring & currName = L"", 
 					const double sellRate = 0.0, const double buyRate = 0.0 )
 			: fCurrKey( currCode ), fCurrName( currName ), fSellRate( sellRate ), fBuyRate( buyRate )
@@ -46,7 +46,7 @@ class TCurrency
 
 	public:
 
-		// Functions to read data
+		// Funkcje do odczytywania danych
 		wstring		GetCurrKey( void ) const { return fCurrKey; }
 		wstring		GetCurrName( void ) const { return fCurrName; }	
 
@@ -54,7 +54,7 @@ class TCurrency
 		double		GetBuyRate( void ) const { return fBuyRate; }			
 
 
-		// Functions to write data
+		// Funkcje do zapisywania danych
 		void		SetCurrCode( const wstring & s ) { fCurrKey = s; }
 		void		SetCurrName( const wstring & s ) { fCurrName = s; }	
 					
@@ -62,7 +62,7 @@ class TCurrency
 		void		SetBuyRate( double r ) { fBuyRate = r; }			
 };
 
-// "w" for wide-character streams
+// "w" dla strumieni ze znakami dwubajtowymi
 std::wostream & operator << ( std::wostream & o, const TCurrency & c );
 
 std::wistream & operator >> ( std::wistream & i, TCurrency & c );
