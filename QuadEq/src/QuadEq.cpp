@@ -18,19 +18,19 @@
 
 
 ///////////////////////////////////////////////////////////
-// This function checks the type of the equation 
+// Ta funkcja sprawdza typ równania 
 ///////////////////////////////////////////////////////////
 //		
-// INPUT:
+// WEJŚCIE:
 //			delta
 //		
-// OUTPUT:
-//			The exact type of the equation 
-//				represented by the parameters f_a, f_b, f_c
+// WYJŚCIE:
+//			Dokładny typ równania 
+//				reprezentowanego przez parametry fa, fb, fc
 //		
-// REMARKS:
-//			Separation of the problem analysis from
-//			problem solution
+// UWAGI:
+//			Rozdzielenie analizy problemu
+//			od rozwiązania problemu
 //	
 TQuadEq::EEqType TQuadEq::GetNumOfRoots( const double delta ) const
 {
@@ -49,42 +49,41 @@ TQuadEq::EEqType TQuadEq::GetNumOfRoots( const double delta ) const
 
 
 ///////////////////////////////////////////////////////////
-// This function computes the roots of the equation,
-// if possible.
+// Ta funkcja oblicza pierwiastki równania,
+// jeśli istnieją.
 ///////////////////////////////////////////////////////////
 //		
-// INPUT:
-//			theRoot_1 - a reference to an object which
-//				contains root 1 if returned kLinOne, kOne or kTwo
-//			theRoot_2 - a reference to an object which
-//				contains root 2 if returned kOne or kTwo
-//				(in the first case root_1 == root_2)
+// WEJŚCIE:
+//			theRoot_1 - referencja do obiektu, który
+//				awiera root_1, gdy zwrócono kLinOne, kOne lub kTwo
+//			theRoot_2 - referencja do obiektu, który
+//				zawiera root_2, gdy zwrócono kOne lub kTwo
+//				(w pierwszym przypadku root_1 == root_2)
 //		
-// OUTPUT:
-//			status of the equation (number of roots)
+// WYJŚCIE:
+//			status równania (liczba pierwiastków)
 //		
-// REMARKS:
-//			The values referenced to by theRoot_1 and theRoot_2
-//			are undefined in all other cases than stated above.
+// UWAGI:
+//			Wartości, do których odnoszą się theRoot_1 i theRoot_2
+//			są niezdefiniowane we wszystkich innych przypadkach niż te powyżej.
 //
 //	
 	
 TQuadEq::EEqType TQuadEq::GetRoots( double & root_1, double & root_2 ) const
 {
-	auto delta( ComputeDelta() );		// call a constructor for the built-in type
+	auto delta( ComputeDelta() );		// wywołaj konstruktor dla typu wbudowanego
 
 	EEqType equationTypeFlag = GetNumOfRoots( delta );
 
-	const double kDivThresh { 1e-36 };		// Used in assert to verify divisions
+	const double kDivThresh { 1e-36 };		// Używane w assert do weryfikowania dzielenia
 
-	// It is a good idea to explicitly place ALL the cases here (to be sure)
+	// Dobrym pomysłem jest jawne umieszczenie tu WSZYSTKICH przypadków (dla pewności)
 	switch( equationTypeFlag )
 	{
 		case EEqType::kLinContra:
 		case EEqType::kNone:
 
-			break;					// if none, then do nothing
-
+			break;					// w przypadku równania sprzecznego nic nie rób
 		case EEqType::kLinOne:
 
 			assert( fa == 0.0 );
@@ -95,15 +94,15 @@ TQuadEq::EEqType TQuadEq::GetRoots( double & root_1, double & root_2 ) const
 
 			root_1 = root_2 = - fc / fb;
 
-			break;					// return with one root
+			break;					// zwróć jeden pierwiastek
 		
 		case EEqType::kOne:
-									// no break here - for these two cases, one solution
+									// tutaj bez przerywania – dla tych dwóch przypadków mamy ten sam kod
 		case EEqType::kTwo:
 
-			{	// We need a block {} here for local variables
+			{	// Potrzebujemy bloku {} dla zmiennych lokalnych
 
-				assert( delta >= 0.0 );	// just in case, who knows?
+				assert( delta >= 0.0 );	// na wszelki wypadek, kto wie?
 
 				double delta_root = std::sqrt( delta );
 				
@@ -121,7 +120,7 @@ TQuadEq::EEqType TQuadEq::GetRoots( double & root_1, double & root_2 ) const
 
 		default :
 
-			assert( false );		// this should not happen - an error in programming?
+			assert( false );		// to nie powinno się zdarzyć – nasz błąd w programowaniu?
 			break;
 	}
 
@@ -130,7 +129,7 @@ TQuadEq::EEqType TQuadEq::GetRoots( double & root_1, double & root_2 ) const
 
 
 //////////////////////////////////////////////////////////
-// Input/Output operations (usually as external functions)
+// Operacje wejścia/wyjścia (zwykle funkcje zewnętrzne)
 std::ostream & operator << ( std::ostream & o, const TQuadEq & eq )
 {
 	o << eq.Get_a() << " " << eq.Get_b() << " " << eq.Get_c() << std::endl;
