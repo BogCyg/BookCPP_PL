@@ -24,18 +24,17 @@ namespace EventSystem
 {
 
 
-	// Base class defining an ACTION
-	// Also can be chained in a list
+	// Klasa bazowa definiująca procedurę obsługi zdarzenia (handler)
+	// Może być również łączona na liście
 	class THandler
 	{
 
 	public:
 
-		virtual ~THandler() = 0					// virtual for proper inheritance
-		{ std::cout << "~H()" << std::endl; }	// Pure virtual but can have a diagnostic body
-
-												// Main action function ==> functional object
-		virtual void operator () ( void ) = 0;	// Pure virtual to define INTERFACE for derived classes
+		virtual ~THandler() = 0					// virtual dla poprawnego dziedziczenia
+		{ std::cout << "~H()" << std::endl; }	// Czysto wirtualne funkcje mogą mieć ciało
+												// Główna funkcja obsługi zdarzenia ==> obiekt funkcyjny
+		virtual void operator () ( void ) = 0;	// Czysto wirtualny w celu zdefiniowania INTERFEJSU dla klas pochodnych
 
 	};
 
@@ -52,7 +51,7 @@ namespace EventSystem
 		using TH_UP = std::unique_ptr< THandler >;
 		using HandlerList = std::list< TH_UP >;
 
-		// An array that contains lists of THandler like objects
+		// Tablica zawierająca listy obiektów pochodzących od THandler
 		using EventVector = std::array< HandlerList, static_cast< int >( EEvent::kSentinel ) >;
 
 	private:
@@ -64,28 +63,28 @@ namespace EventSystem
 		void AttachHandler_4_Event( EEvent event_to_attach, TH_UP new_handler )
 		{
 			assert( static_cast< int >( event_to_attach ) < static_cast< int >( EEvent::kSentinel ) );
-			fEventVector[ static_cast< int >( event_to_attach ) ].emplace_back( std::move( new_handler ) );	// or emplace_front
+			fEventVector[ static_cast< int >( event_to_attach ) ].emplace_back( std::move( new_handler ) );	// lub emplace_front
 		}
 
-		// Run handlers attached to the event
+		// Uruchom obsługę przyłączoną do zdarzenia
 		virtual void operator () ( const HandlerList & list_of_handlers )
 		{
 
 			for( const auto & handler : list_of_handlers )
-				( * handler )();
+				( * handler )(); // wywołaj operator funkcyjny za pomocą wskaźnika do obiektu obsługi
 		}
 
 		virtual void operator () ( EEvent event )
 		{
-			// One way to call a functional operator 
+			// Jeden ze sposobów na wywołanie operatora funkcyjnego 
 			operator () ( fEventVector[ static_cast< int >( event ) ] );
 		}
 
-		// Run all
+		// Uruchom wszystko
 		virtual void operator () ( void )
 		{
 			for( const auto & list : fEventVector )
-				( * this ) ( list );	// Call operator () ( EEvent event )
+				( * this ) ( list );	// Wywołaj operator () ( EEvent event )
 										//operator() ( list );
 		}
 
@@ -101,7 +100,7 @@ namespace EventSystem
 
 
 		// -------------------
-		// Create a few handlers
+		// Utwórz kilka wariantów obsługi zdarzeń
 
 		class HA : public THandler
 		{
@@ -112,7 +111,7 @@ namespace EventSystem
 			HA( std::string s = "" ) : fStr( s ) {}
 			virtual ~HA() { std::cout << "~HA()" << std::endl; }
 
-			void operator () ( void ) override	// it is also virtual but override is enough to express this
+			void operator () ( void ) override	// również jest virtual, ale do wyrażenia tego wystarczy override
 			{
 				std::cout << "I'm HA with text: " << fStr << std::endl;
 			}
@@ -135,13 +134,13 @@ namespace EventSystem
 		// -------------------
 
 		HA ha( "Standalone HA" );
-		ha();						// Call the function operator on object ha
+		ha();						// Wywołaj operator funkcyjny na obiekcie ha
 
-		( HB( 789 ) )();			// Call the function operator on a temporary object HB
+		( HB( 789 ) )();			// Wywołaj operator funkcyjny na obiekcie tymczasowym HB
 
 		std::cout << std::endl;
 
-		// Now attach no matter how many handlers to the available event slots
+		// Teraz dołącz obiekty obsługi do dostępnych slotów zdarzeń
 
 		theHandlerBoard.AttachHandler_4_Event( TEventHandlers::EEvent::kReset, std::make_unique< HA >( "Reset 0" ) );
 		theHandlerBoard.AttachHandler_4_Event( TEventHandlers::EEvent::kReset, std::make_unique< HB >( 123 ) );
@@ -152,7 +151,7 @@ namespace EventSystem
 		theHandlerBoard.AttachHandler_4_Event( TEventHandlers::EEvent::kExternal, std::make_unique< HB >( 200 ) );
 
 
-		theHandlerBoard();		// Run all
+		theHandlerBoard();		// Uruchom wszystko
 
 	}
 
