@@ -26,17 +26,17 @@
 
 
 
-// A type alias declaration for a vector of double values (real approx.)
+// Deklaracja aliasu typu dla wektora wartości double (przybliżenie liczb rzeczywistych)
 using RealVec = std::vector< double >;
 
-// A type alias for vector dimensions (size)
+// Alias typu dla wektora wymiarów (rozmiar)
 using Dim		= RealVec::size_type;
 
-// A type alias for vector type (e.g. double)
+// Alias typu dla wektora typów (np. double)
 using DataType	= RealVec::value_type;
 
 
-// A type alias for a vector of vectors with doubles = a real matrix
+// // Alias typu dla wektora wektorów wartości double = macierz rzeczywista
 using RealMatrix = std::vector< RealVec >;
 
 
@@ -69,8 +69,8 @@ struct EMatrix
 
 
 	// A parametric constructor
-	// rows, cols � number of rows and columns of a matrix (should be > 0)
-	// initVal � an initial value of elements of a matrix
+	// rows, cols – number of rows and columns of a matrix (should be > 0)
+	// initVal – an initial value of elements of a matrix
 	EMatrix( Dim rows, Dim cols, DataType initVal = 0.0 )
 		: fData( rows, RealVec( cols, initVal ) )
 	{	
