@@ -22,44 +22,44 @@
 TheCube	RetAbsCube( const TheCube & inCube );
 
 
-// Test function for TheCube class
+// Funkcja testowa dla klasy TheCube
 void TheCube_Test( void )
 {
 	const int dx { 15 }, dy { 13 }, dz { 11 };
 
 	TheCube		cube( dx, dy, dz );
 
-	// Random Mersenne twister
+	// Algorytm losowości Mersenne twister
 	std::mt19937		rand_gen{ std::random_device{}() }; 	
 
-	// Fill the cube with random values; ref is a reference wrapper
+	// Wypełnij sześcian losowymi wartościami. ref jest otoką referencji
 	std::generate( cube.GetDataBuf(), cube.GetDataBuf() + cube.Size(), std::ref( rand_gen ) );
 	//std::generate( cube.GetDataBuf(), cube.GetDataBuf() + cube.Size(), std::mt19937( std::random_device{}() ) );
 
-	// Cannot move - only copy from cube since it is used further on
+	// Nie można przenieść – tylko kopia z cube, ponieważ jest ona używana później
 	TheCube		mirror_cube( cube );	
 
 
-	cube.Element( 5, 7, 9 ) = -100.0;		// set an element
-	assert( cube.Element( 5, 7, 9 ) == -100.0 );		// read and check
+	cube.Element( 5, 7, 9 ) = -100.0;		// Ustaw jako element,
+	assert( cube.Element( 5, 7, 9 ) == -100.0 );		// odczytaj i sprawdź, czy takie same
 
 	std::ofstream outFile( "TheCube.bin", std::ios::binary );
 	outFile << cube;
-	outFile.close();	// so we can open it in the next line
+	outFile.close();	// żeby można było otworzyć w kolejnej linii
 
 	std::ifstream inFile( "TheCube.bin", std::ios::binary );
 	TheCube		testCube;
 	inFile >> testCube;
 
 
-	// Check if data the same byte after byte
+	// Sprawdź bajt po bajcie, czy dane są takie same
 	assert( std::memcmp( cube.GetDataBuf(), testCube.GetDataBuf(), cube.Size() * sizeof( TheCube::value_type ) ) == 0 );
 
 
-	// Call the move constructor
+	// Wywołaj konstruktor przenoszący
 	TheCube abs_cube( RetAbsCube( cube ) ); 
 
-	// Explicitly call the move assignment operator
+	// Wywołaj jawnie przenoszący operator przypisania
 	cube = static_cast< TheCube && >( abs_cube );	
 
 
@@ -72,15 +72,15 @@ void TheCube_Test( void )
 
 TheCube	RetAbsCube( const TheCube & inCube )
 {
-	// Create an empty return cube of the same dimensions
+	// Utwórz pustą kostkę o tych samych wymiarach co inCube
 	TheCube outCube(	inCube.GetDim( TheCube::kx ), 
 		inCube.GetDim( TheCube::ky ), 
 		inCube.GetDim( TheCube::kz ) );		
 
-	// Transform all elements to their absolute values
+	// Przekształć wszystkie elementy na ich bezwzględne wartości
 	std::transform( inCube.GetDataBuf(), inCube.GetDataBuf() + inCube.Size(), 
 		outCube.GetDataBuf(), [] ( TheCube::value_type v ) { return std::fabs( v ); } );
-	return outCube;			// Invokes the move semantics
+	return outCube;			// Wywołuje semantykę przenoszenia
 }
 
 
