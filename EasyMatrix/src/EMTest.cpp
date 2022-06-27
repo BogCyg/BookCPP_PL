@@ -170,12 +170,12 @@ void Easy_Matrix_Fourth_Test(void)
 void Easy_Matrix_Zeroth_Test( void )
 {
 	EMatrix		m ( 2, 3 );
-	std::cin >> 	m; 		// Call the extraction operator upon std::cin and m
-	std::cout << 	m; 		// Call the insertion operator with std::cout and m
+	std::cin >> 	m; 		// Wywołaj operator wyodrębniania na std::cin i m
+	std::cout << 	m; 		// Wywołaj operator wstawiania z std::cout i m
 
 
 	// The same as the call
-	operator << ( std::cout, m );	// Call the insertion operator with std::cout and m
+	operator << ( std::cout, m );	// Wywołaj operator wstawiania z std::cout i m
 }
 
 
