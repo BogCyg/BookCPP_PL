@@ -29,7 +29,7 @@ class HTTP_File_Body
 
 		virtual bool	Load_HTTP_File( const std::wstring & internet_addr, const std::wstring & localName ) = 0;
 		
-		virtual ~HTTP_File_Body() = default;	// a virtual desctructor to allow inheritance
+		virtual ~HTTP_File_Body() = default;	// wirtualny destruktor w celu bezpiecznego dziedziczenia
 
 };
 
@@ -92,7 +92,7 @@ class HTTP_File_Handle
 				break;		
 
 				default:
-				assert( false );	// not supported
+				assert( false );	// nie obsługiwane
 				break;		
 			}
 	
@@ -100,22 +100,22 @@ class HTTP_File_Handle
 		}
 
 	public:	
-	
+		// Funkcja interfejsu do wczytywania pliku poprzez HTTP (widziana przez klientów)
 		virtual bool	Load_HTTP_File( const std::wstring & internet_addr, const std::wstring & localName )
 		{
-			assert( fBodyObj );
-			return fBodyObj->Load_HTTP_File( internet_addr, localName );	// delegate an action to the body
+			assert( fBodyObj ); // warunek wstępny w programowaniu kontraktowym
+			return fBodyObj->Load_HTTP_File( internet_addr, localName );	// wydeleguj akcję do obiektu ciała
 		}
 
 
 	public:	
 
-		virtual ~HTTP_File_Handle() = default;	// a virtual desctuctor to allow inheritance
+		virtual ~HTTP_File_Handle() = default;	// wirtualny destruktor w celu bezpiecznego dziedziczenia
 
 };
 
 
 
-}	// CppBook
+}	// koniec przestrzeni nazw CppBook
 
 
