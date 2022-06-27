@@ -108,7 +108,7 @@ void Easy_Matrix_Second_Test( void )
 #else // EM_VER > 1
 
 
-// Here we show how to stream EMatrix objects in and out 
+// Pokazujemy tu jak strumieniować obiekty EMatrix w obie strony 
 void Easy_Matrix_Third_Test( void )
 {
 	EMatrix	matrix_1( 3, 3 );
@@ -117,26 +117,26 @@ void Easy_Matrix_Third_Test( void )
 
 
 	{
-		std::cout << matrix_1;	// stream it to the screen	
+		std::cout << matrix_1;	// prześlij strumieniem na ekran	
 		
 		std::ofstream oma( "ema.txt" );
 
-		oma << matrix_1;	// with the same operator << stream it to the file
+		oma << matrix_1;	// tym samym operatorem << prześlij strumieniem do pliku
 	}
 
 	{
-		EMatrix matrix_2( 1, 1 );	// there must be at least 1 element
+		EMatrix matrix_2( 1, 1 );	// musi istnieć co najmniej 1 element
 
 		std::ifstream ima( "ema.txt" );
 
-		ima >> matrix_2;			// stream in from an input file
+		ima >> matrix_2;			// Pobierz ze strumienia z pliku wejściowego
 
-		std::cout << std::endl << matrix_2 << std::endl;		// show it on the screen
+		std::cout << std::endl << matrix_2 << std::endl;		// pokaż na ekranie
 	}
 
 
-	// With overloaded operators operations are even easier
-	//std::cout << "M1 + M1 = \n" << matrix_1 + matrix_1 << std::endl;	// 'operator +' is ambiguous
+	// Z przeciążonymi operatorami operacje są jeszcze prostsze
+	//std::cout << "M1 + M1 = \n" << matrix_1 + matrix_1 << std::endl;	// 'operator +' jest dwuznaczny
 	std::cout << "M1 + M1 = \n" << matrix_1.operator + ( matrix_1 ) << std::endl;	
 	std::cout << "M1 * M1 = \n" << matrix_1 * matrix_1 << std::endl;
 
