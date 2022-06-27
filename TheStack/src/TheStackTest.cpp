@@ -7,11 +7,11 @@
 
 
 
-// Partially specialized using
+// Częściowo specjalizowana using
 template < auto MaxElems >
 using StackForInt_VarSize = CppBook::TStackFor< int, MaxElems >;
 
-// Full class
+// Pełna klasa
 using StackForInt = StackForInt_VarSize< 256 >;
 
 
@@ -25,13 +25,13 @@ void TheStackTest( void )
 
 	cout << "\nValues pushed to the stack:\n";
 
-	// Push consecutive values
+	// // Umieść kolejne wartości
 	for( auto a : CppBook::range( 16 ) )
 		cout << a << " ", theStackForInt.Push( a );
 
 	cout << "\nContent of the stack:\n";
 
-	// Print taking the top of the stack - for will do all
+	// Wypisz zdejmując z góry stosu – for zrobi to wszystko
 	for( StackForInt::value_type v {}; theStackForInt.Pop( v ); cout << v << " " )
 		;
 }
