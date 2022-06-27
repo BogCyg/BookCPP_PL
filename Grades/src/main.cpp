@@ -11,13 +11,13 @@
 
 
 
-#include <vector>			// A header to use std::vector
-#include <iostream>			// Headers for input and output
-#include <iomanip>			// and output formatting
-#include <cmath>			// For math functions
+#include <vector>			// Nagłówek pozwalający użyć std::vector
+#include <iostream>			// Nagłówki dla wejścia i wyjścia
+#include <iomanip>			// oraz formatowania wyjścia
+#include <cmath>			// Dla funkcji matematycznych
 
 
-// Introduce these, to write vector instead of std::vector
+// Wprowadzamy poniższe, aby móc pisać vector zamiast std::vector
 using std::cout, std::cin, std::endl, std::vector; 
 
 
@@ -26,16 +26,16 @@ int main()
 
 	cout << "Enter your grades" << endl;
 
-	vector< double >		studentGradeVec;	// An empty vector of doubles
+	vector< double >		studentGradeVec;	// Posty wektor wartości double
 
-	// Collect student's grades
+	// Zbierz oceny studentów
 	for( ;; )
 	{
 		double grade {};
 
 		cin >> grade;
 
-		// If ok, push new grade at the end of the vector
+		// Jeśli ok, wstaw nową ocenę na końcu wektora
 		if( grade >= 2.0 && grade <= 5.0 )
 			studentGradeVec.push_back( grade );
 
@@ -45,33 +45,33 @@ int main()
 		cin >> ans;
 
 		if( ans == 'n' || ans == 'N' )
-			break;		// the way to exit the loop
+			break;		// sposób na wyjście z pętli
 	}
 
 	
-	// Ok, if there are any grades compute the average
+	// Ok, jeśli są jakiekolwiek oceny, oblicz ich średnią
 	if( studentGradeVec.size() > 0 )
 	{
 		double sum { 0.0 };
-		// Add all the grades
+		// Zsumuj wszystkie oceny
 		for( auto g : studentGradeVec )
 			sum += g;
 
-		double av = sum / studentGradeVec.size();
+		double av = sum / studentGradeVec.size(); // Typ zostanie wypromowany do double
 
 		double finalGrade {};
 
-		// Let it adjust
+		// Niech się dostosuje
 		if( av < 3.0 )
 		{
 			finalGrade = 2.0;
 		}
 		else
 		{
-			double near_int = std::floor( av );	// get integer part
-			double frac		= av - near_int;	// get only the fraction
+			double near_int = std::floor( av );	// pozyskaj część całkowitą
+			double frac		= av - near_int;	// pozyskaj samą część ułamkową
 
-			double adjust { 0.5 };	// new adjustment value
+			double adjust { 0.5 };	// nowa wartość dostosowania
 
 			if( frac < 0.25 )
 				adjust = 0.0;
