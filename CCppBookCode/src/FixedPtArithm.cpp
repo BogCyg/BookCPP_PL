@@ -20,17 +20,17 @@
 
 // -----------------------------
 
-// New way of defining constants
-// with variable templates
+// Nowy sposób definiowania stałych
+// za pomocą szablonów zmiennych
 template< typename T >
 constexpr T gkPi = T( 3.1415926535897932385 );
 
 
-// A helper multiple end-of-line
+// Pomocniczy wieloliniowy symbol końca linii
 template < auto REP = 1, auto CHAR = '\n' >
 std::ostream & endl( std::ostream & o )
 {
-	// Avoid sending endl - it flushes the stream
+	// Unikaj wysyłania endl ‐ opróżnia on strumień
 	return o << std::string( REP, CHAR );
 }
 
@@ -48,7 +48,7 @@ void FxPt_Test_1( void )
 
 	constexpr FX_8_8	kPi_8_8( gkPi< FX_8_8 > );
 
-	// This checks if kPi_8_8 is created during compilation
+	// Sprawdza, czy kPi_8_8 jest tworzona podczas kompilacji
 	static_assert( kPi_8_8.GetInternalValue() >= 0 );
 
 	// double
@@ -65,7 +65,7 @@ void FxPt_Test_1( void )
 
 	static_assert( ComputeRoundingError( area_8_8, area_d ) < 0.005 );
 
-	// area_d and area_8_8 have been already precomputed in compilation
+	// area_d i area_8_8 zostały już wstępnie obliczone w czasie kompilacji
 	cout << "sizeof(double) = " << sizeof( double );
 	cout << ", area< double > = " << area_d << endl;
 	cout << "sizeof(FX_8_8) = " << sizeof( FX_8_8 );
@@ -75,19 +75,19 @@ void FxPt_Test_1( void )
 
 
 	// ------------------------------------------
-	// Compute at run-time
+	// Oblicz w czasie działania
 
 	auto cyl_len { 1000.0 };
 
-	// There will be an overflow
+	// Dojdzie do przepełnienia
 	cout << "volume< FX_8_8 > = " << static_cast< double >( area_8_8 * FX_8_8( cyl_len ) ) << endl;
 
 
-	FX_16_16	area_16_16( area_8_8 );		// init wider from shorter
+	FX_16_16	area_16_16( area_8_8 );		// zainicjalizuj szerszą przy użyciu krótszej
 
 
 
-	// Compute a volume of a cylinder
+	// Oblicz objętość walca
 	area_16_16 *= cyl_len;
 
 	cout << "volume< FX_16_16 > = " << static_cast< double >( area_16_16 ) << endl;
@@ -99,17 +99,17 @@ void FxPt_Test_1( void )
 void FxPt_Test_2( void )
 {
 	// ------------------------------------------
-	// const vs. constexpr
+	// const kontra constexpr
 
-	const FX_8_8		d1 {};	// d1 will be const
-	constexpr FX_8_8	d2 {};	// d2 will be const and computed durinng compilation
+	const FX_8_8		d1 {};	// d1 będzie stałą
+	constexpr FX_8_8	d2 {};	// d2 będzie stałą i zostanie obliczona podczas kompilacji
 
-	// Will not compile -  is not sufficient, must be constexpr
+	// Nie skompiluje się – nie jest wystarczająca, musi być constexpr
 	// static_assert( d1.GetInternalValue() >= 0 );
 
-	// This is ok 
+	// To jest ok 
 	static_assert( d2.GetInternalValue() >= 0 );	
-	// Will not compile -  d2 is const FX_8_8
+	// Nie skompiluje się ‐ d2 jest stałą FX_8_8
 	// d2 *= 2.0;
 }
 
