@@ -10,26 +10,26 @@
 // ==========================================================================
 
 
-// System headers in < >
+// Nagłówki systemowe w < >
 //#include <time.h>
 #include <ctime>
 
 
 // ---------------------------------------
-// A helper simple random number generator
+// Prosty pomocniczy generator liczb losowych
 
-// Marsaglia's Xorshift random numbers
+// Losowe liczby Xorshift Marsaglia
 struct MarsXorShift
 {
-	// Start value - must be different from 0
+	// Wartość początkowa – musi być różna od  0
 	unsigned long r_a_n_d { (unsigned long) time( nullptr ) & 0xFF };
 
-	// These values were found by G. Marsaglia
-	// to generate quite good random values
+	// Te wartości zostały znalezione przez G. Marsaglia
+	// do generowania dosyć dobrze losowych wartości
 	unsigned long GetNext( void )
 	{
-		r_a_n_d ^= r_a_n_d << 13;	// << is bit left shift
-		r_a_n_d ^= r_a_n_d >> 17;	// ^= is XOR-and-assign 
+		r_a_n_d ^= r_a_n_d << 13;	// << to bitowe przesunięcie w lewo
+		r_a_n_d ^= r_a_n_d >> 17;	// ^= to XOR i przypisz 
 		r_a_n_d ^= r_a_n_d << 5;
 
 		return r_a_n_d;
