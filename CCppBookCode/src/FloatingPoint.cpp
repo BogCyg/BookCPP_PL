@@ -250,18 +250,18 @@ void Test_Float_3( void )
 void Test_Float_4( void )
 {
 
-	// Let's find epsilon for single precision floating-point
+	// Znajdźmy epsilon dla liczby zmiennoprzecinkowej pojedynczej precyzji
 	const float kBase { 2.0f };
 
-	// We will start from this and then this will be successively halved
+	// Zaczniemy od tego, a potem będziemy to sukcesywnie dzielić na pół
 	const float kEpsInit { 1.0f };
 
-	// Stores the last computed epsilon
+	// Przechowuje ostatnio obliczony epsilon
 	float store_eps {};
 
-	// Iterate until adding eps to 1.0f does not change 1.0f
+	// Iteruje, aż dodanie eps do 1.0f nie zmieni 1.0f
 	for( float eps = kEpsInit; 1.0f + eps != 1.0f; eps /= kBase )
-		store_eps = eps;	// We need to catch the one before the last
+		store_eps = eps;	// Musimy przechwycić przedostatnią wartość eps
 
 	cout << "Machine epsilon = " << store_eps << endl;
 	cout << "Machine epsilon = " << numeric_limits< float >::epsilon() << endl;
@@ -387,7 +387,7 @@ void QuadraticSolver( void )
 	{
 		if( b < 0.0 )
 		{
-			x1 = ( -b + sqrt( d ) ) / ( a + a );	// �b becomes positive and we have addition
+			x1 = ( -b + sqrt( d ) ) / ( a + a );	// b becomes positive and we have addition
 			x2 = c / x1;
 		}
 		else
