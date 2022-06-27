@@ -12,10 +12,10 @@ TEST( DecRoman_TestSuite, ChainTest )
 {
 	bool result = Decimal_2_Roman_Chain_UnitTest();
 
-	// NonFatal assertion
+	// Niekrytyczna asercja
 	EXPECT_EQ( result, true ) << "All decimals 1..3999 should pass and vice versa";
 
-	// Fatal assertion
+	// Krytyczna asercja
 	ASSERT_EQ( result, true ) << "All decimals 1..3999 should pass and vice versa";
 }
 
