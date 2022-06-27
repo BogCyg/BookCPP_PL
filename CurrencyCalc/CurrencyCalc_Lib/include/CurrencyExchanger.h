@@ -30,98 +30,98 @@ class TCurrencyExchanger
 {
 	public:
 
-		// a kye-value data structure
+		// struktura danych klucz-wartość
 		using CurrencyMap = std::map< wstring, TCurrency >;		
 
 	private:
 
-		CurrencyMap							fCurrencyMap;	// a map will store TCurrency objects
+		CurrencyMap							fCurrencyMap;	// mapa do przechowywania obiektów TCurrency
 
 	public:
 
-		// Let the compiler generate these.
+		// Niech kompilator je wygeneruje
 		TCurrencyExchanger( void ) = default;
-		virtual ~TCurrencyExchanger() = default;
+		virtual ~TCurrencyExchanger() = default;  // wirtualny destruktor do dziedziczenia
 
 	public:
 
 		///////////////////////////////////////////////////////////
-		// This function converts a value of one currency into
-		// the other currency
+		// Ta funkcja konwertuje wartość w jednej walucie
+		// na wartość w innej walucie
 		///////////////////////////////////////////////////////////
 		//
-		// INPUT:
-		//			from_key - a 3-letter code of a currency (USD, PLN, etc.)
-		//			from_val - value to convert
-		//			to_key - a code of a destination currency
-		//			to_val - output value
+		// WEJŚCIE:
+		//			from_key - 3-znakowy kod waluty (USD, PLN itd.)
+		//			from_val - wartość do skonwertowania
+		//			to_key - kod waluty docelowej
+		//			to_val - wartość wynikowa
 		//
-		// OUTPUT:
-		//			true if ok, false otherwise
+		// WYJŚCIE:
+		//			true jeśli ok, w przeciwnym wypadku false
 		//
-		// REMARKS:
-		//			If from_key or to_key is not included in the map
-		//			the function will throw an exception; a given currency
-		//			code can be checked by calling FindCurrency member
+		// UWAGI:
+		//			Jeśli from_key lub to_key nie jest zawarte w mapie,
+		//			funkcja zgłosi wyjątek. Kod danej waluty
+		//			cmoże zostać sprawdzony poprzez wywołanie funkcji składowej FindCurrency
 		//
 		bool Convert( const wstring & from_key, const double from_val, const wstring & to_key, double & to_val ) const;
 
 
 		///////////////////////////////////////////////////////////
-		// A helper to access fCurrencyMap for read only
+		// Funkcja pomocnicza do uzyskiwania dostępu tylko do odczytu dla fCurrencyMap
 		///////////////////////////////////////////////////////////
 		//
-		// INPUT:
-		//			none
-		// OUTPUT:
-		//			the internal map data structure (for read only)
+		// WEJŚCIE:
+		//			brak
+		// WYJŚCIE:
+		//			wewnętrzna struktura danych mapy (tylko do odczytu)
 		//
-		// REMARKS:
+		// UWAGI:
 		//
 		//
 		const CurrencyMap & GetCurrencyMap( void ) const { return fCurrencyMap;	}
 
 
 		///////////////////////////////////////////////////////////
-		// Find and return currency by its code;
-		// Returns true if ok, false if cannot find.
+		// Znajdź i zwróć walutę na podstawie jej kodu.
+		// Zwraca true jeśli ok lub false, gdy nie może jej znaleźć.
 		///////////////////////////////////////////////////////////
 		//
-		// INPUT:
-		//			currency_code - the 3-letters currency code, such
-		//				as "USD", "EUR", etc. 
-		//			outCurrency - contains found currency if returned true
-		// OUTPUT:
-		//			true if ok, false if cannot find
+		// WEJŚCIE:
+		//			currency_code - 3-literowy kod waluty, taki
+		//				ak "USD", "EUR", itd. 
+		//			outCurrency - zawiera znalezioną walutę, jeśli zwrócono true
+		// WYJŚCIE:
+		//			true jeśli ok lub false, jeśli nie może znaleźć
 		//
-		// REMARKS:
+		// UWAGI:
 		//
 		//
 		bool FindCurrency( const wstring & currency_code, TCurrency & outCurrency ) const;
 
 
 		///////////////////////////////////////////////////////////
-		// Adds new currency record to the data-base
+		// Dodaje nowy rekord waluty do bazy danych
 		///////////////////////////////////////////////////////////
 		//
-		// INPUT:
-		//			new_currency - new currency record; If such 
-		//				already exist it is obliterated by this one
-		// OUTPUT:
-		//			none
+		// WEJŚCIE:
+		//			new_currency - nowy rekord waluty. Jeśli już istnieje 
+		//				zostaje zastąpiona tym wpisem
+		// WYJŚCIE:
+		//			brak
 		//
-		// REMARKS:
+		// UWAGI:
 		//
 		//
 		void AddCurrency( const TCurrency & new_currency );
 
 	private:
 
-		// Friends to read and write to fCurrencyMap
+		// Funkcje zaprzyjaźnione do odczytu i zapisu fCurrencyMap
 		friend std::wostream & operator << ( std::wostream & o, const TCurrencyExchanger & c );
 		friend std::wistream & operator >> ( std::wistream & i, TCurrencyExchanger & c );
 };
 
 
-}		// End of the CppBook namespace
+}		// Koniec przestrzeni nazw CppBook
 
