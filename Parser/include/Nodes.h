@@ -23,73 +23,73 @@
 
 
 
-// Forward class declarations
+// Deklaracje zapowiadająca klasy
 class TVisitor;
 
 
 
-// A forward declaration of the base class for the node hierarchy.
+// Deklaracja zapowiadająca klasy bazowej dla hierarchii węzłów.
 class TNode;
 
-// Owning relation - we can declare the std::unique_ptr
-// with only declared class TNode. Its definition follows.
+// Wskaźnik posiadający obiekt – możemy zadeklarować std::unique_ptr
+// tylko z zadeklarowaną klasą TNode:
 using Node_UP = std::unique_ptr< TNode >;
 
-// Non-owning relation
+// Wskaźnik bez posiadania
 using NodePtr = TNode *;
 
 
 
 
-// This is an interface class representing a node
-// in the tree - it serves only
-// to be derived from, its objects cannot be created.
+// To jest klasa interfejsu reprezentująca węzeł
+// w drzewie – istnieje tylko w celu umożliwienia dziedziczenia
+// po niej, a jej obiekty nie mogą być tworzone.
 class TNode
 {
 
 protected:
 
-	// Making the constructor protected is also
-	// a way to indicate a class as a base since
-	// only derived classes can be instantiated.
+	// Umieszczenie konstruktora w sekcji protected również jest sposobem
+	// na oznaczenie klasy jako bazowej, ponieważ wtedy mogą być tworzone tylko obiekty
+	// klas pochodnych.
 	TNode( void ) = default;
 
 
 public:
 
-	// To indicated the class is an abstract interface 
-	// its destructor is a pure virtual function
-	// what is indicated by adding = 0 to the declaration.
+	// Na potrzeby wskazania, że klasa jest interfejsem abstrakcyjnym,
+	// jej destruktor jest czysto wirtualną funkcją,
+	// co jest wskazywane przez dodanie = 0 do deklaracji.
 	virtual ~TNode() = 0; /*{}*/
 
 public:
 
-	// Pure virtual functions can have implementation 
-	// but it is not absolutely required.
-	// Derived types must provide their own implementation if they
-	// are instantiated.
-	// Accept allows operation of a visitor.
+	// Czysto wirtualne funkcje mogą mieć implementacje,
+	// ale nie jest to wcale wymagane, chyba że są wywoływane.
+	// Typy pochodne muszą dostarczać swoje własne implementacje, jeśli
+	// są tworzone ich obiekty.
+	// Accept pozwala na działanie wizytatora.
 	virtual void Accept( TVisitor & v ) const = 0;
 
 public:
 
-	// Re-create yourself - No implementation
-	// for Clone in the base class.
+	// Operacja klonowania się – brak implementacji
+	// dla Clone w klasie bazowej.
 	virtual Node_UP Clone( void ) const = 0;
 
 };
 
 
 
-// A leaf (an object) with a value, such as
-// a number, a string, etc.
+// Liść (obiekt) z wartością, taką jak
+// liczba, ciąg znaków itd.
 template < typename V >
 class ValueLeafNode : public TNode
 {
 
 private:
 
-	V		fVal {};	// a held value
+	V		fVal {};	// przechowywana wartość
 
 public:
 
@@ -110,7 +110,7 @@ public:
 
 	V GetValue( void ) const { return fVal; }
 
-	// Accept a visitor
+	// Przyjmij wizytatora
 	void Accept( TVisitor & v ) const override
 	{
 		v.Visit( * this );
@@ -118,24 +118,24 @@ public:
 
 public:
 
-	// Re-create yourself
+	// Stwórz swoją kopię
 	Node_UP Clone( void ) const override;
 
 };
 
 
-// A leaf with a floating-point value.
+// Liść z wartością zmiennoprzecinkową
 using NumberLeafNode = ValueLeafNode< double >;
 
 
-// A class to represent any binary operator.
+// Klasa do reprezentowania dowolnego operatora binarnego
 class BinOperator : public TNode
 {
 
 private:
 
-	Node_UP		fLeftChild;		// Owning pointer to the left subtree
-	Node_UP		fRightChild;	// Owning pointer to the right subtree
+	Node_UP		fLeftChild;		// Wskaźnik z posiadaniem do lewego poddrzewa
+	Node_UP		fRightChild;	// Wskaźnik z posiadaniem do prawego poddrzewa
 
 public:
 
@@ -146,8 +146,8 @@ public:
 
 protected:
 
-	// Disallow simple (shallows) copying.
-	// To copy use Clone()
+	// Nie zezwalają na proste (płytkie) kopiowanie.
+	// Do kopiowania użyj Clone()
 	BinOperator( const BinOperator & ) = delete;
 	BinOperator( const BinOperator && ) = delete;
 
@@ -159,7 +159,7 @@ public:
 	NodePtr		GetLeftChild( void ) const { assert( fLeftChild != nullptr ); return fLeftChild.get(); }
 	NodePtr		GetRightChild( void ) const { assert( fRightChild != nullptr ); return fRightChild.get(); }
 
-	// Passing up for ownership
+	// Przekazywanie w celu przejęcia na własność
 	void		AdoptLeftChild( Node_UP up ) { fLeftChild = std::move( up ); }
 	void		AdoptRightChild( Node_UP up ) { fRightChild = std::move( up ); }
 
@@ -169,16 +169,16 @@ public:
 
 public:
 
-	// Re-create yourself - this is a derived class but
-	// again Clone is pure virtual and we don't have
-	// its implementation.
+	// Sklonuj się – to jest klasa pochodna, ale
+	// Clone jest czysto wirtualna i nie mamy 
+	// jej implementacji.
 	Node_UP Clone( void ) const override = 0;
 
 };
 
 
 
-// A concrete binary operator 
+// Konkretny operator binarny
 class PlusOperator : public BinOperator
 {
 
@@ -186,12 +186,12 @@ public:
 
 	PlusOperator( void ) = default;
 	PlusOperator( Node_UP left, Node_UP right ) 
-		: BinOperator( std::move( left ), std::move( right ) )	// init base class
+		: BinOperator( std::move( left ), std::move( right ) )	// zainicjalizuj klasę bazową
 	{}
 
 	virtual ~PlusOperator() = default;
 
-	// Object copying disallowed by the base class
+	// Kopiowanie obiektów zabronione w klasie bazowej
 
 public:
 
@@ -199,7 +199,7 @@ public:
 
 public:
 
-	// Re-create yourself
+	// Odtwórz się
 	Node_UP Clone( void ) const override;
 
 };
