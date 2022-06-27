@@ -79,10 +79,10 @@ std::istream & operator >> ( std::istream & in, EMatrix & matrix )
 
 
 
-	// Let add some overloaded arithmetical operators
+	// Dodajmy pewne przeciążone operatory arytmetyczne
 	EMatrix &		EMatrix::operator += ( const EMatrix & b )	
 	{
-		assert( GetRows() == b.GetRows() );	// dim must be the same
+		assert( GetRows() == b.GetRows() );	// wymiary muszą być takie same
 		assert( GetCols() == b.GetCols() );
 
 		for( Dim row = 0; row < b.GetRows(); ++ row )
@@ -94,13 +94,13 @@ std::istream & operator >> ( std::istream & in, EMatrix & matrix )
 
 	EMatrix			EMatrix::operator + ( const EMatrix & b ) const
 	{
-		// Where does matrix "a" come from? It is "this".
-		assert( GetRows() == b.GetRows() );	// dim must be the same
+		// Skąd pochodzi macierz "a"? To jest "this".
+		assert( GetRows() == b.GetRows() );	// wymiary muszą być takie same
 		assert( GetCols() == b.GetCols() );
 
-		EMatrix	c { * this };	// Make c the same as a
+		EMatrix	c { * this };	// Uczyń c takim samym jak a
 
-		c += b;		// call the add and assing operator +=
+		c += b;		// wywołaj operator dodawania i przypisywania +=
 
 		return c;	
 	}
