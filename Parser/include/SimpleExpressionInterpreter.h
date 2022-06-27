@@ -17,7 +17,7 @@
 
 // Expression grammar
 
-//E -> E + T | E � T | T			expression
+//E -> E + T | E – T | T			expression
 //T -> T * F | T / F | F			term
 //F -> D | ( E )					factor
 //D -> 0 | 1 | 2 | ... | 9
@@ -59,7 +59,7 @@
 // Therefore we have to exchange the grammar to get rid of
 // the left recursion.
 // 
-// E -> T | E + T | E � T                       expression
+// E -> T | E + T | E – T                       expression
 //
 
 
@@ -73,15 +73,15 @@
 
 
 
-// Implements the simple expression grammar
-// free of the left recursion.
+// Implementuje prostą gramatykę wyrażenia
+// wolną od lewej rekurencji.
 class TSimpleExpressionInterpreter
 {
 
 	private:
 
 		std::string				fExpressionString;
-		std::string::size_type	fCurrPos {};		// indicates currently examined position in the expression string
+		std::string::size_type	fCurrPos {};		// wskazuje obecnie badaną pozycję w ciągu wyrażeń
 
 	public:
 
@@ -105,18 +105,18 @@ class TSimpleExpressionInterpreter
 	public:
 
 		///////////////////////////////////////////////////////////
-		// Functional operator to match an expression to fulfill
-		// the grammar.
+		// Operator funkcyjny sprawdzający wyrażenie pod kątem spełnienia
+		// gramatyki.
 		///////////////////////////////////////////////////////////
 		//
-		// INPUT:
-		//			in_str - a string with input expression 		
+		// WEJŚCIE:
+		//			in_str - ciąg z wyrażeniem wejściowym 		
 		//
-		// OUTPUT:	true if expression fulfills the grammar, false otherwise
+		// WYJŚCIE:	true, gdy wyrażenie spełnia gramatykę, w przeciwnym razie false
 		//
-		// REMARKS:
-		//		If false returned, then fCurrPos points 
-		//		at the last properly matched position.
+		// UWAGI:
+		//		W przypadku zwrócenia false, fCurrPos wskazuje 
+		//		ostatnią dobrze dopasowaną pozycję.
 		//
 		virtual bool operator () ( const std::string & in_str )
 		{
@@ -129,32 +129,32 @@ class TSimpleExpressionInterpreter
 	protected:
 
 		///////////////////////////////////////////////////////////
-		// This is the simplest lexical analyzer.
-		// It checks if a character matches 1:1 a character
-		// in the fExpressionString at position fCurrPos.
+		// To jest najprostszy analizator leksykalny.
+		// Sprawdza, czy znak pasuje 1:1 do znaku w wyrażeniu
+		// fExpressionString na pozycji fCurrPos.
 		///////////////////////////////////////////////////////////
 		//
-		// INPUT:
-		//		c - the character to match in fExpressionString at position fCurrPos 		
+		// WEJŚCIE:
+		//		c - znak do dopasowania w fExpressionString na pozycji fCurrPos		
 		//
-		// OUTPUT:	true if c matched, false otherwise
+		// WYJŚCIE:	true, gdy c dopasowane, w przeciwnym razie false
 		//
-		// REMARKS:
-		//		If a match, then fCurrPos is advanced to the next character.
+		// UWAGI:
+		//		Jeśli dopasowano, wówczas fCurrPos przesuwana jest na kolejny znak.
 		//
 		virtual bool Match( char c )
 		{
 			if( fCurrPos >= fExpressionString.size() )
-				return false;		// the pointer out of scope, exiting ...
+				return false;		// twskaźnik poza zakresem, wychodzę...
 
 			if( fExpressionString[ fCurrPos ] == c )
 			{
-				++ fCurrPos;		// advance the pointer to the next position
+				++ fCurrPos;		// przesuń wskaźnik na kolejną pozycję
 				return true;
 			}
 			else
 			{
-				return false;			// no match
+				return false;			// brak dopasowania
 			}
 		}
 
@@ -174,17 +174,17 @@ class TSimpleExpressionInterpreter
 		{
 			if( Match( '+' ) )
 			{
-				return Term_Fun() && Expr_Prime_Fun();			// production: + T E'
+				return Term_Fun() && Expr_Prime_Fun();			// produkcja: + T E'
 			}
 			else
 			{
 				if( Match( '-' ) )
 				{
-					return Term_Fun() && Expr_Prime_Fun();		// production: - T E'
+					return Term_Fun() && Expr_Prime_Fun();		// produkcja: - T E'
 				}
 			}
 
-			return true;										// production: e
+			return true;							// produkcja: e
 		}
 
 
@@ -201,17 +201,17 @@ class TSimpleExpressionInterpreter
 		{
 			if( Match( '*' ) )
 			{
-				return Factor_Fun() && Term_Prime_Fun();		// production: * F T'
+				return Factor_Fun() && Term_Prime_Fun();		// produkcja: * F T'
 			}
 			else
 			{
 				if( Match( '/' ) )
 				{
-					return Factor_Fun() && Term_Prime_Fun();	// production: / F T'
+					return Factor_Fun() && Term_Prime_Fun();	// produkcja: / F T'
 				}
 			}
 
-			return true;										// production: e
+			return true;							// produkcja: e
 		}
 
 
@@ -220,13 +220,13 @@ class TSimpleExpressionInterpreter
 		{
 			if( Digit_Fun() )
 			{
-				return true;			// ok we have matched D
+				return true;			// ok, dopasowaliśmy D
 			}
 			else
 			{
 				if( Match( '(' ) && Expr_Fun() && Match( ')' ) )
 				{
-					return true;		// ok, this subexpression matches production ( E )
+					return true;		// ok, to podwyrażenie pasuje do produkcji ( E )
 				}
 			}
 
