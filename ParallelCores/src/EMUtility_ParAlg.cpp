@@ -14,7 +14,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
-#include <omp.h>		// Header for OpenMP
+#include <omp.h>		// Nagłówek dla OpenMP
 
 
 
@@ -34,75 +34,75 @@
 
 void OpenMP_Test( void )
 {
-	// This is a shared objects - the same for all threads.
-	// A problem might happen if many threads want to 
-	// write it SIMULTANEOUSLY.
+	// To jest obiekt współdzielony ‐ ten sam dla wszystkich wątków.
+	// Może wystąpić problem, gdy wiele wątków będzie chciało 
+	// apisywać do niego JEDNOCZEŚNIE.
 	std::ostringstream outStream;
 
-	// We start with a serial code executed by one thread line-after-line
+	// Zaczynamy od kodu szeregowego wykonywanego przez jeden wątek linia po linii
 	outStream << "Beginning with " << omp_get_num_threads() << " thread(s).\n";
 	outStream << "Let's enter the omp parallel ...\n";
 
-	// Before the parallel section can set a number 
-	// of threads in a thread-team (do not confuse with cores)
+	// Przed sekcją równoległą ustaw liczbę 
+	// wątków w zespole (nie mylić z rdzeniami) 
 	//omp_set_num_threads( 36 );	
 
 	// ------------------------
-	// --- This is PARALLEL ---
-	// Let's see the TEAM of threads in action
+	// ‐‐‐ To jest RÓWNOLEGŁE ‐‐‐
+	// Zobaczmy ZESPÓŁ wątków w akcji
 	// However, declaring an object as shared
 	// does NOT automatically makes its access
 	// thread safe.
 	#pragma omp parallel shared( outStream )
 	{
-		// This is a local variable; each thread has 
-		// its own copy of it.
+		// To jest zmienna lokalna. Każdy wątek ma
+		// swoją własną kopię tej zmiennej.
 		auto thisThreadNo = omp_get_thread_num();
 
-		// This is also a local object.
+		// To również jest obiekt lokalny.
 		const auto kNumOfThreads = omp_get_num_threads();
 
-		// Let's use 'critical' to allow execution of
-		// only one thread at a time - otherwise there
-		// will be a mess on the screen.
-		// Do NOT forget the 'omp' keyword here
+		// Użyjmy ‘critical’, aby zezwolić na działanie
+		// tylko jednego wątku jednocześnie – w innym wypadku
+		// będzie bałagan na ekranie.
+		// NIE zapomnijmy tutaj o słowie kluczowym ‘omp’
 		#pragma omp critical ( critical_0 )
 		{
 			outStream << "I'm thread no. " << thisThreadNo << " / " << kNumOfThreads << "\n";
 		}
 
 	}
-	// Here is the SYNCHRONIZATION BARRIER - after that, all threads have finished
-	// only the master executes
-	// --- End of PARALLEL ---
+	// Tu znajduje się BARIERA SYNCHRONIZACJI ‐ po niej wszystkie wątki zakończyły już prace
+	// i wykonuje się tylko wątek główny
+	// --- Koniec wykonywania RÓWNOLEGŁEGO ‐‐‐
 	// ------------------------
 
-	// One (master) thread again, no synchronization necessary.
+	// Ponownie jeden wątek (główny), brak konieczności synchronizacji.
 	outStream << "After crossing the parallel BARRIER we run " << omp_get_num_threads() << " thread(s).\n";
 
-	// Let see what we gathered
+	// Zobaczmy, co zostało zebrane
 	std::cout << outStream.str() << std::endl;
 
 }
 
 
 
-// Computes pi with arctan(1) series summation.
-// N - the number of terms in the series.
+// Oblicza liczbę pi poprzez sumowanie szeregu arctan(1).
+// N ‐ liczba wyrazów w szeregu.
 double Compute_Pi( int N )
 {
 	const double dx = 1.0 / static_cast< double >( N );
 
-	// This is a SHARED variable
+	// To jest WSPÓŁDZIELONA zmienna
 	double sum {};
 
 	// -------------------------------------
 	#pragma omp parallel for reduction( + : sum )	if( N > 1000000 )
 	for( auto i = 0; i < N; ++ i )
 	{
-		auto c_i = dx * ( static_cast< double >( i ) + 0.5 );	// This is a local variable
+		auto c_i = dx * ( static_cast< double >( i ) + 0.5 );	// Zmienna lokalna
 		
-		// sum is shared, but unique access is guaranteed by the reduction
+		// sum jest współdzielona, ale wyłączny dostęp gwarantowany jest przez reduction
 		sum += 1.0 / ( 1.0 + c_i * c_i );	
 	}
 	// -------------------------------------
@@ -119,10 +119,10 @@ void OpenMP_Pi_Test( void )
 
 	for( const auto N : N_list )
 	{
-		// Returns the number of seconds since the OS start-up.
-		auto start_time = omp_get_wtime();	// Get start point
-			auto pi = Compute_Pi( N );		// Do computations
-		auto exec_time = omp_get_wtime() - start_time;	// End time
+		// Zwraca liczbę sekund od czasu uruchomienia systemu operacyjnego.
+		auto start_time = omp_get_wtime();	// Pozyskaj czas rozpoczęcia
+			auto pi = Compute_Pi( N );		// Wykonaj obliczenia
+		auto exec_time = omp_get_wtime() - start_time;	// Czas zakończenia
 
 		std::cout	<< "pi(" << N << ")=" << std::setprecision( 12 ) 
 					<< pi << " in " << exec_time << std::endl;
@@ -164,7 +164,7 @@ EMatrix		operator + ( const EMatrix & a, const EMatrix & b )
 	return c;
 }
 
-// It can be used as follows: c = a * b;
+// Można go używać następująco: c = a * b;
 EMatrix		operator * ( const EMatrix & a, const EMatrix & b )
 {
 	const auto a_cols = a.GetCols();
@@ -173,19 +173,19 @@ EMatrix		operator * ( const EMatrix & a, const EMatrix & b )
 	const auto b_cols = b.GetCols();
 	const auto b_rows = b.GetRows();	
 
-	assert( a_cols == b_rows );			// Dimensions must be the same
+	assert( a_cols == b_rows );			// Wymiary muszą być takie same
 
-	EMatrix	c( a_rows, b_cols, 0.0 );	// Output matrix has these dimensions
+	EMatrix	c( a_rows, b_cols, 0.0 );	// Macierz wynikowa ma te wymiary
 
-	// Split the outer-most for loop and run each chunk in a separate thread
+	// Podziel najbardziej zewnętrzną pętlę for i wykonaj każdy fragment w osobnym wątku
 	#pragma omp parallel for \
 			shared( a, b, c, a_rows, b_cols, a_cols ) \
 			default( none ) \
 			schedule( static )
-	// Only the outermost loop will be made parallel 
-	for( Dim ar = 0; ar < a_rows; ++ ar )	// Traverse rows of a
-		for( Dim bc = 0; bc < b_cols; ++ bc )	// Traverse cols of b
-			for( Dim ac = 0; ac < a_cols; ++ ac ) // Traverse cols of a == rows of b
+	// Tylko najbardziej zewnętrzna pętla będzie wykonywana równolegle
+	for( Dim ar = 0; ar < a_rows; ++ ar )	// Przejdź po wierszach a
+		for( Dim bc = 0; bc < b_cols; ++ bc )	// Przejdź po kolumnach b
+			for( Dim ac = 0; ac < a_cols; ++ ac ) // Przejdź po kolumnach a == wierszach b
 				c[ ar ][ bc ] += a[ ar ][ ac ] * b[ ac ][ bc ];
 
 
@@ -215,11 +215,11 @@ void OpenMP_MultMatrix_Test( void )
 	RandInit( a );
 	RandInit( b );
 
-	auto start_time = omp_get_wtime();	// Get time start point
+	auto start_time = omp_get_wtime();	// Pozyskaj punkt początkowy
 
 	EMatrix		c( a * b );				
 
-	auto exec_time = omp_get_wtime() - start_time;	// End time
+	auto exec_time = omp_get_wtime() - start_time;	// Pomiar czasu końcowego
 
 
 	std::cout << "Middle elem val: " << c[ kCols / 2 ][ kCols / 2 ] << std::endl;
