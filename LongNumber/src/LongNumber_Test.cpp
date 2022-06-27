@@ -77,19 +77,19 @@ void LongNumbers_Test( void )
 
 
 
-// A function that checks main functionality 
-// of the TLongNumberFor class that has the proxy pattern
+// Funkcja, która sprawdza główną funkcjonalność klasy
+// TLongNumberFor, zawierającej wzorzec pełnomocnika
 void LongNumbersWithProxy_Test( void )
 {
 #ifdef TURN_ON_PROXY
 
 	TLongNumberFor< 11 > id;
 
-	int x = id[ 7 ];	// operator = to read only
+	int x = id[ 7 ];	// użyj tutaj pełnomocnika
 
-	id[ 7 ] = 7;		// use proxy here
+	id[ 7 ] = 7;		// użyj tutaj pełnomocnika
 
-	id[ 6 ] = id[ 8 ] = id[ 7 ] = 3;	// use proxy as well		
+	id[ 6 ] = id[ 8 ] = id[ 7 ] = 3;	// tutaj również użyj pełnomocnika		
 
 	assert( id[ 6 ] == 3 );
 	assert( id[ 7 ] == 3 );
@@ -99,12 +99,12 @@ void LongNumbersWithProxy_Test( void )
 
 #endif
 
-	// The concordant indexing:      9   ...  0
-	const TLongNumberFor< 11 > cid( "9876543210" );	// cid contains "09876543210"
-	assert( cid[ 10 ] == cid[ 0 ] );	// the leading 11th digit was set to 0
+	// Zgodne indeksowanie: 9 ... 0
+	const TLongNumberFor< 11 > cid( "9876543210" );	// cid zawiera "09876543210"
+	assert( cid[ 10 ] == cid[ 0 ] );	// wiodąca 11-ta cyfra została ustawiona na 0
 
-	//cid[ 0 ] = 5;		cannot do that since cid is const
-	int z = cid[ 7 ];	// calls const int TLongNumberFor< 11 >::operator [] ( int position ) const
+	//cid[ 0 ] = 5;		nie można wykonać, ponieważ cid jest const
+	int z = cid[ 7 ];	// wywołuje const int TLongNumberFor< 11 >::operator [] ( int position ) const
 
 #ifdef TURN_ON_PROXY
 
