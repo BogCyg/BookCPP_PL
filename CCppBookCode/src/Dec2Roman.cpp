@@ -28,12 +28,12 @@
 using std::vector, std::string, std::tuple;
 using std::cout, std::cin, std::endl;
 
-// Converts decimal number in_dec_num into a Roman numeral string
+// Konwertuje liczbę dziesiętną in_dec_num na tekst reprezentujący liczbę rzymską
 auto ConvertDecimal_2_Roman( int in_dec_num )
 {
 	assert( in_dec_num <= 3999 );
 
-	// The values need to be sorted from the largest one
+	// Wartości muszą zostać posortowane od największej do najmniejszej
 	const vector< tuple< int, string > > RomanValueTranslator  
     {
         {	1000,	"M"	},		{	900,	"CM"	},
@@ -46,10 +46,10 @@ auto ConvertDecimal_2_Roman( int in_dec_num )
     };
 
 	string outStr { "" };
-	// Traverse all tuples [ val, str ], starting from the largest val
-	for( const auto & [ val, str ] : RomanValueTranslator )	// structured binding
-        while( in_dec_num >= val )					// iterate subtracting
-            outStr += str, in_dec_num -= val;	// the largest possible value
+	// Przejdź po wszystkich krotkach [ val, str ], zaczynając od największej wartości val
+	for( const auto & [ val, str ] : RomanValueTranslator )	// powiązanie strukturalne
+        while( in_dec_num >= val )					// iteruj odejmując
+            outStr += str, in_dec_num -= val;	// największa możliwa wartość
 
     return outStr;
 }
@@ -72,13 +72,13 @@ void Dec_2_Roman_Test( void )
 /////////////////////////////////////////////////////////////////////////
 
 
-// Unit test for ConvertDecimal_2_Roman
+// Test jednostkowy dla funkcji ConvertDecimal_2_Roman
 bool ConvertDecimal_2_Roman_UnitTest( void )
 {
 	assert( ConvertDecimal_2_Roman( 2000 ) == "MM" );
 	assert( ConvertDecimal_2_Roman( 137 ) == "CXXXVII" );
 	assert( ConvertDecimal_2_Roman( 1999 ) == "MCMXCIX" );
-	//assert( ConvertDecimal_2_Roman( 2018 ) == "MMVIII" );	// a mistake to catch
+	//assert( ConvertDecimal_2_Roman( 2018 ) == "MMVIII" );	// pomyłka do wyłapania
 
 	return true;
 }
@@ -111,29 +111,29 @@ auto ConvertRoman_2_DecimalNumber( const string & Roman_str )
 #include <random>
 
 ///////////////////////////////////////////////////////////
-// Creates a vector with random integers
+// Tworzy wektor z losowymi liczbami całkowitymi
 ///////////////////////////////////////////////////////////
 //
-// INPUT:
-//			kFrom, kTo - range of values
-//			kNumOfTrials - the number of values
-// OUTPUT:
-//			vector< int > with random values in the range
+// WEJŚCIE:
+//			From, kTo – zakres wartości
+//			kNumOfTrials - liczba wartości
+// WYJDZIE:
+//			vector< int > z losowymi wartościami w zakresie
 //
 auto	CreateRandomVector( const int kFrom, const int kTo, const int kNumOfTrials )					-> std::vector< int >
 {
-	// To generate random values we need:
-	// (1) a random initialization object
+	// Do wygenerowania wartości losowych potrzebujemy:
+	// (1) obiektu inicjalizacji losowości
     std::random_device rd;				
-	// (2) a random engine 
-	std::mt19937 mtRandomEngine( rd() );	// Mersenne twister MT19937? Why not?
-	// (3) a distribution
-	std::uniform_int_distribution uni_distr( kFrom, kTo );		// values between from_val and to_val
+	// (2) silnika losowości 
+	std::mt19937 mtRandomEngine( rd() );	// Mersenne twister MT19937? Czemu nie?
+	// (3) biektu żądanego rozkładu
+	std::uniform_int_distribution uni_distr( kFrom, kTo );		// wartości from_val-to_val
 
-	std::vector< int >	random_decimals;	// will hold random integers
+	std::vector< int >	random_decimals;	// będzie przechowywać losowe liczby całkowite
 
-	// Generate kNumOfTrials random values through the lambda function joining 
-	// uni_distr with mtRandomEngine. We use back_inserter since vector is empty.
+	// ygeneruj kNumOfTrials losowych wartości przez funkcję lambda łączącą 
+	// uni_distr z mtRandomEngine. Używamy back_inserter, ponieważ wektor jest pusty.
 	std::generate_n( back_inserter( random_decimals ), kNumOfTrials, [&](){ return uni_distr( mtRandomEngine ); } );
 	
 	return random_decimals;
@@ -142,26 +142,26 @@ auto	CreateRandomVector( const int kFrom, const int kTo, const int kNumOfTrials 
 
 
 ///////////////////////////////////////////////////////////
-// Unit test to randomly test both conversions
+// Test jednostkowy do losowego testowania obu konwersji
 ///////////////////////////////////////////////////////////
 //
-// INPUT:
-//			kFrom, kTo - range of values to test
-//			kNumOfTrials - a number of random test values
-// OUTPUT:
-//			true if all tests passed ok, false otherwise
+// WEJŚCIE:
+//			kFrom, kTo - zakres wartości do przetestowania
+//			kNumOfTrials - liczba losowych wartości testowych
+// WYJŚCIE:
+//			true, jeśli wszystkie testy zakończą się pomyślnie, false w przeciwnym razie
 //
-// REMARKS:
-//			Calls assert()
+// UWAGI:
+//			Wywołuje assert()
 //
 bool Decimal_2_Roman_Chain_UnitTest( const int kFrom = 1, const int kTo = 3999, const int kNumOfTrials = 1000 )
 {
-	// Check each random decimal if it converts ok
+	// Sprawdź czy każda losowa liczba dziesiętna konwertuje się poprawnie
 	for( const auto & val : CreateRandomVector( kFrom, kTo, kNumOfTrials ) )
 		if(	ConvertRoman_2_DecimalNumber( ConvertDecimal_2_Roman( val ) ) != val )
-			return false;
+			return false;  // test nie powiódł się, kończenie...
 
-	return true;	// if here, then we passed all tests ;)
+	return true;	// skoro tu dotarliśmy, wszystkie test zakończyły się sukcesem ;)
 }
 
 
