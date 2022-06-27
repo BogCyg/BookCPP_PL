@@ -20,21 +20,21 @@
 
 int main()
 {
-	CloseConsoleWindow();	// Get rid of the console window
+	CloseConsoleWindow();	// Pozbądź się okna konsoli
 
 	namespace fs = std::filesystem;
-	// Get full path to the initialization file
+	// Pozyskaj pełną ścieżkę do pliku inicjalizacji
 	std::wstring iniPath( fs::current_path() / fs::path( CurrExchanger::initDefaultFileName ) );
 
-	// Create the currency exchanger object
+	// Utwórz obiekt wymiany walut
 	auto curExchObj = OL_CE::CreateCurExchanger( OL_CE::nbp_addr, iniPath );
 	if( ! curExchObj )
-		return fl_alert( "Cannot load currency information (no ini file, no Internet) - exiting ..." ), -1;	// Exit with error code
+		return fl_alert( "Cannot load currency information (no ini file, no Internet) - exiting ..." ), -1;	// Wyjdź
 
-	// Create GUI object with the provided currency exchanger object
+	// Utwórz obiekt GUI z dostarczonym obiektem wymiany walut
 	CC_GUI	gCC_GUI( * curExchObj );		
 
-	// Run application 
+	// Uruchom aplikację
 	return gCC_GUI.Create_GUI();
 }
 
