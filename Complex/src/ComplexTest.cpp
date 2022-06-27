@@ -27,76 +27,76 @@ using CppBook::TComplex;
 
 
 
-// Simple operations with complex numbers 
-// using the keyboard and the screen
+// Proste operacje na liczbach zespolonych
+// z użyciem klawiatury i ekranu
 void Complex_Test_Screen( void )
 {
 	//////////////////////////////////////////
-	// Let's create few TComplex objects:
-	CppBook::TComplex	a, b,			// a and b by default constructor
-						c( 10., 20. );	// c by the parametric constructor
+	// Utwórzmy kilka obiektów TComplex:
+	CppBook::TComplex	a, b,			// a i b za pomocą konstruktora domyślnego
+						c( 10., 20. );	// c za pomocą konstruktora parametrycznego
 
-	TComplex d( c );	// yet another one, this time d contains a copy of c
+	TComplex d( c );	// Kolejny, tym razem d zawiera kopię obiektu c
 
-	// Let's test how to stream out object d to the screen
+	// Przetestujmy strumieniowanie obiektu d na ekran
 	cout << d << endl;		
-	operator << ( cout, d );	// we can also write like this
-	cout << endl;				// then move to the new line
+	operator << ( cout, d );	// Możemy również napisać to tak,
+	cout << endl;				// a następnie przejść do nowej linii
 
 	cout << "Write re, press Enter, then im, press Enter" << endl;
-	cin >> a;	// from the keyboard read new values to the object a
+	cin >> a;	// Wczytaj z klawiatury nowe wartości dla obiekty a
 
-	c = b = a;	// copy a to b, then b to c (= is right associative)
+	c = b = a;	// Skopiuj a do b, następnie b do c (= ma łączność prawostronną)
 
-	// Let's add two complex numbers b and d and display the result
+	// Dodajmy do siebie dwie liczby zespolone b i d, i wypiszmy rezultat
 	cout << "( " << a << " ) + ( " << b << " ) = ( " << a + b << " ) " << endl;	
 
-	// To assign 5.0 to b, at first, 5.0 needs to be converted to TComplex, then assigned.
+	// Aby przypisać 5.0 do b, 5.0 musi zostać skonwertowane na TComplex, a potem przypisane.
 	b = 5.0;
 	cout << "( " << a << " ) + ( " << b << " ) = ( " << a + b << " ) " << endl;	
 }
 
 
-// Simple operations with complex numbers 
-// using the keyboard, the screen, and a file
+// Proste operacje na liczbach zespolonych
+// z użyciem klawiatury, ekranu i pliku
 void Complex_Test_File( void )
 {
-	// Create two complex objects
+	// Utwórz dwa obiekty zespolone
 	TComplex	a, b;			
 		
-	// Enter two from the keyboard
+	// Wprowadź je z klawiatury
 	cout << "Enter 1st complex" << endl;
 	cin >> a;
 
 	cout << "Enter 2nd complex" << endl;
 	cin >> b;
 
-	// Let's try to copy results to a file opened in appending mode
+	// Spróbujmy skopiować wyniki do pliku otwartego w trybie dopisywania
 	ofstream theFile( "ComplexTest.txt", std::ios::app );	 
 
-	// Always check if the file opened correctly
+	// Zawsze sprawdzaj, czy plik został prawidłowo otwarty
 	if( theFile.is_open() == true )
 	{
-		// Perform operations and print results to the file
+		// Wykonaj operacje i wypisz wyniki do pliku
 		theFile << "a = " << a << ", b = " << b << endl;
 		theFile << "a + b = " << a + b << endl;
 		theFile << "a - b = " << a - b << endl;
 		theFile << "a * b = " << a * b << endl;
 
-		// However, division is different - it can throw an exception
+		// Dzielenie jest jednak inne – może zgłosić wyjątek
 		try
 		{
-			// Keep it in the try-catch clamp
+			// Trzymaj to w bloku try-catch
 			theFile << "a / b = " << a / b << endl << endl;
 		}
-		catch( std::exception & e )		// catch exceptions
+		catch( std::exception & e )		// przechwyć wyjątki
 		{
-			// Standard exceptions will be processed here
-			std::cerr << "Exception caught: "	<< e.what() << endl;	// print the cause 
+			// Standardowe wyjątki będą przetwarzane tutaj
+			std::cerr << "Exception caught: "	<< e.what() << endl;	// wypisz przyczynę
 		}
 		catch( ... ) 
 		{
-			// Any other exception will be caught here
+			// Dowolny inny wyjątek zostanie przechwycony tutaj
 			std::cerr << "Unknown error" << endl;	
 		}		
 
