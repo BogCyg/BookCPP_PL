@@ -55,15 +55,15 @@ void RangeTest( void )
 	// 3:
 	ostr << endl << "3rd test:" << endl;
 
-	auto vvv = range( 123 );	// 0..122 inclusive, with step 1
+	auto vvv = range( 123 );	// 0..122 włącznie, z krokiem 1
 	for( auto a : vvv )
 		ostr << a << ", ";
 
 	// 4:
 	ostr << endl << "4th test:" << endl;
 
-	// Can be used in the nested loops as well
-	for( auto i : range( 0.0, 256.0, 16.5 ) ) // Must be the same type, 0.0 not 0
+	// Można również użyć w pętlach zagnieżdżonych
+	for( auto i : range( 0.0, 256.0, 16.5 ) ) // Musi być tego samego typu, 0.0 nie 0
 	{
 		for( auto j : range( -2, +16, 3 ) ) 
 		{
