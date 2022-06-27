@@ -42,12 +42,12 @@ namespace CurrExchanger
 #include <iostream>
 #include <locale>
 
-
+// Twórz prosty main(), kod umieść w innych komponentach
 int main( void )
 {
-	setlocale( /*LC_ALL*/LC_CTYPE, "Polish" );	// to display national letters (but don't change financial format ',' vs '.')
+	setlocale( /*LC_ALL*/LC_CTYPE, "Polish" );
 	CurrExchanger::OnLine_CurrExchanger::Run();
-	return 0; // Although not absolutely required, return the value from main
+	return 0; // Choć nie jest to wymagane, zwróć wartość z main
 }
 
 
