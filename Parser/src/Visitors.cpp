@@ -115,12 +115,12 @@ void PrintVisitor::Visit( const DivOperator & n )
 }
 
 
-// Here we have an infix operation: left-this-right
+// Tutaj mamy operację infiksową: lewy-bieżący-prawy
 void PrintVisitor::LeftRightProcess( const BinOperator & n, char op )
 {
-	auto prev_dl = fDepthLevel;	// get current indentation level
+	auto prev_dl = fDepthLevel;	// pozyskaj bieżący poziom wcięcia
 
-	fDepthLevel += fDL_Step;	// increase indentation 
+	fDepthLevel += fDL_Step;	// zwiększ wcięcie
 
 	n.GetRightChild()->Accept( * this );
 
@@ -131,7 +131,7 @@ void PrintVisitor::LeftRightProcess( const BinOperator & n, char op )
 
 	n.GetLeftChild()->Accept( * this );
 
-	fDepthLevel = prev_dl;		// restore previous indent level
+	fDepthLevel = prev_dl;		// przywróć poprzedni poziom wcięcia
 }
 
 
