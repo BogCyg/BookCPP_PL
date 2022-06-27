@@ -86,41 +86,41 @@ void fun_perform_timer_test( void )
 
 namespace CppBook
 {
-	// Nested namespace
+	// Zagnieżdżona przestrzeń nazw
 	namespace LTimer
 	{
 		const int kIterations = 10;
 
 		///////////////////////////////////////////////////////////
-		// Lambda to measure execution time of a function taking 
-		// any set of parameters.
+		// Lambda do pomiaru czasu wykonywania funkcji przyjmującej dowolny
+		// zestaw parametrów.
 		///////////////////////////////////////////////////////////
 		//
-		// INPUT:
-		//			func - a function to be called func( func_params )
-		// OUTPUT:
-		//			time in milliseconds per single execution of func
+		// WEJŚCIE:
+		//			func - funkcja do wywołania jako: func( func_params )
+		// WYJŚCIE:
+		//			czas w milisekundach dla pojedynczego wykonania func
 		//
-		// REMARKS:
-		//			func will be called kIterations times and the 
-		//			execution time will be averaged 
+		// UWAGI:
+		//			func zostanie wywołana kIterations razy, a czas 
+		//			wykonania zostanie uśredniony
 		//
 		auto measureFuncAvTiming = [ iter = kIterations ]( auto && func, auto && ... func_params )               
 		{
-			static_assert( kIterations > 0 );	// check at compile time
+			static_assert( kIterations > 0 );	// sprawdź w czasie kompilacji
 
 			using timer = typename std::chrono::high_resolution_clock;
 			
 			auto time_start = timer::now();
 				  
-				// Run an algorithm a number of iterations 
+				// Wykonaj algorytm pewną liczbę iteracji
 				for( auto i : range( iter ) )
 					std::forward< decltype( func ) >( func )
 					( 
 						std::forward< decltype( func_params ) >( func_params ) ... 
 					);
 
-			// Compute an average execution time of func in milliseconds
+			// COblicz średni czas wykonywania func w milisekundach
 			return 	std::chrono::duration_cast< std::chrono::milliseconds >
 						( timer::now() - time_start ).count() 
 						/ /*kIterations*/iter;
@@ -149,9 +149,9 @@ void TestSimpleFunctionTimeMeasurement( void )
 
 void MathFun_RandTest( int iters, double eps, double & result )
 {
-	// init Mersenne twister 
+	// Zainicjuj Mersenne twister
 	std::mt19937 mtRandomEngine( (random_device())() );	
-	std::bernoulli_distribution bern( 0.7 ); // 0 or 1 with p=0.7
+	std::bernoulli_distribution bern( 0.7 ); // 0 lub 1 z p=0.7
 
 	result = 0.0;
 	for( int i = 0; i < iters; ++ i )
