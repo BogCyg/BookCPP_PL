@@ -21,11 +21,11 @@ namespace CppBook
 
 
 
-// "w" for wide-character streams
+// "w" dla strumieni znaków dwubajtowych
 std::wostream & operator << ( std::wostream & o, const TCurrency & c )
 {
-	const int kOutWidth { 10 };		// total width of numeric output
-	const int kOutPrec { 4 };		// precision for the rates
+	const int kOutWidth { 10 };		// całkowita szerokość wyjścia numerycznego
+	const int kOutPrec { 4 };		// precyzja dla kursów
 
 	o << c.GetCurrKey() << "\t";
 	o << c.GetCurrName() << "\t";
@@ -45,11 +45,11 @@ std::wostream & operator << ( std::wostream & o, const TCurrency & c )
 
 std::wistream & operator >> ( std::wistream & i, TCurrency & c )
 {
-	wstring s {};	// empty temporary string
+	wstring s {};	// pusty tymczasowy ciąg znaków
 	i >> s; c.SetCurrCode( s );
 	i >> s; c.SetCurrName( s );
 
-	double tmp {};	// temporary double
+	double tmp {};	// tymczasowa zmienna typu double
 	i >> tmp; c.SetSellRate( tmp );
 	i >> tmp; c.SetBuyRate( tmp );
 
