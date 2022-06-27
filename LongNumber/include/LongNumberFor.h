@@ -27,11 +27,11 @@ using std::istream, std::ostream;
 
 
 
-// This class efficiently stores a series of numbers, such as 12345678901234567890
-// of a given length. Each number is stored in a nibble (i.e. 4 bits).
+// Ta klasa przechowuje w wydajny sposób serię liczb, takich jak 12345678901234567890,
+// odanej długości. Każda liczba przechowywana jest w półbajcie (tj. na czterech bitach).
 //
-// The auto keyword in a template parameter -
-// the type is deduced at the point of instantiation. 
+// Słowo kluczowe auto w parametrze szablonu -
+// typ dedukowany jest w czasie tworzenia instancji. 
 //
 template < auto MAX_NUMBERS >
 class TLongNumberFor
@@ -44,12 +44,12 @@ class TLongNumberFor
 	private:
 
 		// --------------------------------
-		// A class can define another class
-		// This class is just a placeholder
+		// Klasa może definiować kolejna klasę
+		// Ta klasa definiuje 2 cyfry do przechowania
 		struct NibblePair
 		{
-				unsigned char fFirst	: 4;		// define two bit fields
-				unsigned char fSecond	: 4;		// of a total size of 1 byte
+				unsigned char fFirst	: 4;		// zdefiniuj dwa pola bitowe
+				unsigned char fSecond	: 4;		// o całkowitym rozmiarze 1 bajtu
 
 				NibblePair() : fFirst( 0 ), fSecond( 0 ) {}
 		};
@@ -59,51 +59,51 @@ class TLongNumberFor
 		static const auto kNumOfBytes = ( kMaxNumbers >> 1 ) + ( kMaxNumbers & 0x01 );
 
 		using NibbleArray = std::array< NibblePair, kNumOfBytes >;
-		NibbleArray	fData {};		// Here we efficiently store the nibbles - enforce zero-initialization by adding {}
+		NibbleArray	fData {};		// Tutaj wydajnie przechowujemy półbajty - wymuszamy inicjalizację zerem poprzez dodanie {}
 
 
-		// Helper function 
-		// Returns true if first nibble 
+		// Funkcja pomocnicza
+		// Zwraca true, gdy index określa pierwszy półbajt
 		bool IsFirstNibble( int index ) const { return ( index & 0x01 ) == 0; }		// inline functions
 		
-		// Returns address of a number in the fData structure
+		// Zwraca adres liczby w strukturze fData
 		auto ReComputeIndex( int index ) const { return index >> 1; }
 
 	public:
 
-		// Construction part
+		// Część konstrukcyjna
 		TLongNumberFor( void ) 
 		{ 
 			assert( kMaxNumbers > 0 );
-			assert( sizeof( NibblePair ) == sizeof( unsigned char ) );		// at first check our invariant
-			assert( sizeof( fData ) == ( kMaxNumbers >> 1 ) + ( kMaxNumbers & 0x01 ) );	// some bit manipulation, but be careful about the hierarchy
+			assert( sizeof( NibblePair ) == sizeof( unsigned char ) );		// najpierw sprawdzamy nasz niezmiennik
+			assert( sizeof( fData ) == ( kMaxNumbers >> 1 ) + ( kMaxNumbers & 0x01 ) );	// jakieś manipulacje bitami, ale ostrożnie z hierarchią
 #if ALLOW_INHERITANCE == 0																		
-			assert( sizeof( * this ) == sizeof( fData ) );		// that the object does not contain more than bare data
+			assert( sizeof( * this ) == sizeof( fData ) );		// sprawdzanie, czy obiekt nie zawiera więcej niż same dane
 #endif
 		}
 
 #if ALLOW_INHERITANCE == 1
-		virtual ~TLongNumberFor() {}	// A virtual destructor to allow inheritance
+		virtual ~TLongNumberFor() {}	// Wirtualny destruktor zapewniający dziedziczenie
 #endif
 
 	public:
 
-		// Type converting constructor - assumes big endiannes,
-		// i.e. the rightmost character will be at 0 index,
-		// e.g. "123" will be allocated as: 0 ... 0 1 2 3
+		// Konstruktor konwersji typu – zakłada kolejność bajtów big endian,
+		// tj. znak najbardziej na prawo będzie pod indeksem 0,
+		// np. "123" zostanie przydzielone jako: 0 ... 0 1 2 3
 		TLongNumberFor( const string & s ) 
 		{
-			assert( s.length() <= kMaxNumbers );	// should we throw?
+			assert( s.length() <= kMaxNumbers );	// co zrobić jeśli nie spełnione? Rzucić wyjątek?
 
-			// template type deduction has to exactly match the passed types
+			// dedukcja typu szablonu musi dokładnie pasować do przekazanych typów
 			auto char_len = std::min( static_cast< decltype( kMaxNumbers ) >( s.length() ), kMaxNumbers );
 
 			if( char_len < 1 )
-				return;				// nothing to do, exit
+				return;				// nic do zrobienia, wyjdź
 
 			for( auto i { 0 }; i < char_len; ++ i )
 			{
-				// Traverse from the leftmost char of the string
+				// Przejdź od znaku najbardziej na lewo w ciągu znaków (kolejność bajtów)
 				auto digit { s[ char_len - i - 1 ] - '0' };
 
 				assert( digit >= 0 && digit <= 9 );
@@ -118,21 +118,21 @@ class TLongNumberFor
 
 
 
-		// Type converter - assumes big endiannes,
-		// i.e. the rightmost character will be at 0 index,
-		// e.g. "123" will be allocated as: 0 ... 0 1 2 3
+		// Konwerter typów – zakłada kolejność big endian,
+		// tj. znak najbardziej na prawo będzie pod indeksem 0,
+		// np. "123" zostanie przydzielone jako: 0 ... 0 1 2 3
 		operator string() const
 		{
 			string str;
 
-			// Build the string
+			// Zbuduj ciąg znaków
 			for( int i { kMaxNumbers - 1 }; i >= 0; -- i )
 			{
 				auto a_digit { GetNumberAt( i ) };
 				if( a_digit == 0 && str.length() == 0 )
-					continue;				// skip leading left 0s
+					continue;				// pomiń zera wiodące
 				else
-					str += '0' + a_digit;	// let's use the simple patterns
+					str += '0' + a_digit;	// użyjmy prostego sposobu konwersji
 			}
 
 			return str;
@@ -142,43 +142,43 @@ class TLongNumberFor
 
 		bool operator == ( const TLongNumberFor & obj )
 		{
-			// Treat array as a series of bytes
+			// Traktuj tablicę jak serię bajtów
 			return std::memcmp( & fData[ 0 ], & obj.fData[ 0 ], sizeof( fData ) ) == 0;
 		}
 
 	public:
 
-		// Retuns a ditig at position
+		// Zwraca cyfrę na danej pozycji
 		int GetNumberAt( int position ) const
 		{
 			assert( position < kMaxNumbers );
 			if( position >= kMaxNumbers )
-				throw std::out_of_range( "GetNumberAt position out of range" );		// if wrong position then throw
+				throw std::out_of_range( "GetNumberAt position out of range" );		// jeśli zła pozycja, zgłoś wyjątek
 			return IsFirstNibble( position ) ? fData[ ReComputeIndex( position ) ].fFirst : fData[ ReComputeIndex( position ) ].fSecond;
 		}
 
 		void SetNumberAt( int position, int val )
 		{
-			assert( val >= 0 && val <= 9 );		// check that we don't abuse it
+			assert( val >= 0 && val <= 9 );		// sprawdź, czy nie nadużywamy
 			assert( position < kMaxNumbers );
 			if( position >= kMaxNumbers )
-				throw std::out_of_range( "SetNumberAt position out of range" );		// if wrong position then throw
+				throw std::out_of_range( "SetNumberAt position out of range" );		// jeśli zła pozycja, zgłoś wyjątek
 			IsFirstNibble( position ) ? ( fData[ ReComputeIndex( position ) ].fFirst = val ) : ( fData[ ReComputeIndex( position ) ].fSecond = val );
 		}
 
-		// Resets all numbers to 0
+		// Resetuje wszystkie liczby do 0
 		void ClearAll( void )
 		{
-			fData.fill( NibbleArray::value_type() );	// set all to 0
+			fData.fill( NibbleArray::value_type() );	// ustawia wszystko na 0
 		}
 
 
-		// Overloaded subscript operator but ONLY to READ.
-		// To write, we will need a proxy pattern (see below).
+		// Przeciążony operator indeksu, ale TYLKO do ODCZYTU.
+		// Aby móc zapisywać, potrzebujemy wzorca pełnomocnika (patrz niżej).
 		const int operator [] ( int position ) const
 		{
 			assert( position < kMaxNumbers );
-			return GetNumberAt( position );		// can throw
+			return GetNumberAt( position );		// może zgłaszać wyjątek
 		}
 
 #define TURN_ON_PROXY
@@ -287,7 +287,7 @@ class TLongNumberFor
 
 
 /////////////////////////////////////////////////////////////////////////////////
-// Extraction operator
+// Operator wstawiania
 template < typename auto MAX_NUMBERS >
 ostream & operator << ( ostream & o, const TLongNumberFor< MAX_NUMBERS > & longNumb )
 {
@@ -298,13 +298,13 @@ ostream & operator << ( ostream & o, const TLongNumberFor< MAX_NUMBERS > & longN
 
 
 /////////////////////////////////////////////////////////////////////////////////
-// Insertion operator
+// Operator wyodrębniania
 template < typename auto MAX_NUMBERS >
 istream & operator >> ( istream & i, TLongNumberFor< MAX_NUMBERS > & longNumb )
 {
 	string str;
-	i >> str;			// read as a string
-	longNumb = str;		// call conversion
+	i >> str;			// odczytaj jako ciąg znaków
+	longNumb = str;		// wywołaj konwersję
 	return i;
 }
 
