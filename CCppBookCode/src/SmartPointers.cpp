@@ -233,17 +233,17 @@ void unique_ptr_with_custom_deleters( void )
 	// -----------------------------------------------
 	// Examples of custom deleters for unique_ptr
 
-	// Define a custom deleter for AClass - a lambda function
+	// Zdefiniuj niestandardowe usuwanie dla AClass ‐ funkcja lambda
 	auto AClass_delete_fun = [] ( AClass * ac_ptr ) 
 	{ 
-		// Print to the log ...
+		// Wypisz do dziennika ...
 		delete ac_ptr; 
 	};
 
 	// ...
 	unique_ptr< AClass, decltype( AClass_delete_fun ) > p_d_8( new AClass(), AClass_delete_fun );
 
-	// Define a custom deleter for FILE - a lambda function 
+	// Zdefiniuj własną metodę usuwania dla FILE ‐ funkcja lambda
 	auto file_close_fun = [] ( FILE * f) { fclose( f ); };
 
 
@@ -258,20 +258,20 @@ void unique_ptr_with_custom_deleters( void )
 void things_to_avoid_with_unique_ptr( void )
 {
 	{																		
-		// AClass object on the heap, p_d takes care
-		auto p_d_0( new AClass( "No ..." ) );	// oops, an ordinary pointer
+		// Obiekt AClass na stercie, zajmuje się tym p_d
+		auto p_d_0( new AClass( "No ..." ) );	// ups, zwykły wskaźnik
 
-		delete p_d_0;			// get rid of it
+		delete p_d_0;			// pozbądź się go
 	}
 
 	{
 		AClass * p_d_5 = new AClass;
 
-		unique_ptr< AClass > p_d_6( p_d_5 );	// do not initialize via ord pointer
+		unique_ptr< AClass > p_d_6( p_d_5 );	// nie inicjalizuj za pomocą zwykłego wskaźnika
 
 		// ...
-		// somewhere else ...
-		unique_ptr< AClass > p_d_7( p_d_5 );	// wrong, two unique_ptr to one object
+		// gdzieś indziej ...
+		unique_ptr< AClass > p_d_7( p_d_5 );	// źle, dwa wskaźniki unique_ptr do jednego obiektu
 	}
 
 
@@ -624,34 +624,34 @@ void donator( void )
 
 class N
 {
-	string fStr;
+	string fStr;  // dane własne
 public:	
 	const string & GetStr( void ) const { return fStr; }
 	void SetStr( const string & s ) { fStr = s; }
 
 private:	
-	shared_ptr< N > fNext;	// forward reference
-	weak_ptr< N >	fPrev;	// back reference
+	shared_ptr< N > fNext;	// referencja do przodu
+	weak_ptr< N >	fPrev;	// referencja do tyłu
 
 public:	
 	void SetNext( shared_ptr< N > s ) { fNext = s; }
 	//void SetPrev( weak_ptr< N >	p ) { fPrev = p; }
 	shared_ptr< N > GetNext( void ) const { return fNext; }
 public:		
-	
+	// Domyślny/parametryczny konstruktor
 	N( const string & s = "", const shared_ptr< N > & prev = nullptr ) : fStr( s ), fPrev( prev ) {}
 	~N() { cout << "Killing node " << fStr << endl; }
 
 public:	
-	// Add 3 texts ... - [i-1] - [i] - [i+1] - ...
+	// Dodaje 3 teksty... <‐> [i‐1] <‐> [i] <‐> [i+1] <‐> ...
 	string operator() ( void )
 	{
 		string outStr;
 
-		// fPrev is a weak_ptr
+		// fPrev jest wskaźnikiem weak_ptr – najpierw sprawdź, czy jest prawidłowy
 		if( fPrev.expired() == false ) outStr += fPrev.lock()->GetStr();
 		outStr += fStr;
-		// fNext is a shared ptr
+		// fNext jest wskaźnikiem shared_ptr – również sprawdź, czy jest prawidłowy
 		if( fNext ) outStr += fNext->GetStr();
 
 		return outStr;
@@ -663,30 +663,30 @@ public:
 
 void double_linked_list_test( void )
 {
-	using SP_N = shared_ptr< N >;	// a useful type alias
+	using SP_N = shared_ptr< N >;	// przydatny alias typu
 	
 
-	SP_N root, pr;		// two empty shared ptrs 
+	SP_N root, pr;		// dwa puste wskaźniki współdzielone
 
 	// ---------------
-	// Create the list
+	// Utwórz listę
 	for( const auto & s : { "A", "B", "C", "D", "E", "F" } )
 	{
 		if( ! pr /*== false*/ )
 		{
-			root = pr = make_shared< N >( s );	// the first node 
+			root = pr = make_shared< N >( s );	// pierwszy węzeł
 		}
 		else
 		{
-			// Make a new node, and connect to the previous node in the list
+			// Utwórz nowy węzeł i podłącz do poprzedniego węzła na liście
 			pr->SetNext( make_shared< N >( s, pr ) );
-			pr = pr->GetNext();		// advance pr on to the end of the list
+			pr = pr->GetNext();		// Przesuń pr na koniec listy
 		}
 	}
 
 	// ---------------------------------------------------------------
-	// OK, the list is ready, so traverse the list and call operator()
-	// To check if pointing at valid object implicitly use operator bool ()
+	// Ok, lista jest gotowa, więc przejdź po liście i wywołaj operator()
+	// Aby sprawdzić, czy pokazuje na prawidłowy obiekt, niejawnie użyj operatora bool ()
 	//                  v
 	for( SP_N p = root; p; p = p->GetNext() )
 		cout << ( * p )() << endl;
