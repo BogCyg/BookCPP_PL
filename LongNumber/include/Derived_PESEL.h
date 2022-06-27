@@ -20,7 +20,7 @@
 
 
 /////////////////////////////////////////////////////////////////////////////////
-// The "is-a" version
+// Wersja "jest"
 class PESEL : public TLongNumberFor< 11 >
 {
 	public:
@@ -30,7 +30,7 @@ class PESEL : public TLongNumberFor< 11 >
 
 	private:
 
-		// Some constants specific to the Polish PESEL number
+		// Pewne stałe specyficzne dla polskiego numeru PESEL
 		enum { kBirthYear_Dec = 10, kBirthYear_Sngl = 9, kSex = 1 };
 
 	public:
@@ -40,10 +40,10 @@ class PESEL : public TLongNumberFor< 11 >
 	public:
 
 		PESEL( void ) {}
-		PESEL( const string & s ) : BaseClass( s ) {}		// initialize the base class from the string
+		PESEL( const string & s ) : BaseClass( s ) {}		// lasa bazowa z ciągu znaków
 		
-		virtual ~PESEL() {}		// this must be virtual, why?
-								// also TLongNumberFor<> should have a virtual destructor
+		virtual ~PESEL() {}		// musi być wirtualny, dlaczego?
+								// aponadto TLongNumberFor<> powinna mieć wirtualny destruktor
 	public:
 
 		auto GetYearOfBirth( void ) 
