@@ -25,24 +25,24 @@ using std::cout, std::endl;
 
 
 
-template < typename ElemType >		// TEMPLATE preamble � ElemType is a placeholder 
-class TinyCube						// for a later concrete type 
+template < typename ElemType >		// preambuła SZABLONU – ElemType jest symbolem zastępczym
+class TinyCube						// dla późniejszego konkretnego typu 
 {
 	public:
 
-		static const int kDims = 3;		// the same for all objects of this class
+		static const int kDims = 3;		// to samo dla wszystkich obiektów tej klasy
 		
-		enum EDims { kx, ky, kz };		// shortcuts for 3 dimensions
+		enum EDims { kx, ky, kz };		// skróty dla 3 wymiarów
 	
 	private:
 
-		vector< ElemType >	fDataBuf;		// a vector to store data
+		vector< ElemType >	fDataBuf;		// wektor do przechowywania danych
 		
-		array< int, kDims >	fDim;
+		array< int, kDims >	fDim;                   // przechowuje zakres każdego wymiaru
 
 	public:
 
-		// Parametric constructor - dx, dy, dz must be > 0
+		// Konstruktor parametryczny - dx, dy, dz muszą być > 0
 		TinyCube( const int dx, const int dy, const int dz )
 			: fDim{ dx, dy, dz }, fDataBuf( dx * dy * dz, ElemType() )
 		{
@@ -50,16 +50,16 @@ class TinyCube						// for a later concrete type
 			assert( fDataBuf.size() == dx * dy * dz );
 		}
 
-		// Destructor does nothing; data will be deleted by the vector
-		~TinyCube() {} 
+		// Destruktor niczego nie robi. Dane zostaną usunięte przez wektor, jednak
+		~TinyCube() {}  // jawna definicja destruktora wyklucza semantykę przekazywania
 
 	public:
 
-		// Access elements by reference - bi-directional
+		// Uzyskaj dostęp do elementów przez referencję - dwukierunkowe
 		ElemType & Element( const int x, const int y, const int z )
 		{ 
 			const auto offset = ( z * fDim[ ky ] + y ) * fDim[ kx ] + x;
-			return fDataBuf[ offset ]; 
+			return fDataBuf[ offset ];  // indeks dolny zwracany przez referencję
 		}
 
 };
@@ -177,20 +177,20 @@ void MultiDimArray_Test( void )
 
 void TinyCubeTest( void )
 {
-	TinyCube< double >	_3D_double_cube_obj( 2, 3, 4 );	// 2x3x4 cube of doubles
+	TinyCube< double >	_3D_double_cube_obj( 2, 3, 4 );	// 2x3x4 kostka liczb double
 
 	_3D_double_cube_obj.Element( 1, 2, 3 ) = -3.14;
 	assert( _3D_double_cube_obj.Element( 1, 2, 3 ) == -3.14 );
 
 
 	typedef TinyCube< int > TinyCubeForInt;
-	TinyCubeForInt			_3D_int_cube_obj( 1, 1, 1 );	// 1x1x1 cube of ints
+	TinyCubeForInt			_3D_int_cube_obj( 1, 1, 1 );	// 1x1x1 kostka liczb całkowitych
 	_3D_int_cube_obj.Element( 0, 0, 0 ) = -1700;
 	assert( _3D_int_cube_obj.Element( 0, 0, 0 ) == -1700 );
 
 
-	using StringCube = TinyCube< std::string >;
-	StringCube		_3D_string_cube_obj( 3, 2, 1 );	// 3x2x2 cube of strings
+	using StringCube = TinyCube< std::string >;             // C++11
+	StringCube		_3D_string_cube_obj( 3, 2, 1 );	// 3x2x2 kostka ciągów znaków
 	_3D_string_cube_obj.Element( 2, 1, 0 ) = "John";
 	assert( _3D_string_cube_obj.Element( 2, 1, 0 ) == "John" );
 
