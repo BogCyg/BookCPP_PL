@@ -113,9 +113,9 @@ namespace InnerProducts
 	}
 
 	// -----------------
-	// PARALLEL VERSIONS
+	// WERSJE RÓWNOLEGŁE
 
-	// Parallel version of the inner product with transform-reduce 
+	// Wersja równoległa iloczynu skalarnego z transform‐reduce 
 	auto InnerProduct_TransformReduce_Par( const DVec & v, const DVec & w )
 	{
 		return std::transform_reduce(	std::execution::par,
@@ -125,21 +125,21 @@ namespace InnerProducts
 		);
 	}
 
-	// Parallel version of the inner product with sorting
+	// Wersja równoległa iloczynu skalarnego z sortowaniem
 	auto InnerProduct_SortAlg_Par( const DVec & v, const DVec & w )
 	{
-		DVec z( v.size() );		// Stores element-wise products
+		DVec z( v.size() );		// Przechowuje iloczyny poszczególnych elementów
 
-		// PARALLEL elementwise multiplication: c = v .* w
+		// RÓWNOLEGŁE mnożenie po elementach: c = v .* w
 		std::transform(	std::execution::par,
 						v.begin(), v.end(), w.begin(), 
 						z.begin(), 
 						[] ( const auto & v_el, const auto & w_el) { return v_el * w_el; } );
 
-		// PARALLEL sort in ascending  order
+		// RÓWNOLEGŁE sortowanie w kolejności rosnącej
 		std::sort( std::execution::par, z.begin(), z.end(), [] ( const DT & p, const DT & q ) { return fabs( p ) < fabs( q ); } );		// Is it magic?
 
-		// PARALLEL summation 
+		// RÓWNOLEGŁE sumowanie 
 		return std::reduce( std::execution::par, z.begin(), z.end() );
 	}
 
@@ -276,12 +276,12 @@ namespace InnerProducts
 	
 
 
-	// THE BEST PERFORMANCE
-	// This is a simple data parallelizing of the Kahan algorithm.
-	// The input vectors are divided into chunks that are 
-	// then processed in parallel but by the serial Kahan algorithm.
-	// The partial sums are then summed up with yet run of the
-	// Kahan algorithm.
+	// NAJLEPSZA WYDAJNOŚĆ
+	// Wersja równoległa dla danych algorytmu Kahana.
+	// Wektory wejściowe dzielone są na fragmenty, które są
+	// następnie przetwarzane równolegle, ale przez szeregowy algorytm Kahana.
+	// Sumy częściowe są na końcu sumowane za pomocą 
+	// algorytmu Kahana.
 	auto InnerProduct_KahanAlg_Par( const DVec & v, const DVec & w, const ST kChunkSize = 10000 )
 	{
 		const auto kMinSize { std::min( v.size(), w.size() ) };
@@ -299,19 +299,19 @@ namespace InnerProducts
 
 		vector< future< double > >		my_thread_pool;
 
-		// Process all equal size chunks of data
+		// Przetwórz wszystkie fragmenty danych o tej samej wielkości
 		std::decay< decltype( k_num_of_chunks ) >::type i {}; 
 		for( i = 0; i < k_num_of_chunks; ++ i )
 			my_thread_pool.push_back( async( std::launch::async, fun_inter, v_data_begin + i * kChunkSize, w_data_begin + i * kChunkSize, kChunkSize ) );
 
-		// Process the remainder, if present
+		// Przetwórz resztę danych, jeśli pozostał jakiś fragment (mniejszy niż kChunkSize)
 		if( k_remainder > 0 )
 
 			my_thread_pool.push_back( async( std::launch::async, fun_inter, v_data_begin + i * kChunkSize, w_data_begin + i * kChunkSize, k_remainder ) );
 
 		assert( par_sum.size() == my_thread_pool.size() );
 		for( i = 0; i < my_thread_pool.size(); ++ i )
-			par_sum[ i ] = my_thread_pool[ i ].get();			// get() blocks until the async is done
+			par_sum[ i ] = my_thread_pool[ i ].get();			// pozyskuj bloki do momentu zakończenia async
 
 		return Kahan_Sort_And_Sum( par_sum );			
 		//return Kahan_Sum( par_sum );			
