@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.6.2 )
 
-# For a new project it is sufficient to change only its name in the following line
+# W przypadku nowego projektu wystarczy zmienić tylko jego nazwę w poniższej linii
 set( PROJECT_NAME EmptyPro )
 
 project( ${PROJECT_NAME} )
@@ -26,16 +26,16 @@ elseif( UNIX )
 endif()
 
 
-# Inform CMake where the header files are
+# Poinformuj CMake, gdzie znajdują się pliki nagłówkowe
 include_directories( include )
 
 
-# Automatically add all *.cpp and *.h files to the project
+# Automatycznie dodaj wszystkie pliki *.cpp i *.h do projektu
 file ( GLOB SOURCES "./src/*.cpp" "./include/*.h" )
 add_executable( ${PROJECT_NAME} ${SOURCES} )
 
 
-# Set the default project 
+# Ustaw domyślny projekt
 set_property( DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME} )
 
 
