@@ -16,7 +16,7 @@
 #include <iostream>
 #include <iomanip>
 #include <random>
-#include <numeric>		// for inner product
+#include <numeric>		// dla iloczynu skalarnego
 
 
 
@@ -38,54 +38,54 @@ namespace InnerProducts
 
 	auto InnerProduct_StdAlg( const DVec & v, const DVec & w )
 	{
-		// The last argument is an initial value
+		// Ostatni argument jest wartością początkową
 		return inner_product( v.begin(), v.end(), w.begin(), DT() );
 	}
 
 
 	auto InnerProduct_SortAlg( const DVec & v, const DVec & w )
 	{
-		DVec z;		// Stores element-wise products
+		DVec z;		// Przechowuje iloczyny poszczególnych elementów
 
-		// Elementwise multiplication: c = v .* w
+		// Mnożenie poszczególnych elementów: c = v .* w
 		transform(	v.begin(), v.end(), w.begin(), 
 					back_inserter( z ), 
 					[] ( const auto & v_el, const auto & w_el) { return v_el * w_el; } );
 
-		// Sort in ascending order
-		sort( z.begin(), z.end() );		// Is it magic?
+		// Posortuj w kolejności rosnącej
+		sort( z.begin(), z.end() );		// Czy to magia?
 	
-		// The last argument is an initial value
+		// Ostatni argument jest wartością początkową
 		return accumulate( z.begin(), z.end(), DT() );
 	}
 
 
-	// In the Kahan algorithm each addition is corrected by a correction
-	// factor. In this algorithm the non associativity of FP is assumed, i.e.:
+	// W algorytmie Kahana każde dodawanie korygowane jest przez czynnik korekcji.
+	// fW algorytmie tym zakładany jest brak łączności liczb zmiennoprzecinkowych, tj.:
 	// ( a + b ) + c != a + ( b + c )
 	auto InnerProduct_KahanAlg( const DVec & v, const DVec & w )
 	{
 		DT theSum {};
 
-		// volatile prevents the compiler from applying any optimization
-		// on the object since it can be changed by someone else, etc.,
-		// in a way that cannot be foreseen by the compiler.
+		// volatile powstrzymuje kompilator przed stosowaniem jakichkolwiek optymalizacji
+		// na obiekcie, ponieważ może on zostać zmieniony przez jakiś zewnętrzny komponent itd.,
+		// w sposób, którego kompilator nie jest w stanie przewidzieć.
 
-		volatile DT c {};		// a "correction" coefficient
+		volatile DT c {};		// współczynnik "korekcji"
 
 		const ST kElems = std::min( v.size(), w.size() );
 
 		for( ST i = 0; i < kElems; ++ i )
 		{
-			DT y = v[ i ] * w[ i ] - c;	// From y subtracts the correction factor
+			DT y = v[ i ] * w[ i ] - c;	// Odejmuje czynnik korekcji od y
 
-			DT t = theSum + y;	// Add corrected summand to the running sum theSum
-			// But theSum is big, y is small, so its lower bits will be lost
+			DT t = theSum + y;	// Dodaj skorygowany składnik do sumy bieżącej theSum
+			// Ale theSum jest duża, zaś y jest małe, więc niższe bity zostaną utracone
 
-			c = ( t - theSum ) - y; // Low-order bits of y are lost in the summation. 
-		// High-order bits of y are computed in ( t - theSum ). Then, when y
-		// is subtracted from this, the low order bits of y are recovered (negative).
-		// Algebraically, c should always be 0 (beware of compiler optimization).
+			c = ( t - theSum ) - y; // Niższe bity y zostaną utracone podczas sumowania. 
+		// Wyższe bity y są obliczane w ramach ( t ‐ theSum ). Następnie, gdy odejmowane jest
+		// od tego y, niższe bity y są odzyskiwane (wartość ujemna).
+		// Algebraicznie, c zawsze powinno wynosić 0 (uwaga na optymalizacje kompilatora).
 
 			theSum = t;
 		}
@@ -102,15 +102,15 @@ namespace InnerProducts
 		DVec	v( kElems );
 		DVec	w( kElems );
 	
-		std::mt19937		rand_gen{ std::random_device{}() }; 	// Random Mersenne twister
+		std::mt19937		rand_gen{ std::random_device{}() }; 	// Algorytm losowości Mersenne twister
 
-		// ref is a reference wrapper
+		// ref opakowuje referencję
 		std::generate( v.begin(), v.end(), ref( rand_gen ) );
 		std::generate( w.begin(), w.end(), ref( rand_gen ) );
 
-		// Now let's double our vectors with one negative reflection
+		// Podwajamy nasze wektory z użyciem pojedynczego odbicia ujemnego
 
-		// Lambda has to be mutable to allow change of the variable n
+		// Lambda musi być modyfikowalna, aby umożliwić modyfikację zmiennej n
 		v.resize( 2 * kElems );
 		std::generate( v.begin() + kElems, v.end(), 
 							[ n = 0, & v ] () mutable { return - v[ n ++ ]; } );
@@ -118,8 +118,8 @@ namespace InnerProducts
 		std::generate( w.begin() + kElems, w.end(), 
 							[ n = 0, & w ] () mutable { return + w[ n ++ ]; } );
 
-		// The inner product should be close to 0.0, 
-		// so let's check the two algorithms.
+		// Iloczyn skalarny powinien być bliski 0.0, 
+		// więc sprawdźmy oba algorytmy.
 
 		cout 	<< "Stand alg error = \t"	<< std::setprecision( 8 ) 
 				<< fabs( InnerProduct_StdAlg( v, w ) ) << endl;
