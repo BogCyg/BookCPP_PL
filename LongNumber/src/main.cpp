@@ -89,10 +89,10 @@ public:
 
 	auto GetAge( void ) const { return fAge; }
 
-	// Verify a precondition on what is written in
+	// Sprawdza warunek wstępny odnośnie tego, co jest zapisywane
 	void SetAge( unsigned char age ) { assert( age < 128 ); fAge = age; }
 
-	// ... more interface
+	// ... więcej interfejsu
 };
 
 
@@ -104,9 +104,9 @@ private:
 	std::wstring		fFirstName;
 	std::wstring		fLastName;
 
-	TAge				fAge {};		// Self-contained class to represent an age
+	TAge				fAge {};		// Samowystarczalna klasa do reprezentowania wieku
 
-	PESEL				fID {};		// PESEL id � no capacity problem here
+	PESEL				fID {};		// numer PESEL – nie ma tu problemu z pojemnością
 
 public:
 
