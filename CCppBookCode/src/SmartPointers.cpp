@@ -106,23 +106,23 @@ bool ProcessFile_2( const string fileName )
 // memory pointed by this pointer is AUTOMATICALLY
 // released by the destructor of the a_p.
 template < typename T >
-class a_p
+class a_p  // tylko przykład – zamiast tego użyj std::unique_ptr
 {
 private:
 
-	T *	fPtr;	// held ptr
+	T *	fPtr;	// wskaźnik do strzeżonego obiektu
 
 public:
 
 	a_p( T * p ) : fPtr( p ) {}
 
-	// When a_p is destroyed, 
-	// then also fPtr is destroyed.
+	// gdy a_p jest niszczony,  
+	// niszczony jest również fPtr.
 	~a_p() { delete fPtr; }	
 
 public:
 
-	// a_p can be used as an ordinary pointer
+	// a_p może być używany jako zwykły wskaźnik dzięki przeciążeniu operatora *
 	T & operator * ( void ) { return * fPtr; }
 
 	// ...
@@ -131,17 +131,17 @@ public:
 
 void a_p_test( void )
 {
-	// Create advanced pointer as a local object
-	// - make it hold a pointer to double
+	// Utwórz zaawansowany wskaźnik jako obiekt lokalny
+	// - niech przechowuje wskaźnik do double
 	a_p< double >	apd( new double( 0.0 ) );
 
-	// Do something with apd like with an ordinary pointer to double
+	// Pracuj z apd jak ze zwykłym wskaźnikiem do double
 	* apd = 5.0;		
 	* apd *= 3.0;
 	cout << "apd=" << * apd << " sizeof(apd) = " << sizeof( apd ) << endl;
 
-	// apd will be destroyed here since it is an automatic object
-	// It will destroy held object as well
+	// apd zostanie tu zniszczony, ponieważ jest to obiekt automatyczny
+	// Zniszczy on również przechowywany obiekt
 }	// <==
 
 
@@ -176,7 +176,7 @@ void unique_ptr_tests( void )
 	* real_val_1 = 3.14;	// use like any other pointer
 
 	// ------------------------------------------------------------------------
-	// Heap allocate an array of 16 double � access via the unique_ptr
+	// Heap allocate an array of 16 double – access via the unique_ptr
 	const int kElems = 16;
 
 	unique_ptr< double [] > 	real_array_0( new double[ kElems ] );	// OK
@@ -291,7 +291,7 @@ void things_to_avoid_with_unique_ptr( void )
 
 // Simple factory example
 
-// Pure virtual base class
+// Czysto wirtualna klasa bazowa
 class B
 {
 public:
@@ -300,7 +300,7 @@ public:
 	virtual void operator() ( void ) = 0;
 };
 
-// Derived classes
+// Klasy pochodne
 class C : public B
 {
 public:
@@ -309,7 +309,7 @@ public:
 		cout << "C is deleted" << endl;	
 	}
 
-	// It is also virtual but override is enough to express this (skip virtual)
+	// Również wirtualny, ale override wystarczy, aby to wyrazić (pomijamy virtual)
 	void operator() ( void ) override	
 	{
 		cout << "C is doing an action..." << endl;
@@ -357,26 +357,26 @@ auto Factory( EClassId id )
 		case kD: return unique_ptr< B >( make_unique< D >() );
 		case kE: return unique_ptr< B >( make_unique< E >() );
 
-		default: assert( false );	// should not be here
+		default: assert( false );	// nie powinniśmy tu być
 	}
 
-	return unique_ptr< B >();	// can be empty
+	return unique_ptr< B >();	// może być pusty, nie powinniśmy tu dotrzeć
 }
 
 void FactoryTest( void )
 {
-	vector< unique_ptr< B > > theObjects;// = { Factory( kC ), Factory( kD ), Factory( kE ) };
-
-	theObjects.push_back( Factory( kC ) );		// copy or move semantics? move
+	vector< unique_ptr< B > > theObjects; // = { Factory( kC ), Factory( kD ), Factory( kE ) };
+					      // wektor zawierający inteligentne wskaźniki!
+	theObjects.push_back( Factory( kC ) );		// jaka semantyka? przenoszenie
 	
-	theObjects.emplace_back( Factory( kD ) );	// this for sure will use move semantics, OK
+	theObjects.emplace_back( Factory( kD ) );	// tu będzie przenoszenie, ok
 
 	theObjects.emplace_back( Factory( kE ) );
 
-	theObjects[ theObjects.size() - 1 ] = Factory( kD );	// replace E with D
+	theObjects[ theObjects.size() - 1 ] = Factory( kD );	// zamień (przenieś) E na D
 
 	for( auto & a : theObjects )
-		( * a )();		// call actions via the virtual mechanism
+		( * a )();		// wywołaj akcje za pomocą mechanizmu wirtualnego
 }
 
 
@@ -389,101 +389,101 @@ class TMatrix
 {
 public:
 	TMatrix( int cols, int rows ) {}
-	// ... all the rest
+	// ... cała reszta
 };
 
 
 
 
 // ---------
-// PRODUCER
-// Returns unique_ptr< TMatrix > 
+// PRODUCENT
+// Zwraca unique_ptr< TMatrix > 
 auto	OrphanRandomMatrix( const int kCols, const int kRows /*, enum ERandType rand_type*/ )
 {
 	auto retMatrix( make_unique< TMatrix >( kCols, kRows ) );
 
-	// ... do computations
+	// ... wykonaj obliczenia
 
-	return retMatrix;		// return a heavy object using the move semantics
+	return retMatrix;		// zwróć ciężki obiekt za pomocą semantyki przenoszenia
 }
 
 
 // ---------
-// CONSUMERS
+// KONSUMENCI
 
 
-// If always processing an object, then pass an object by a const ref (read only)
+// Jeśli zawsze przetwarzany jest obiekt, przekaż obiekt przez referencję lub stałą referencję (tylko do odczytu)
 double ComputeDeterminant( const TMatrix & matrix )
 {
 	double retDeterminant {};
 
-	// ... do computations
+	// ... wykonaj obliczenia
 
 	return retDeterminant;
 }
 
 
 
-// OK, unique_ptr is passed by a const reference, however
-// a pointer to the matrix can be nullptr - we can use this feature
-// if wish to have an option to pass an empty object
+// Ok, unique_ptr jest przekazywany przez stałą referencję, jednak wskaźnik
+// do macierzy może mieć wartość nullptr ‐ możemy użyć tej cechy,
+// jeśli chcemy mieć opcję przekazania pustego obiektu.
 bool ComputeDeterminant( const unique_ptr< TMatrix > & matrix, double & outRetVal )
 {
 	if( ! matrix )
-		return false;		// if an empty ptr, then no computations at all
+		return false;		// jeśli pusty wskaźnik, nie wykonuj wcale obliczeń
 
-	outRetVal = ComputeDeterminant( * matrix );		// get the object
+	outRetVal = ComputeDeterminant( * matrix );		// pozyskaj obiekt
 
 	return true ;
 }
 
-// Pass by reference to the unique_ptr - we can take over a held object
+// Przekaż przez referencję do unique_ptr ‐ możemy przejąć przechowywany obiekt
 void TakeOverAndProcessMatrix( unique_ptr< TMatrix > & matrix )
 {
-	// "it is a deleted function"
-	unique_ptr< TMatrix > myMatrix( move( matrix ) );	// take over the object
-														// changes the passed "matrix" to empty
-	// ... do computations
+	// Bez std::move się nie skompiluje; wystąpi błąd: "it is a deleted function"
+	unique_ptr< TMatrix > myMatrix( move( matrix ) );	// przejmij ten obiekt
+														// zmienia przekazaną "macierz" na pustą
+	// ... wykonaj obliczenia
 
-	// when we exit there will be no matrix object at all
+	// po zakończeniu nie będzie wcale obiektu matrix
 }
 
-// Such a version is also possible - however, we can have
-// matrix == nullptr, then it is also possible that matrix.get() == nullptr
+// Taka wersja jest również możliwa – jednak możemy mieć matrix == nullptr,
+// więc możliwe jest również, że matrix.get() == nullptr
 void TakeOverAndProcessMatrix( unique_ptr< TMatrix > * matrix )
 {
 	if( matrix == nullptr )
 		return;
 
-	// "it is a deleted function"
-	unique_ptr< TMatrix > myMatrix( move( * matrix ) );	// take over the object
-														// changes the passed "matrix" to empty
-	// ... do computations
+	// Bez std::move się nie skompiluje; wystąpi błąd: "it is a deleted function"
+	unique_ptr< TMatrix > myMatrix( move( * matrix ) );	// przejmij ten obiekt
+														// zmienia przekazaną "macierz" na pustą
+	// ... wykonaj obliczenia
 
-	// when we exit there will be no matrix object at all
+	// po zakończeniu nie będzie wcale obiektu matrix
 }
 
 
 void AcceptAndProcessMatrix( unique_ptr< TMatrix > matrix )
 {
-	// if here, then TMatrix object is governed by the 
-	// local matrix unique_ptr - it is owned by this function
+	// jeśli tutaj, wówczas obiekt TMatrix zarządzany jest przez 
+	// lokalny unique_ptr dla matrix ‐ funkcja jest w jego posiadaniu
 
 	assert( matrix );
 
 
-	// ... do computations
+	// ... wykonaj obliczenia
 
-	// when we exit there will be no matrix object at all
+	// po wyjściu nie będzie już wcale obiektu matrix
 }
 
 
 void unique_ptr_OrphanAcceptTest( void )
 {
 	auto	matrix_1( OrphanRandomMatrix( 20, 20 ) );
-	// matrix_1 is of type unique_ptr< TMatrix >
+	// matrix_1 jest typu unique_ptr< TMatrix >
 
-	assert( matrix_1 );		// make sure the object was created OK (enough memory,  etc.)
+	assert( matrix_1 );		// pewnij się, że obiekt został utworzony (wystarczająca pamięć itd.)
 
 	cout << "Det = " << ComputeDeterminant( * matrix_1 ) << endl;
 
@@ -494,22 +494,22 @@ void unique_ptr_OrphanAcceptTest( void )
 	assert( detCompStatus );
 
 
-	TakeOverAndProcessMatrix( matrix_1 );		// this will take over the TMatrix object from the passed unique_ptr
-	//TakeOverAndProcessMatrix( & matrix_1 );		// this will take over the TMatrix object from the passed unique_ptr
+	TakeOverAndProcessMatrix( matrix_1 );		// spowoduje to przejęcie obiektu TMatrix z przekazanego unique_ptr
+	//TakeOverAndProcessMatrix( & matrix_1 );		// spowoduje to przejęcie obiektu TMatrix z przekazanego unique_ptr
 
-	assert( ! matrix_1 );		// no object, only an empty unique_ptr
+	assert( ! matrix_1 );		// brak obiektu, tylko pusty wskaźnik unique_ptr
 
 
-	matrix_1 = make_unique< TMatrix >( 20, 20 );	// create other fresh object (move semantics)
+	matrix_1 = make_unique< TMatrix >( 20, 20 );	// utwórz inny świeży obiekt (semantyka przenoszenia)
 
 	assert( matrix_1 );
 
-	//AcceptAndProcessMatrix( matrix_1 );	// generates an error - "attempting to reference a deleted function"
-	AcceptAndProcessMatrix( move( matrix_1 ) );	// we need to force the move semantics
+	//AcceptAndProcessMatrix( matrix_1 );	// generuje błąd ‐ "próba odwołania do usuniętej funkcji"
+	AcceptAndProcessMatrix( move( matrix_1 ) );	// musimy użyć semantyki przenoszenia
 
-	assert( ! matrix_1 );		// no object, only an empty unique_ptr
+	assert( ! matrix_1 );		// brak obiektu, tylko pusty wskaźnik unique_ptr
 
-	AcceptAndProcessMatrix( OrphanRandomMatrix( 20, 20 ) );		// however, we can make and pass a temporary object
+	AcceptAndProcessMatrix( OrphanRandomMatrix( 20, 20 ) );		// możemy również utworzyć i przekazać obiekt tymczasowy
 
 }
 
