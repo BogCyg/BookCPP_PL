@@ -39,37 +39,37 @@ class XML_CurrencyExchanger : public TCurrencyExchanger
 	private:
 
 
-		// Simple state machine
+		// Prosta maszyna stanów
 		enum class ESearchStates { kIdle, k_Name_Processed, k_Code_Processed, k_BuyingRate_Processed, k_SellingRate_Processed };
 
 	private:
 
-		// Let's define some patterns
-		// We use raw string formats here R"(   )"
+		// Zdefiniujmy wzorce
+		// Używamy tutaj surowych formatów tekstu R"( )"
 		wregex f_curr_name_pat		{ LR"(<nazwa_waluty>(.+)</nazwa_waluty>)" };
 		wregex f_curr_code_pat		{ LR"(<kod_waluty>([[:upper:]][[:upper:]][[:upper:]])</kod_waluty>)" };
-		wregex f_buy_rate_pat		{ LR"(<kurs_kupna>([[:d:]]+),([[:d:]]+)</kurs_kupna>)" };		// instead of 1.27, in Poland 1,27 is used (with comma)
+		wregex f_buy_rate_pat		{ LR"(<kurs_kupna>([[:d:]]+),([[:d:]]+)</kurs_kupna>)" };      // zamiast 1.27, w Polsce używamy 1,27 (z przecinkiem)
 		wregex f_sell_rate_pat		{ LR"(<kurs_sprzedazy>([[:d:]]+),([[:d:]]+)</kurs_sprzedazy>)" };
 
 	public:
 
-		// Allow other patterns
+		// Zezwól na inne wzorce
 		void set_curr_name_pat( const wregex & pat ) { f_curr_name_pat = pat; }
 		// ...
 
 	public:
 
 		///////////////////////////////////////////////////////////
-		// Fills currency table 
+		// Wypełnij tabelę walut
 		///////////////////////////////////////////////////////////
 		//
-		// INPUT:
-		//			currencyFile - full path to the XML file
-		//				with currency entries
-		// OUTPUT:
-		//			true if ok, false otherwise
+		// WEJŚCIE:
+		//			currencyFile - pełna ścieżka do pliku XML
+		//				z wpisami dla walut
+		// WYJŚCIE:
+		//			rue, jeśli ok, w przeciwnym razie false
 		//
-		// REMARKS:
+		// UWAGI:
 		//
 		//
 		virtual bool	FillCurrencyTableFrom( const wstring & currencyFile );
