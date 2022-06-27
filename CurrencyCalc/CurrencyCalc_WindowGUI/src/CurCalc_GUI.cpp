@@ -14,7 +14,7 @@
 
 
 
-// Useful includes for the FLTK library
+// grupa dyrektyw #include (FLTK & SL)
 #include <FL/Fl.h>
 #include <FL/Fl_Box.h>
 #include <FL/Fl_Window.h>
@@ -47,7 +47,7 @@
 #include <FL/Fl_Group.H>
 
 
-// Useful for STL
+// Przydatne dla biblioteki standardowej
 #include <vector>
 #include <string>
 
@@ -61,7 +61,7 @@
 #include <cassert>
 	
 
-// using declarations
+// deklaracje using
 using std::string;
 using std::wstring;
 using std::vector;
@@ -75,40 +75,40 @@ using std::vector;
 
 
 
-
+// Konstruktor parametryczny klasy
 CC_GUI::CC_GUI( XCE & xce, const wstring & fromCurrency /*= L"PLN"*/ ) 
 	:	fXML_CurrencyExchanger( xce ), 
 		fFromCurrencyCode( fromCurrency ) 
 {
 }
-	
+// Destruktor nic nie robi – na wypadek dziedziczenia zdefiniowany jako wirtualny	
 CC_GUI::~CC_GUI() 
 {
 }
 
 
-// CALLBACK FUNCTION - do NOT modify !!!
+// FUNKCJA WYWOŁANIA ZWROTNEGO – NIE modyfikuj !!!
 void CC_GUI::theButtonCallback( Fl_Widget * widgetPtr, void * obj ) 
 {
-	// Convert the input pointer to our class object
+	// Konwertuje wskaźnik wejściowy na obiekt naszej klasy
 	CC_GUI * theObj = reinterpret_cast< CC_GUI * >( obj );
 
-	// Call button handler function
+	// Wywołaj funkcję obsługi przycisku
 	theObj -> Action_On_Button();
 }
 
 
 ///////////////////////////////////////////////////////////
-// Local function to process button requests
+// Lokalna funkcja do przetwarzania żądań przycisku
 ///////////////////////////////////////////////////////////
 //		
-// INPUT:
-//			none
+// WEJŚCIE:
+//			brak
 //		
-// OUTPUT:
-//			none
+// WYJŚCIE:
+//			brak
 //		
-// REMARKS:
+// UWAGI:
 //		
 //	
 bool CC_GUI::Action_On_Button( void )
@@ -117,8 +117,8 @@ bool CC_GUI::Action_On_Button( void )
 	{
 
 		///////////////////////////////////
-		// Get the value from the edit widget
-		const char * editWidget_Text = fEditWidget->value();	// first get its text
+		// Pozyskaj wartość z widżetu edycji
+		const char * editWidget_Text = fEditWidget->value();	// Najpierw pozyskaj jego tekst
 
 			
 		double from_val = stod( string( editWidget_Text ) );
@@ -128,12 +128,12 @@ bool CC_GUI::Action_On_Button( void )
 		wstring to_code = Code_2_CurrencyKey( (unsigned long) menu_item->user_data() );
 
 
-		// We are ready to convert
+		// Jesteśmy gotowi do konwersji
 		if( double to_val {}; fXML_CurrencyExchanger.Convert( fFromCurrencyCode, from_val, to_code, to_val ) == true )
 		{
 			fStaticEditWidget->value( to_val );
 		
-			// Update text
+			// Zaktualizuj tekst
 			fStaticEditWidget->copy_label( to_string( to_code ).c_str() );
 
 			fMainWindow->redraw();
@@ -152,17 +152,17 @@ bool CC_GUI::Action_On_Button( void )
 
 
 ///////////////////////////////////////////////////////////
-// Converter of a three-letter code to one word with bytes
-// set with code characters.
+// Konwertuje trzyznakowy kod na jedno słowo z bajtami
+// ustawionymi na znaki kodu.
 ///////////////////////////////////////////////////////////
 //		
-// INPUT:
-//			wstr - a wide-string object with 3 letters code
+// WEJŚCIE:
+//			wstr - obiekt dwubajtowego tekstu z 3-literowym kodem
 //		
-// OUTPUT:
-//			the code in one word
+// WYJŚCIE:
+//			kod w jednym słowie
 //		
-// REMARKS:
+// UWAGI:
 //		
 //	
 unsigned long	CC_GUI::CurrencyKey_2_Code( const wstring & wstr )
@@ -172,17 +172,17 @@ unsigned long	CC_GUI::CurrencyKey_2_Code( const wstring & wstr )
 }
 
 ///////////////////////////////////////////////////////////
-// Converts one-word currency code to the wide string code
+// Konwertuje jednosłowowy kod waluty na kod dwubajtowego tekstu
 ///////////////////////////////////////////////////////////
 //		
-// INPUT:
-//			code - a word with letters in each byte, starting
-//				from the LSB
+// WEJŚCIE:
+//			code - słowo z literami w każdym bajcie, zaczynając
+//				od najmniej znaczącego bajtu
 //		
-// OUTPUT:
-//			wstring with the letters from the input word
+// WYJŚCIE:
+//			wstring z literami ze słowa wejściowego
 //		
-// REMARKS:
+// UWAGI:
 //		
 //	
 wstring			CC_GUI::Code_2_CurrencyKey( const unsigned long & code )
@@ -200,37 +200,37 @@ wstring			CC_GUI::Code_2_CurrencyKey( const unsigned long & code )
 
 
 ///////////////////////////////////////////////////////////
-// This function creates the Graphical User Interface
+// Ta funkcja tworzy graficzny interfejs użytkownika
 ///////////////////////////////////////////////////////////
 //		
-// INPUT:
-//			none
+// WEJŚCIE:
+//			brak
 //		
-// OUTPUT:
-//			FLTK status code
+// WYJŚCIE:
+//			kod stanu FLTK
 //		
-// REMARKS:
+// UWAGI:
 //		
 //	
 int CC_GUI::Create_GUI( void )
 {
 	///////////////////////////////////////////////
-	//// Create the main window
+	//// Utwórz okno główne
 	const int kMainWin_w = 400;
 	const int kMainWin_h = 250;
 	const string kMainWin_Caption( "CurrencyCalc (Polish National Bank)" );
 	Fl_Window	main_win( kMainWin_w, kMainWin_h, kMainWin_Caption.c_str() );
 
-	fMainWindow = & main_win;					// connect through the global variable
+	fMainWindow = & main_win;					// połącz poprzez ogólnie dostępną składową klasy CC_GUI
 
 
 	///////////////////////////////////////////////
-	//// Some const
+	//// Pewne stałe
 	const int kWidgetSeparator_h = 75;
 	const int kWidgetSeparator_v = 25;
 
 	/////////////////////////////////////////////
-	// Add edit widget
+	// Dodaj widżet theEdit
 	const int kEdit_x = 100;
 	const int kEdit_y = 50;
 	const int kEdit_w = 100;
@@ -238,15 +238,15 @@ int CC_GUI::Create_GUI( void )
 
 	const string kEdit_Caption( "From " + string( to_string( fFromCurrencyCode ) ) );
 	Fl_Float_Input	theEdit( kEdit_x, kEdit_y, kEdit_w, kEdit_h, kEdit_Caption.c_str() );
-	theEdit.value( "0" );		// initial value
+	theEdit.value( "0" );		// wartość początkowa
 
-	fEditWidget = & theEdit;					// connect through the global variable
+	fEditWidget = & theEdit;					// połącz poprzez ogólnie dostępną składową klasy CC_GUI
 
 
 	//auto edit_tuple = Create_MainWindow( make_tuple( 0, 0, kMainWin_w, kMainWin_h ) );
 
 	/////////////////////////////////////////////
-	// Add combo widget
+	// Dodaj widżet pola kombi
 	const int kChoiceWidget_x = kEdit_x + kEdit_w + kWidgetSeparator_h;
 	const int kChoiceWidget_y = kEdit_y;
 	const int kChoiceWidget_w = kEdit_w;
@@ -262,7 +262,7 @@ int CC_GUI::Create_GUI( void )
 
 	assert( curMap.size() > 0 );
 	
-	// A collection of FLTK menu items texts
+	// Kolekcja tekstu dla elementów menu FLTK
 	std::vector< std::string >		menuItemTexts;
 
 
@@ -278,9 +278,9 @@ int CC_GUI::Create_GUI( void )
 	}
 
 
-	// Put a sentinel to the menu list
+	// Umieść strażnika na liście menu
 	if( menuItemVec.size() > 0 )
-		menuItemVec[ menuItemVec.size() - 1 ] = { 0 }; // Overwrite the last entry
+		menuItemVec[ menuItemVec.size() - 1 ] = { 0 }; // Nadpisz ostatni wpis
 	else
 		menuItemVec.push_back( { 0 } );
 
@@ -290,11 +290,11 @@ int CC_GUI::Create_GUI( void )
 	Fl_Choice theChoiceWidget( kChoiceWidget_x, kChoiceWidget_y, kChoiceWidget_w, kChoiceWidget_h, kChoiceWidget_Caption.c_str() );
 	theChoiceWidget.menu( & menuItemVec[ 0 ] );
 
-	fChoiceWidget = & theChoiceWidget;			// Connect through the member variable
+	fChoiceWidget = & theChoiceWidget;			// Połącz poprzez zmienną składową
 
 
 	/////////////////////////////////////////////
-	// Add const edit widget
+	// Dodaj stałe widżetu theStaticEdit
 	const int kStaticEdit_x = kEdit_x;
 	const int kStaticEdit_y = kEdit_y + kEdit_h + kWidgetSeparator_v;
 	const int kStaticEdit_w = kEdit_w;
@@ -305,11 +305,11 @@ int CC_GUI::Create_GUI( void )
 	int staticValue = 0;
 	theStaticEdit.value( staticValue );
 
-	fStaticEditWidget = & theStaticEdit;		// Connect through the member variable
+	fStaticEditWidget = & theStaticEdit;		// Połącz poprzez zmienną składową
 
 
 	/////////////////////////////////////////////
-	// Add button
+	// Dodaj przycisk
 	const int kButtonEdit_x = kStaticEdit_x;
 	const int kButtonEdit_y = kStaticEdit_y + kStaticEdit_h + kWidgetSeparator_v;
 	const int kButtonEdit_w = kStaticEdit_w;
@@ -319,17 +319,17 @@ int CC_GUI::Create_GUI( void )
 
 	Fl_Return_Button theButton( kButtonEdit_x, kButtonEdit_y, kButtonEdit_w, kButtonEdit_h, kButtonCaption.c_str() ); 
 
-	theButton.callback( theButtonCallback, this );		// Connect the callback function
+	theButton.callback( theButtonCallback, this );		// Podłącz funkcję wywołania zwrotnego
 
 	
 	/////////////////////////////////////////////
-	// Finalize adding new widgets
+	// Zakończ dodawanie nowych widżetów
 	main_win.end();
 	main_win.show();
 
 	
 	/////////////////////////////////////////////
-	// When all the windows are closed it returns zero
+	// Po zamknięciu wszystkich okien zwraca zero
 	return Fl::run();		
 
 }
