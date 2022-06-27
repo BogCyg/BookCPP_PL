@@ -42,27 +42,27 @@ namespace CurrExchanger
 
 
 	///////////////////////////////////////////////////////////
-	// This function 
+	// Tworzy i inicjalizuje obiekt TCurrencyExchanger
 	///////////////////////////////////////////////////////////
 	//
-	// INPUT:
-	//		initFileFullPath - full path to the ini file containing
-	//			formatted information for currencies and exchange ratios
-	// OUTPUT:
-	//		There are two options for the return CurrExch_Optional object:
-	//			- It is either TCurrencyExchanger if properly built
-	//			- or empty CurrExch_Optional if it cannot be created 
+	// WEJŚCIE:
+	//		initFileFullPath - pełna ścieżka do pliku ini zawierającego
+	//			sformatowane informacji dla walut i kursów wymiany
+	// WYJŚCIE:
+	//		Istnieją dwie opcje dla zwracanego obiektu CurrExch_Optional:
+	//			- Jest to TCurrencyExchanger, gdy poprawnie zbudowany
+	//			- pusty obiekt CurrExch_Optional, jeśli nie można go utworzyć 
 	//
 	auto CreateCurExchanger( const wstring & initFileFullPath ) -> CurrExch_Optional
 	{
 		wifstream	inFile( initFileFullPath );
 
 		if( inFile.is_open() == false )
-			return CurrExch_Optional();	// no init file, no object, what to return?
+			return CurrExch_Optional();	// brak pliku ini, brak obiektu, co zwrócić?
 
 		TCurrencyExchanger	currencyExchangerObj;
 
-		// Read data from the file
+		// Wczytaj dane z pliku
 		inFile >> currencyExchangerObj;
 
 		return CurrExch_Optional( currencyExchangerObj );
@@ -71,12 +71,12 @@ namespace CurrExchanger
 
 	void DisplayAllCurrencies( const TCurrencyExchanger & currencyExchangerObj )
 	{
-		// Display available currencies
+		// Wyświetl dostępne waluty
 		const TCurrencyExchanger::CurrencyMap & cur_map = currencyExchangerObj.GetCurrencyMap();
 
 		wcout << L"Available currencies:" << endl;
 
-		// Use structured binding
+		// Użyj powiązania strukturalnego
 		for( const auto & [ key, val ] : cur_map )
 			wcout << val.GetCurrKey() << L" : " << val.GetCurrName() << endl;
 
@@ -89,21 +89,21 @@ namespace CurrExchanger
 		using timer = std::chrono::system_clock;
 		std::time_t time_point = timer::to_time_t( timer::now() );
 		string time_str( std::ctime( & time_point ) );
-		wcout << wstring( time_str.begin(), time_str.end() );	// the way to convert string to wstring
+		wcout << wstring( time_str.begin(), time_str.end() );	// string ==> wstring
 	}
 
-	// Perform currency exchange based on user's commands.
+	// Dokonaj wymiany waluty na podstawie poleceń użytkownika.
 	void UserInterface( const TCurrencyExchanger & currencyExchangerObj )
 	{
 
-		// Work with the user
+		// Pracuj z użytkownikiem
 		wstring answer;
 		do
 		{
 			try
 			{
 				wstring from_curr, to_curr;
-				wstring from_val {};	// we could use double here but who knows what user enters ...
+				wstring from_val {};	// double byłoby ok, ale co wprowadzi użytkownik...
 				double to_val {};
 
 				wcout << L"Enter from currency code: "; wcin >> from_curr; wcout << endl;
@@ -120,7 +120,7 @@ namespace CurrExchanger
 				wcout << L"Error - wrong input." << endl;
 			}
 
-			// Ask the user what to do next
+			// Zapytaj użytkownika, co robić dalej
 			wcout << endl << L"New conversion [y/n]?"; 
 			wcin >> answer;
 			wcout << endl;
@@ -131,7 +131,7 @@ namespace CurrExchanger
 
 	}
 
-	// Run if we have already the currency exchanger object
+	// Uruchom, jeśli mamy już obiekt TCurrencyExchanger
 	void Run( const TCurrencyExchanger & currExchObj )
 	{
 		wcout << "*** Welcome to the currency exchanger ***" << endl;
@@ -144,14 +144,14 @@ namespace CurrExchanger
 	}
 
 
-	// All actions
+	// Wszystkie akcje
 	void Run( void )
 	{
 		namespace fs = std/*::experimental*/::filesystem;
 
 		wstring iniPath( fs::current_path() / fs::path( initDefaultFileName ) );
 
-		// First try to get the currency object
+		// Najpierw spróbuj pozyskać bieżący obiekt
 		if( CurrExch_Optional all_my_options { CreateCurExchanger( iniPath ) }; all_my_options )
 		{
 			Run( * all_my_options );
@@ -164,7 +164,7 @@ namespace CurrExchanger
 	}
 
 
-}		// End of CurrExchanger namespace
+}		// Koniec przestrzeni nazw CurrExchanger
 
 
 /////////////////////////////////////////////////////////
