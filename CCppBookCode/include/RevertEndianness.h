@@ -12,14 +12,14 @@
 
 
 #include <iostream>
-#include <type_traits>		// for is_unsigned_v
+#include <type_traits>		// dla is_unsigned_v
 
 
 
 ///////////////////////////////////////////////////////////
-// Template function to change endianness of integer types
-// i.e. it reverts order of bytes in the input arg.
-// Example: 0x78ABCDEF will be changed to 0xEFCDAB78
+// Funkcja szablonowa do zmiany kolejności bajtów dla typów całkowitych
+// tj. odwraca kolejność bajtów w argumencie wejściowym.
+// Przykład: 0x78ABCDEF zostanie zmienione na 0xEFCDAB78
 ///////////////////////////////////////////////////////////
 //
 // INPUT:
@@ -37,7 +37,7 @@ constexpr auto RevertEndianness( T in )
 	static_assert( std::is_unsigned_v< T > );
 
 	T out { 0 };
-	for( auto i { 0 }; i < sizeof( in ); ++ i )		// rotate bytes
+	for( auto i { 0 }; i < sizeof( in ); ++ i )		// odwróć bajty
 	{
 		out <<= 8;
 		out |= in & 0xFF;
@@ -50,18 +50,18 @@ constexpr auto RevertEndianness( T in )
 
 inline void RevertEndianness_Test( void )
 {
-	// RevertEndianness can be computed in the compilation time
-	// Notice 'u' in 0xABCDu - this makes 0xABCD an unsigned constant
+	// RevertEndianness może zostać obliczona w czasie kompilacji
+	// Zwróć uwagę na 'u' w 0xABCDu – dzięki temu 0xABCD jest stałą bez znaku
 	std::cout << std::hex << std::uppercase << "ABCD" << "\t <-> "  
 							<< RevertEndianness( 0xABCDu ) << std::endl;
 
-	// Compilation time since argument is constexpr
+	// W czasie kompilacji, ponieważ argument jest constexpr
 	constexpr unsigned int ui { 0xABCDu };
 	std::cout << std::hex << std::uppercase << ui << "\t <-> " 
 							<< RevertEndianness( ui ) << std::endl;
 
 	long l { 0x01234567 };
-	// This will not compile since l is not an 'unsigned' type
+	// To się nie skompiluje, ponieważ l nie jest typu 'unsigned'
 	//std::cout << std::hex << l << "\t <-> " 
 	//						<< RevertEndianness( l ) << std::endl;
 
