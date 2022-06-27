@@ -21,7 +21,7 @@
 
 
 
-// Forward declarations
+// Deklaracje zapowiadające
 class Fl_Choice;		
 class Fl_Float_Input;
 class Fl_Value_Output;	
@@ -39,7 +39,7 @@ class CC_GUI
 {
 	private:
 
-		// Pointers to the FLTK widgets
+		// Wskaźniki do widżetów FLTK
 		Fl_Choice *			fChoiceWidget {};
 		Fl_Float_Input *	fEditWidget {};
 		Fl_Value_Output	*	fStaticEditWidget {};
@@ -49,14 +49,14 @@ class CC_GUI
 
 	private:
 
-		// An interface to our currency calculator component
+		// Interfejs do naszego komponentu kalkulatora walut
 
 		using XCE = OL_CE::XML_CurrencyExchanger;
 
 
 		XCE &		fXML_CurrencyExchanger;
 
-		// Initial code of the reference currency
+		// Początkowy kod waluty referencyjnej
 		std::wstring		fFromCurrencyCode;
 
 
@@ -69,35 +69,35 @@ class CC_GUI
 	private:
 
 		///////////////////////////////////////////////////////////
-		// CALLBACK FUNCTION - do NOT modify !!!
+		// FUNKCJA WYWOŁANIA ZWROTNEGO – NIE modyfikować !!!
 		///////////////////////////////////////////////////////////
 		//		
-		// INPUT:
-		//			widgetPtr - a pointer to the button widget
-		//			obj - a pointer "this" to CC_GUI object
+		// WEJŚCIE:
+		//			widgetPtr - wskaźnik do widżetu przycisku
+		//			obj - wskaźnik "this" do obiektu CC_GUI
 		//		
-		// OUTPUT:
-		//			none
+		// WYJŚCIE:
+		//			brak
 		//		
-		// REMARKS:
-		//			A static function to be put as the FLTK button callback 
-		//			Delegates an action to the Action_On_Button().
+		// UWAGI:
+		//			Statyczna funkcja do umieszczenia jako wywołanie zwrotne przycisku FLTK 
+		//			Deleguje akcję do Action_On_Button().
 		//	
 		static void theButtonCallback( Fl_Widget * widgetPtr, void * obj );
 
 	protected:
 
 		///////////////////////////////////////////////////////////
-		// Local function to process button requests
+		// Lokalna funkcja do przetwarzania żądań przycisku
 		///////////////////////////////////////////////////////////
 		//		
-		// INPUT:
-		//			none
+		// WEJŚCIE:
+		//			brak
 		//		
-		// OUTPUT:
-		//			true if ok
+		// WYJŚCIE:
+		//			true, jeśli ok
 		//		
-		// REMARKS:
+		// UWAGI:
 		//		
 		//	
 		virtual bool Action_On_Button( void );
@@ -105,31 +105,31 @@ class CC_GUI
 	private:
 
 		///////////////////////////////////////////////////////////
-		// Converter of a three-letter code to one word with bytes
-		// set with code characters.
+		// Konwertuje trzyznakowy kod na jedno słowo z bajtami
+		// ustawionymi na znaki kodu.
 		///////////////////////////////////////////////////////////
 		//		
-		// INPUT:
-		//			wstr - a wide-string object with 3 letters code
+		// WEJŚCIE:
+		//			wstr - obiekt dwubajtowego tekstu z 3-literowym kodem
 		//		
-		// OUTPUT:
-		//			the code in one word
+		// WYJŚCIE:
+		//			kod w jednym słowie
 		//		
-		// REMARKS:
+		// UWAGI:
 		//		
 		//	
 		unsigned long	CurrencyKey_2_Code( const std::wstring & wstr );
 
 		///////////////////////////////////////////////////////////
-		// Converts one word currency code to the wide string code
+		// Konwertuje jednosłowowy kod waluty na kod dwubajtowego tekstu
 		///////////////////////////////////////////////////////////
 		//		
 		// INPUT:
-		//			code - a word with letters in each byte, starting
-		//				from the LSB
+		//			code - słowo z literami w każdym bajcie, zaczynając
+		//				od najmniej znaczącego bajtu
 		//		
 		// OUTPUT:
-		//			wstring with the letters from the input word
+		//			wstring z literami ze słowa wejściowego
 		//		
 		// REMARKS:
 		//		
@@ -142,23 +142,23 @@ class CC_GUI
 
 
 		///////////////////////////////////////////////////////////
-		// This function creates the Graphical User Interface
-		// and runs the application.
+		// Ta funkcja tworzy graficzny interfejs użytkownika
+		// i uruchamia aplikację.
 		///////////////////////////////////////////////////////////
 		//		
-		// INPUT:
-		//			none
+		// WEJŚCIE:
+		//			brak
 		//		
-		// OUTPUT:
-		//			FLTK status code
+		// WYJŚCIE:
+		//			kod stanu FLTK
 		//		
-		// REMARKS:
-		//			This function does not exit, only upon
-		//			exit from the application
+		// UWAGI:
+		//			Ta funkcja nie kończy działania. Wyjście tylko
+		//			z poziomu aplikacji
 		//	
 		virtual int Create_GUI( void );
 
 
 
-};			// end of CC_GUI
+};			// koniec CC_GUI
 
