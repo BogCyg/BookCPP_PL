@@ -11,7 +11,7 @@
 
 
 
-// Let's include the definition of the TComplex class
+// Dołączmy definicję klasy TComplex
 #include "Complex.h"
 
 
@@ -20,25 +20,25 @@ namespace CppBook
 {
 
 
-	// Used to check against division by 0
+	// Używane do sprawdzania potencjalnego dzielenia przez 0
 	const double kDivThresh { 1e-36 };
 
 
 	///////////////////////////////////////////////////////////
-	// Overloaded arithmetic operators for the TComplex class
+	// Przeciążone operatory arytmetyczne dla klasy TComplex
 	///////////////////////////////////////////////////////////
 
 	// +
 	TComplex TComplex::operator + ( const TComplex & second_op ) const
 	{
 		TComplex retComplex( fRe + second_op.fRe, fIm + second_op.fIm );
-		return retComplex;		// Return object by value
+		return retComplex;		// Zwróć obiekt przez wartość
 	}
 
 	TComplex & TComplex::operator += ( const TComplex & second_op )
 	{
 		fRe += second_op.fRe, fIm += second_op.fIm;
-		return * this;			// Return object by refernce
+		return * this;			// Zwróć obiekt przez referencję
 	}
 
 
@@ -72,12 +72,12 @@ namespace CppBook
 	}
 
 
-	// div - can throw an exception of division by zero
+	// dzielenie – może zgłosić wyjątek dzielenia przez zero
 	TComplex TComplex::operator / ( const TComplex & second_op ) const
 	{
 		auto div = second_op.fRe * second_op.fRe + second_op.fIm * second_op.fIm;
-		if( fabs( div ) < kDivThresh )	// don't divide by small number or 0 (better than: div == 0.0)
-			throw std::overflow_error( "div by 0 error" );	// if so, then throw simple text exception
+		if( fabs( div ) < kDivThresh )	// nie dziel przez małą liczbę lub 0
+			throw std::overflow_error( "div by 0 error" );	// lepsze niż sprawdzenie tylko div==0.0
 
 		auto re = fRe * second_op.fRe + fIm * second_op.fIm;
 		re /= div;
@@ -85,7 +85,7 @@ namespace CppBook
 		auto im = fIm * second_op.fRe - fRe * second_op.fIm;
 		im /= div;
 
-		return TComplex( re, im );		// Return object by value
+		return TComplex( re, im );		// Zwróć obiekt przez wartość
 	}
 
 	TComplex & TComplex::operator /= ( const TComplex & second_op )
@@ -104,14 +104,14 @@ namespace CppBook
 		fRe = re;
 		fIm = im;
 
-		return * this;		// Return object by refernce
+		return * this;		// Zwróć obiekt przez referencję
 	}
 
 
 
 	/////////////////////////////////////////////////////////
-	// Streaming operators - they do not need to be declared
-	// as friends
+	// Operatory strumieniowania – nie muszą być deklarowane
+	// jako zaprzyjaźnione (friend)
 
 	std::istream & operator >> ( std::istream & i, TComplex & complex )
 	{
@@ -137,7 +137,7 @@ namespace CppBook
 	}
 
 
-}		// end of the CppBook namespace
+}		// koniec przestrzeni nazw CppBook
 
 /////////////////////////////////////////////////////////
 
