@@ -30,7 +30,7 @@
 
 
 
-// The interpreter that builds the parsing tree
+// Interpreter, który buduje drzewa parsowania
 class ExpressionTreeBuilderInterpreter : public TSimpleExpressionInterpreter
 {
 	public:
@@ -40,7 +40,7 @@ class ExpressionTreeBuilderInterpreter : public TSimpleExpressionInterpreter
 		virtual ~ExpressionTreeBuilderInterpreter() = default;
 
 
-		// No shallow copy allowed due to fRoot and other members
+		// Brak zezwolenia na płytkie kopiowanie z powodu fRoot i innych składowych
 		ExpressionTreeBuilderInterpreter( const ExpressionTreeBuilderInterpreter & )	= delete;
 		ExpressionTreeBuilderInterpreter( const ExpressionTreeBuilderInterpreter && )	= delete;
 
@@ -50,22 +50,22 @@ class ExpressionTreeBuilderInterpreter : public TSimpleExpressionInterpreter
 	public:
 
 		///////////////////////////////////////////////////////////
-		// Functional operator to match an expression to fulfill
-		// the grammar.
+		// Operator funkcyjny dopasowujący wyrażenie pod kątem spełnienia
+		// gramatyki.
 		///////////////////////////////////////////////////////////
 		//
-		// INPUT:	in_str - a string with input expression 		
+		// WEJŚCIE:	in_str - ciąg z wyrażeniem wejściowym 		
 		//
-		// OUTPUT:	true if expression fulfills the grammar, false otherwise
+		// WYJŚCIE:	ttrue, gdy wyrażenie spełnia gramatykę, w przeciwnym razie false
 		//
-		// REMARKS:
-		//			If false returned, then fCurrPos points 
-		//			at the last properly matched position.
+		// UWAGI:
+		//			Jeśli zwraca false, fCurrPos wskazuje na 
+		//			ostatnią dobrze dopasowaną pozycję.
 		//
 		virtual bool operator () ( const std::string & in_str )
 		{
-			if( BaseClass::operator()( in_str ) )	// Call the base parser
-				return fNodeStack.Pop( fRoot );		// Take the node off from the stack
+			if( BaseClass::operator()( in_str ) )	// Wywołaj parser bazowy
+				return fNodeStack.Pop( fRoot );		// Zdejmij węzeł ze stosu
 
 			return false;
 		}
@@ -74,13 +74,13 @@ class ExpressionTreeBuilderInterpreter : public TSimpleExpressionInterpreter
 
 		using BaseClass = TSimpleExpressionInterpreter;
 	
-		using NodeStack = CppBook::UP_Stack_1000< TNode >;		// useful stack alias
+		using NodeStack = CppBook::UP_Stack_1000< TNode >;		// Przydatne aliasy stosu
 
 	private:		
 		
-		NodeStack	fNodeStack;			// the stack to store temporary branches of the tree
+		NodeStack	fNodeStack;			// Stos do przechowywania tymczasowych gałęzi drzewa
 
-		Node_UP		fRoot;				// root node of the parsing tree
+		Node_UP		fRoot;				// Węzeł główny drzewa parsowania
 
 	public:
 
@@ -114,7 +114,7 @@ class ExpressionTreeBuilderInterpreter : public TSimpleExpressionInterpreter
 		{
 			if( Match( '+' ) == true )
 			{
-				if( Term_Fun() )		// production: + T E'
+				if( Term_Fun() )		// produkcja: + T E'
 				{
 					CreateSubTree( std::make_unique< PlusOperator >() );
 					return Expr_Prime_Fun();
@@ -128,7 +128,7 @@ class ExpressionTreeBuilderInterpreter : public TSimpleExpressionInterpreter
 			{
 				if( Match( '-' ) == true )
 				{
-					if( Term_Fun() )		// production: - T E'
+					if( Term_Fun() )		// produkcja: - T E'
 					{
 						CreateSubTree( std::make_unique< MinusOperator >() );
 						return Expr_Prime_Fun();
@@ -140,7 +140,7 @@ class ExpressionTreeBuilderInterpreter : public TSimpleExpressionInterpreter
 				}
 			}
 
-			return true;					// production: e
+			return true;					// produkcja: e
 		}
 
 
@@ -150,7 +150,7 @@ class ExpressionTreeBuilderInterpreter : public TSimpleExpressionInterpreter
 		{
 			if( Match( '*' ) == true )
 			{
-				if( Factor_Fun() )		// production: * F T
+				if( Factor_Fun() )		// produkcja: * F T
 				{
 					CreateSubTree( std::make_unique< MultOperator >() );
 					return Term_Prime_Fun();
@@ -164,7 +164,7 @@ class ExpressionTreeBuilderInterpreter : public TSimpleExpressionInterpreter
 			{
 				if( Match( '/' ) == true )
 				{
-					if( Factor_Fun() )		// production: / F T'
+					if( Factor_Fun() )		// produkcja: / F T'
 					{
 						CreateSubTree( std::make_unique< DivOperator >() );
 						return Term_Prime_Fun();
@@ -176,7 +176,7 @@ class ExpressionTreeBuilderInterpreter : public TSimpleExpressionInterpreter
 				}
 			}
 
-			return true;					// production: e
+			return true;					// produkcja: e
 		}
 
 
@@ -185,14 +185,14 @@ class ExpressionTreeBuilderInterpreter : public TSimpleExpressionInterpreter
 	protected:
 
 		///////////////////////////////////////////////////////////
-		// Builds a branch of the parsing tree
+		// Buduje gałąź drzewa parsowania
 		///////////////////////////////////////////////////////////
 		//
-		// INPUT:	bin_op - smart pointer with the input binary operator 		
+		// WEJŚCIE:	bin_op - inteligentny wskaźnik z wejściowym operatorem binarnym 		
 		//
-		// OUTPUT:	node
+		// WYJŚCIE:	węzeł
 		//
-		// REMARKS: bin_op held object is overtaken and pushed onto the stack
+		// UWAGI: obiekt przechowywany w bin_op jest pozyskiwany i umieszczany na stosie
 		//
 		void CreateSubTree( std::unique_ptr< BinOperator > bin_op )
 		{
@@ -203,15 +203,15 @@ class ExpressionTreeBuilderInterpreter : public TSimpleExpressionInterpreter
 
 			Node_UP left, right;
 
-			fNodeStack.Pop( right );	// Pop the right sub-expression
-			fNodeStack.Pop( left );		// Pop the left sub-expression
+			fNodeStack.Pop( right );	// Ściągnij prawe podwyrażenie
+			fNodeStack.Pop( left );		// Ściągnij lewe podwyrażenie
 
-			bin_op->AdoptLeftChild( std::move( left ) );	// Connect left
-			bin_op->AdoptRightChild( std::move( right ) );	// Connect right
+			bin_op->AdoptLeftChild( std::move( left ) );	// Połącz lewe
+			bin_op->AdoptRightChild( std::move( right ) );	// Połącz prawe
 #endif 
 
-			fNodeStack.Push( std::move( bin_op ) ); // Push onto the stack
-			assert( bin_op.get() == nullptr );		// The input bin_op has been orphaned
+			fNodeStack.Push( std::move( bin_op ) ); // mieść na stosie
+			assert( bin_op.get() == nullptr );		// Wejściowy bin_op jest osierocony
 		}
 
 };
