@@ -32,12 +32,12 @@ void ComplexQuadEq_Test( void )
 	if( eq_type == TComplexQuadEq::EEqType::kOne || 
 		eq_type == TComplexQuadEq::EEqType::kTwo )
 	{
-		// Check if correct - there are many abs functions, but
-		// thanks to the CppBook namespace we do not confuse them
+		// Sprawdź, czy poprawne – istnieje wiele funkcji abs, ale
+		// dzięki przestrzeni nazw CppBook nie mylimy ich ze sobą
 		assert( CppBook::abs( r1 * ( r1 * a + b ) + c ) < 1e-12 );
 		assert( CppBook::abs( r2 * ( r2 * a + b ) + c ) < 1e-12 );
 
-		// Print out the results:
+		// Wypisz wyniki:
 		cout << "a=" << a << ", b=" << b << ", c=" << c << endl;
 		cout << "Root_1=" << r1 << ", Root_2=" << r2 << endl;
 	}
