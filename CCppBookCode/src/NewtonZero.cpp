@@ -30,28 +30,28 @@ namespace NewtonZero
 	using FP = double;
 	using Real_Fun = std::function< FP( FP ) >;
 
-	// Derivative is also a 1D real function
+	// Pochodna również jest jednowymiarową funkcją rzeczywistą
 	auto deriv( const Real_Fun & fun, const FP x0, const FP eps = 1e-5 )
 	{
-		// Let's use the definition of a derivative
+		// LUżyjmy definicji pochodnej
 		return ( fun( x0 + eps ) - fun( x0 ) ) / eps;
 	}
 
 
 	///////////////////////////////////////////////////////////
-	// Finds zero crossing of the supplied function 
+	// Znajduje miejsca zerowe podanej funkcji
 	///////////////////////////////////////////////////////////
 	//
-	// INPUT:	fun - a function object
-	//			start_x - estimated starting point
-	//			thresh - a convergence threshold
-	// OUTPUT:
-	//			a tuple containing a pair of values:
-	//			- the found zero position
-	//			- true if computations converged
+	// WEJŚCIE: 		fun ‐ obiekt funkcyjny
+	//			start_x - oszacowany punk początkowy
+	//			thresh - próg zbieżności
+	// WYJŚCIE:
+	//			krotka zawierająca parę wartości:
+	//			- pozycja znalezionego zera
+	//			- true, w przypadku osiągnięcia zbieżności obliczeń
 	//
-	// REMARKS:
-	//			Only if true is returned can the result be valid
+	// UWAGI:
+	//			Tylko w przypadku zwrócenia true rezultat może być poprawny
 	//
 	auto FindZero( const Real_Fun & fun, const FP start_x, const FP thresh = 1e-10 )
 	{
@@ -59,37 +59,37 @@ namespace NewtonZero
 
 		const FP eps = std::numeric_limits< FP >::epsilon();
 
-		// Only if true can computations be correct
+		// Tylko w przypadku true obliczenia mogą być poprawne
 		bool reach_converg { false };
 
-		// It is always good to have a fuse in case computations do not converge
+		// Zawsze dobrze jest mieć bezpiecznik na wypadek braku zbieżności obliczeń
 		const size_t kMaxIters { 1000 };
 
 		for( size_t n = 0; n < kMaxIters; ++ n )
 		{
-			// Set the threshold
+			// Ustaw próg
 			const FP loc_thresh = std::max( thresh, eps * std::fabs( x_n ) );
 
 			FP df_x = deriv( fun, x_n );
 
-			// Check if we can safely divide
+			// Sprawdź, czy możemy bezpiecznie dzielić
 			if( std::fabs( df_x ) <= eps )
 				break;
 
-			// This is the Newton step
+			// To jest krok Newtona
 			FP delta = - fun( x_n ) / df_x;
 
-			// Check for convergence 
+			// Sprawdź pod kątem zbieżności
 			if( std::fabs( delta ) <= loc_thresh )
 			{
-				reach_converg = true;		// result can be OK
+				reach_converg = true;		// Wynik może być OK
 				break;		
 			}
 
-			x_n += delta;	// Update the argument by delta and iterate
+			x_n += delta;	// Zaktualizuj argument o deltę i iteruj
 		}
 
-		// Return the result - valid only if reach_converg == true
+		// Zwróć wynik – prawidłowy tylko, gdy reach_converg == true
 		return std::make_tuple( x_n, reach_converg );
 	}
 
@@ -116,10 +116,10 @@ namespace NewtonZero
 namespace NewtonZero
 {
 
-	// Compute the square root of the arg
+	// Oblicz pierwiastek kwadratowy argumentu
 	auto SquareRootApproxNewton( const FP arg )
 	{
-		// This is a reverse function of the square root
+		// To jest funkcja odwrotna pierwiastka
 		auto sq_root = [ arg = arg ] ( double x ) { return x * x - arg; };
 	
 		return FindZero( sq_root, 1.0 );
@@ -143,6 +143,6 @@ namespace NewtonZero
 
 	}
 
-}	// End of NewtonZero
+}	// Koniec NewtonZero
 
 
