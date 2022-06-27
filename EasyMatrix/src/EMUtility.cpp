@@ -28,8 +28,8 @@
 
 
 
-// Ask the user to enter values for matrix m 
-// from the keyboard.
+// Poproś użytkownika o wprowadzenie wartości dla macierzy m 
+// z klawiatury.
 void AskUserForMatrixData( EMatrix & m )
 {
 	const Dim kCols = m.GetCols();
@@ -41,25 +41,25 @@ void AskUserForMatrixData( EMatrix & m )
 		for( Dim c = 0; c < kCols; ++ c )
 		{
 			std::cout << c << ": ";
-			std::cin >> m.fData[ r ][ c ];		// read a value from the keyboard
+			std::cin >> m.fData[ r ][ c ];		// odczytaj wartość z klawiatury
 		}
 	}
-	std::cout << std::endl;	// new line again
+	std::cout << std::endl;	// znów nowa linia
 }
 
 
 
-// Prints contents of a matrix m on the screen
+// Wypisuje zawartość macierzy m na ekran
 void ShowMatrix( const EMatrix & m )
 {
-	for( const auto & row : m.fData )	// go row-by-row
+	for( const auto & row : m.fData )	// przejdź wiersz po wierszu
 	{
-		for( const auto & data : row )	// go through the data in single row
-			std::cout << data << "\t";	// separate data with tab
+		for( const auto & data : row )	// przejdź po danych w pojedynczym wierszu
+			std::cout << data << "\t";	// rozdziel dane za pomocą tabulatora
 
-		std::cout << std::endl;		// print new line
+		std::cout << std::endl;		// wypisz nową linię
 	}
-	std::cout << std::endl;	// new line again
+	std::cout << std::endl;	// znów nowa linia
 }
 
 
@@ -71,15 +71,15 @@ void ShowMatrix( const EMatrix & m )
 
 
 
-// Add two matrices, return the result:
+// Dodaj dwie macierze, zwróć rezultat:
 // c = a + b
-// Dimensions of a and b must be the same.
+// Wymiary macierzy a i b muszą być takie same.
 EMatrix		AddMatrix( const EMatrix & a, const EMatrix & b )
 {
-	assert( a.GetRows() == b.GetRows() );	// dim must be the same
+	assert( a.GetRows() == b.GetRows() );	// sprawdź w wersji debug czy wymiary są takie same
 	assert( a.GetCols() == b.GetCols() );
 
-	EMatrix	c { a };	// Make c the same as a
+	EMatrix	c { a };	// Stwórz macierz c taką samą jak a
 
 	for( Dim row = 0; row < b.GetRows(); ++ row )
 		for( Dim col = 0; col < b.GetCols(); ++ col )
@@ -88,9 +88,9 @@ EMatrix		AddMatrix( const EMatrix & a, const EMatrix & b )
 	return c;
 }
 
-// Multiply two matrices, return the result:
+// Pomnóż dwie macierze, zwróć ich rezultat:
 // c = a * b
-// Dimensions of a and b must comply for multiplication
+// Wymiary a i b muszą być zgodne w przypadku mnożenia
 EMatrix		MultMatrix( const EMatrix & a, const EMatrix & b )
 {
 	const auto a_cols = a.GetCols();
@@ -99,13 +99,13 @@ EMatrix		MultMatrix( const EMatrix & a, const EMatrix & b )
 	const auto b_cols = b.GetCols();
 	const auto b_rows = b.GetRows();	
 
-	assert( a_cols == b_rows );	// Dimensions must be the same
+	assert( a_cols == b_rows );	// Wymiary muszą być takie same
 
-	EMatrix	c( a_rows, b_cols, 0.0 );	// Output matrix has such dimensions
+	EMatrix	c( a_rows, b_cols, 0.0 );	// Macierz wynikowa ma takie rozmiary
 
-	for( Dim ar = 0; ar < a_rows; ++ ar )	// Traverse rows of a
-		for( Dim bc = 0; bc < b_cols; ++ bc )	// Traverse cols of b
-			for( Dim ac = 0; ac < a_cols; ++ ac ) // Traverse cols of a == rows of b
+	for( Dim ar = 0; ar < a_rows; ++ ar )	// Przejdź po wierszach macierzy a
+		for( Dim bc = 0; bc < b_cols; ++ bc )	// Przejdź po kolumnach macierzy b
+			for( Dim ac = 0; ac < a_cols; ++ ac ) // Przejdź po kolumnach a == wierszach b
 				c.fData[ ar ][ bc ] += a.fData[ ar ][ ac ] * b.fData[ ac ][ bc ];
 
 	return c;
