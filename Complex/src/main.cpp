@@ -11,13 +11,13 @@
 
 #include "Complex.h"
 
-// Declarations are sufficient to call functions
+// Deklaracje są wystarczające do wywoływania funkcji
 void Complex_Test_Screen( void );
 void Complex_Test_File( void );
 
 
 
-// In C++ there are few versions of the main function
+// W C++ istnieje kilka wersji funkcji main
 int main( void )
 {
 	Complex_Test_Screen();
