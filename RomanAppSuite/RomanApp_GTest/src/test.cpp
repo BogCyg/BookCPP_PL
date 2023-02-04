@@ -1,6 +1,11 @@
-#include "pch.h"
+
 
 #include "Dec2Roman.h"
+#include <gtest/gtest.h>
+
+
+// https://google.github.io/googletest/quickstart-cmake.html
+
 
 TEST(TestCaseName, TestName) {
   EXPECT_EQ(1, 1);

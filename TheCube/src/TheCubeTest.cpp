@@ -34,7 +34,6 @@ void TheCube_Test( void )
 
 	// Wypełnij sześcian losowymi wartościami. ref jest otoką referencji
 	std::generate( cube.GetDataBuf(), cube.GetDataBuf() + cube.Size(), std::ref( rand_gen ) );
-	//std::generate( cube.GetDataBuf(), cube.GetDataBuf() + cube.Size(), std::mt19937( std::random_device{}() ) );
 
 	// Nie można przenieść – tylko kopia z cube, ponieważ jest ona używana później
 	TheCube		mirror_cube( cube );	

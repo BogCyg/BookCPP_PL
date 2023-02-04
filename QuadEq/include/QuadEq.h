@@ -11,7 +11,7 @@
 
 
 
-// Preprocessor idiom to include the header only once
+// Idiom preprocesora aby do³¹czaæ ten plik hederowy wy³¹cznie raz
 #ifndef QuadEq_h
 #define QuadEq_h
 
@@ -22,7 +22,7 @@
 
 
 ///////////////////////////////////////////////////////////
-// This class implement the quadratic equation of the form:
+//  Ta klasa implementuje równanie kwadratowe w postaci:
 //
 //		a*x*x + b*x + c = 0
 //
@@ -31,17 +31,17 @@ class TQuadEq
 {
 	private:
 
-		double fa {}, fb {}, fc {};	// the coefficients of the equation
+		double fa {}, fb {}, fc {};	// wspó³czynniki równania
 
 	public:
 
 		// ===================================================
 		
-		// Class default constructor
+		// konstruktor domyœlny klasy
 		TQuadEq( void ) : fa( 0.0 ), fb( 0.0 ), fc( 0.0 )
 		{}
 		
-		// Class parametric constructor
+		 // konstruktor parametryczny klasy
 		TQuadEq( double a, double b, double c )
 			: fa( a ), fb( b ), fc( c )
 		{}
@@ -52,7 +52,7 @@ class TQuadEq
 
 	public:
 
-		// Getters & Setters
+		// Gettery i settery
 		double Get_a( void ) const { return fa; }
 		double Get_b( void ) const { return fb; }
 		double Get_c( void ) const { return fc; }
@@ -64,52 +64,52 @@ class TQuadEq
 
 	public:
 
-		// Helper functions to compute the discriminant of the quadratic equation;
-		// This is an inline function (definition of a function in the class)
+		// Funkcje pomocnicze do obliczania wyró¿nika równania kwadratowego.
+		// Jest to funkcja inline (definicja funkcji znajduje siê w klasie)
 		double ComputeDelta( void ) const { return fb * fb - 4.0 * fa * fc; }
 
-		// Define some constants for the class - using the scoped enum type
+		 // Zdefiniuj pewne sta³e dla klasy – za pomoc¹ silnego typu wyliczeniowego
 		enum class EEqType { kNone, kOne, kTwo, kLinOne, kLinContra };
 
 
 		///////////////////////////////////////////////////////////
-		// This function checks the type of the equation 
+		// Ta funkcja sprawdza typ równania 
 		///////////////////////////////////////////////////////////
 		//		
-		// INPUT:
+		// WEJŒCIE:
 		//			delta
 		//		
-		// OUTPUT:
-		//			The exact type of the equation 
-		//				represented by the parameters f_a, f_b, f_c
+		// WYJŒCIE:
+		//			Dok³adny typ równania 
+		//				reprezentowanego przez parametry fa, fb, fc
 		//		
-		// REMARKS:
-		//			Separation of a problem analysis from
-		//			problem solution
-		//		
+		// UWAGI:
+		//			Rozdzielenie analizy problemu
+		//			od rozwi¹zania problemu
+		//	
 		virtual EEqType GetNumOfRoots( const double delta ) const;
 
 
 		///////////////////////////////////////////////////////////
-		// This function computes the roots of the equation,
-		// if possible.
+		// Ta funkcja oblicza pierwiastki równania,
+		// jeœli istniej¹.
 		///////////////////////////////////////////////////////////
 		//		
-		// INPUT:
-		//			theRoot_1 - a reference to an object which
-		//				contains root 1 if returned kLinOne, kOne or kTwo
-		//			theRoot_2 - a reference to an object which
-		//				contains root 2 if returned kOne or kTwo
-		//				(in the first case root_1 == root_2)
+		// WEJŒCIE:
+		//			theRoot_1 - referencja do obiektu, który
+		//				awiera root_1, gdy zwrócono kLinOne, kOne lub kTwo
+		//			theRoot_2 - referencja do obiektu, który
+		//				zawiera root_2, gdy zwrócono kOne lub kTwo
+		//				(w pierwszym przypadku root_1 == root_2)
 		//		
-		// OUTPUT:
-		//			status of the equation (number of roots)
+		// WYJŒCIE:
+		//			status równania (liczba pierwiastków)
 		//		
-		// REMARKS:
-		//			The values referenced to by theRoot_1 and theRoot_2
-		//			are undefined in all other cases than stated above.
+		// UWAGI:
+		//			Wartoœci, do których odnosz¹ siê theRoot_1 i theRoot_2
+		//			s¹ niezdefiniowane we wszystkich innych przypadkach ni¿ te powy¿ej.
 		//
-		//		
+		//	
 		EEqType GetRoots( double & theRoot_1, double & theRoot_2 ) const;
 
 };
@@ -117,7 +117,7 @@ class TQuadEq
 
 
 //////////////////////////////////////////////////////////
-// Input/Output operations (external functions)
+// Operacje wejœcia/wyjœcia (zwykle funkcje zewnêtrzne)
 std::ostream & operator << ( std::ostream & o, const TQuadEq & equation );
 std::istream & operator >> ( std::istream & i, TQuadEq & equation );
 

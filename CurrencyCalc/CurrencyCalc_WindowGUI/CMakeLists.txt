@@ -1,7 +1,7 @@
 cmake_minimum_required( VERSION 3.6.2 )
 
 # For a new project it is sufficient to change only its name in the following line
-set( PROJECT_NAME CurrencyCalc_GUI )
+set( PROJECT_NAME CurrencyCalc_WindowGUI )
 
 project( ${PROJECT_NAME} )
 
@@ -31,7 +31,8 @@ endif()
 include_directories( ../CurrencyCalc_Lib/include )
 include_directories( ./include )
 include_directories( ../../FLTK )
-
+#include_directories( ../../FLTK/build/FL )		# added in 2023 after FLTK changed to GitHub
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/../../FLTK/build/FL/fl_config.h DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../../FLTK/FL )
 
 
 # Automatically add all *.cpp files to the project
@@ -50,6 +51,9 @@ if( WIN32 )
 				PUBLIC 
 					wsock32
 					comctl32
+					gdiplus.lib
+					gdi32.lib
+					user32.lib
 			)
 
 elseif( ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
@@ -68,9 +72,9 @@ find_library( 	CURRENCY_CALC_LIB
 
 # FLTK libraries
 find_library( 	FLTK_LIBRARY
-		NAMES 			fltkd fltk
-		PATHS 			../../FLTK/lib/Debug 	../../FLTK/lib/Release 	../../FLTK/lib )
-
+		NAMES 			fltkd fltk	fltk_formsd fltk_gld
+		#PATHS 			../../FLTK/lib/Debug 	../../FLTK/lib/Release 	../../FLTK/lib )
+		PATHS 			../../FLTK/build/lib/Debug 	../../FLTK/build/lib/Release 	../../FLTK/build/lib )	# changed in 2023 after FLTK changed to GitHub
 
 target_link_libraries( 	${PROJECT_NAME} 
 			PUBLIC 

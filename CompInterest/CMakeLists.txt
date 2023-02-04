@@ -37,5 +37,7 @@ include_directories( include )
 file ( GLOB SOURCES "./src/*.cpp" "./include/*.h" )
 add_executable( ${PROJECT_NAME} ${SOURCES} )
 
+# Set the default project
+set_property( DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME} )
 
 message( "CMAKE_BUILD_TYPE is ${CMAKE_BUILD_TYPE}" )

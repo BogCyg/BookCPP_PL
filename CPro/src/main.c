@@ -20,7 +20,7 @@
 
 
 /* Function declaration. */
-void ToBinConvert( int val );
+void ToBinConvert( unsigned int val );
 
 
 /* The CProg converts a decimalvalue into an 
@@ -104,7 +104,7 @@ int main( int argc, char ** argv )
 
 
 /* Recursivly print bits in reverse order thanks to recursion. */
-void ToBinConvert( int val )
+void ToBinConvert( unsigned val )
 {
 	if( val > 1 )
 		ToBinConvert( val >> 1 );	/* Recursive call */

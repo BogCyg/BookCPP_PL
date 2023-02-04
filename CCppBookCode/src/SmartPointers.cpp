@@ -630,8 +630,8 @@ public:
 	void SetStr( const string & s ) { fStr = s; }
 
 private:	
-	shared_ptr< N > fNext;	// referencja do przodu
-	weak_ptr< N >	fPrev;	// referencja do tyłu
+	shared_ptr< N > fNext;	// połączenie do przodu
+	weak_ptr< N >	fPrev;	// połączenie do tyłu
 
 public:	
 	void SetNext( shared_ptr< N > s ) { fNext = s; }

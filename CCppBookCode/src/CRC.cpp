@@ -35,7 +35,7 @@
 unsigned char CalcCRC( unsigned char crc, unsigned char byte )
 {
 	// A representation of the x^8 + x^2 + x^1 + 1 polynomial
-	const unsigned short kPoly = 0x107;
+	const unsigned short kPoly = 0xE0;
 
 	unsigned short x { crc };
 	x ^= byte;

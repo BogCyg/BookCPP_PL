@@ -55,8 +55,8 @@ public:
 	// Konstruktor domyślny musi być jawnie zakodowany, 
 	// sponieważ został dodany konstruktor kopiujący i przypisanie
 	// (w innym przypadku można go było pominąć).
-	//TPointFor( void ) : fx( T() ), fy( T() ) {}
-	TPointFor( void ) = default;
+	//TPointFor( void ) : fx( T() ), fy( T() ) {}		
+	TPointFor( void ) = default;						
 };
 
 

@@ -61,7 +61,7 @@ std::tuple< int, int > FindMin( const std::vector< int > & v )
 			shared( sh_val, sh_offset, src_data_ptr, data_num )
 	{
 		// Each thread will take its payload and determine 
-		// its lowest local pixel (reduction for min)
+		// its lowest local value (reduction for min)
 		#pragma omp for nowait
 		for( auto i = 0; i < data_num; ++ i )
 		{

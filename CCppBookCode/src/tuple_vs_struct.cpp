@@ -19,7 +19,7 @@
 
 
 
-
+using namespace std::literals::string_literals;		// aby móc użyć "s w celu zdefiniowania literału typu std::string, jak w "June"s
 
 using std::tuple, std::get, std::tie, std::tuple_size, std::make_tuple, std::ignore;
 using std::cout, std::endl;
@@ -38,8 +38,8 @@ void tuple_vs_struct( void )
 		tuple< int, string, int >	t_date( 27, "June", 2019 );
 
 		// Łatwiej będzie za pomocą make_tuple
-		auto t_date_2 = make_tuple( 27, "June", 2019 );
-
+		auto t_date_2 = make_tuple( 27, "June"s, 2019 );	// dzięki s na końcu od razu tworzymy obiekt std::string (a nie const char*)
+															// ale pamiętajmy dodać: using namespace std::literals::string_literals
 		// uple_size<>::value zwraca liczbę elementów
 		cout << "t_date has " << tuple_size< decltype(t_date) >::value 
 			<< " elems" << endl;

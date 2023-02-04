@@ -43,7 +43,7 @@ namespace CurrExchanger
 #include <locale>
 
 // Twórz prosty main(), kod umieść w innych komponentach
-int main( void )
+int main()
 {
 	setlocale( /*LC_ALL*/LC_CTYPE, "Polish" );
 	CurrExchanger::OnLine_CurrExchanger::Run();

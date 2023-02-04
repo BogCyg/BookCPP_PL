@@ -185,7 +185,7 @@ void CondStatements( void )
 		if( val > 0.0 )					// if val larger than 0.0
 			cout << std::log( val );	// output natural logarithm of val
 		else
-			cout << "Error - Negative argument" << endl;
+			cout << "Error - Wrong argument" << endl;
 	
 	
 	}
@@ -378,9 +378,9 @@ void LoopStatements( void )
 	{
 
 		const size_t kSize = 16;
-		std::array< int, kSize > tab;
+		std::array< int, kSize > tab;	// zdefiniuj tablicê wartoœci int
 
-		// fill all values with 0 - use pointers
+		// wype³nij wszystkie wartoœci zerami
 		int i = 0;
 		while( i < tab.size() )
 			tab[ i ++ ] = 0;
@@ -394,9 +394,9 @@ void LoopStatements( void )
 	{
 
 		const size_t kSize = 16;
-		std::array< int, kSize > tab;
+		std::array< int, kSize > tab;	// zdefiniuj tablicê wartoœci int
 
-		// fill all values with 0 - more readable
+		// wype³nij wszystkie wartoœci zerami – bardziej czytelne
 		int i = 0;
 		while( i < tab.size() )
 		{

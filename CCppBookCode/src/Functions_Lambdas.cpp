@@ -44,7 +44,7 @@ void SimpleLambda_TestFun( void )
 	// To jest domknięcie lambda
 	auto cm_2_in = 
 		// To jest wyrażenie lambda
-		[] ( const double cm ) { return 2.54 * cm; };
+		[] ( const double cm ) { return 1./2.54 * cm; };
 
 
 

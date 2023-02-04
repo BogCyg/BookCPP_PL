@@ -29,10 +29,10 @@
 // Deklaracja aliasu typu dla wektora wartości double (przybliżenie liczb rzeczywistych)
 using RealVec = std::vector< double >;
 
-// Alias typu dla wektora wymiarów (rozmiar)
+// Alias typu dla rozmiarów wektora (rozmiar)
 using Dim		= RealVec::size_type;
 
-// Alias typu dla wektora typów (np. double)
+// Alias dla typu przechowywanych obiektów w wektorze (np. double)
 using DataType	= RealVec::value_type;
 
 
@@ -106,7 +106,7 @@ private:
 
 public:
 
-	// Konstruktor parametryczny
+	// Konstruktor parametryczny - rows oraz cols powinny być > 0
 	EMatrix( Dim rows, Dim cols, DataType initVal = 0.0 )
 		: fData( rows, RealVec( cols, initVal ) )
 	{	// macierz == wektor wektorów danych typu double

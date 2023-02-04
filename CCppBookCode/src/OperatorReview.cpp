@@ -58,8 +58,8 @@ void workerFun( void )
 template < typename T >
 class OrdMatrixFor
 {
-		T * fData;			// data buffer
-		int	fCol, fRow;		// dimensions
+		T * fData {};			// data buffer
+		int	fCol {}, fRow {};	// dimensions
 
 		T * (OrdMatrixFor::*data_offset)( int c, int r );	// pointer to a member function
 		
@@ -79,8 +79,8 @@ class OrdMatrixFor
 		~OrdMatrixFor() { delete [] fData; }		// free memory
 		
 		// Access an element using right data offset (two equivalent alternatives)
-		void SetElem( int c, int r, double v ) { * (this->*data_offset)( c, r ) = v; }
-		double GetElem( int c, int r ) { return * ((*this).*data_offset)( c, r ); }
+		void SetElem( int c, int r, T v ) { * (this->*data_offset)( c, r ) = v; }
+		T GetElem( int c, int r ) { return * ((*this).*data_offset)( c, r ); }
 };
 
 

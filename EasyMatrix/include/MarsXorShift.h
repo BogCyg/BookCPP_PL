@@ -11,7 +11,6 @@
 
 
 // Nagłówki systemowe w < >
-//#include <time.h>
 #include <ctime>
 
 

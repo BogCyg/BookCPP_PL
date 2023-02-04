@@ -23,7 +23,6 @@
 
 
 
-//using namespace std;
 
 using std::vector, std::string, std::tuple;
 using std::cout, std::cin, std::endl;
@@ -49,7 +48,7 @@ auto ConvertDecimal_2_Roman( int in_dec_num )
 	// Przejdź po wszystkich krotkach [ val, str ], zaczynając od największej wartości val
 	for( const auto & [ val, str ] : RomanValueTranslator )	// powiązanie strukturalne
         while( in_dec_num >= val )					// iteruj odejmując
-            outStr += str, in_dec_num -= val;	// największa możliwa wartość
+            outStr += str, in_dec_num -= val;	// największą możliwą wartość
 
     return outStr;
 }

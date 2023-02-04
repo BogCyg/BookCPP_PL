@@ -40,7 +40,7 @@ int main()
 	cout << "Enter the annual rate [% per 12 months]: " << endl;
 	double r {};
 	cin >> r;
-	if( r <= 0.0 || r >= 100.0 )
+	if( r <= 0.0 || r >= 100.0 )	// operator || oznacza logiczne LUB
 	{
 		cout << "Wrong value, exiting..." << endl;
 		return -1;

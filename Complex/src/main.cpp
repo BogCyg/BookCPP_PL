@@ -18,7 +18,7 @@ void Complex_Test_File( void );
 
 
 // W C++ istnieje kilka wersji funkcji main
-int main( void )
+int main()
 {
 	Complex_Test_Screen();
 	Complex_Test_File();

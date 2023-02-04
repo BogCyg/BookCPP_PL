@@ -38,7 +38,6 @@ class TLongNumberFor
 {
 	public:
 
-		//enum { kMaxNumbers = MAX_NUMBERS };
 		inline static const auto kMaxNumbers { MAX_NUMBERS };
 
 	private:
@@ -76,7 +75,7 @@ class TLongNumberFor
 		{ 
 			assert( kMaxNumbers > 0 );
 			assert( sizeof( NibblePair ) == sizeof( unsigned char ) );		// najpierw sprawdzamy nasz niezmiennik
-			assert( sizeof( fData ) == ( kMaxNumbers >> 1 ) + ( kMaxNumbers & 0x01 ) );	// jakieś manipulacje bitami, ale ostrożnie z hierarchią
+			assert( sizeof( fData ) == ( kMaxNumbers >> 1 ) + ( kMaxNumbers & 0x01 ) );	// manipulacje bitami, ale ostrożnie z hierarchią
 #if ALLOW_INHERITANCE == 0																		
 			assert( sizeof( * this ) == sizeof( fData ) );		// sprawdzanie, czy obiekt nie zawiera więcej niż same dane
 #endif

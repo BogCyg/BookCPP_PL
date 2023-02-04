@@ -29,8 +29,8 @@ class TheCube
 {
 public:
 
-	using value_type = double;
-	using size_type = /*int*/std::size_t;
+	using value_type	= double;
+	using size_type		= std::size_t;
 
 	static const size_type kDims { 3 };		// to samo dla wszystkich obiektów klasy
 
@@ -54,7 +54,7 @@ public:
 	}
 
 	// Konstruktor parametryczny
-	TheCube( const /*int*/size_type dx, const /*int*/size_type dy, const /*int*/size_type dz )
+	TheCube( const size_type dx, const size_type dy, const size_type dz )
 		: fDim{ dx, dy, dz }
 	{
 		// Przydziel 1-wymiarową tablicę elementów value_type i przypisz do fDataBuf

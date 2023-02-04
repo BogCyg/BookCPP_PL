@@ -38,7 +38,7 @@ class TinyCube						// dla późniejszego konkretnego typu
 
 		vector< ElemType >	fDataBuf;		// wektor do przechowywania danych
 		
-		array< int, kDims >	fDim;                   // przechowuje zakres każdego wymiaru
+		array< int, kDims >	fDim;           // przechowuje zakres każdego wymiaru
 
 	public:
 
@@ -51,7 +51,7 @@ class TinyCube						// dla późniejszego konkretnego typu
 		}
 
 		// Destruktor niczego nie robi. Dane zostaną usunięte przez wektor, jednak
-		~TinyCube() {}  // jawna definicja destruktora wyklucza semantykę przekazywania
+		//~TinyCube() {}  // jawna definicja destruktora wykluczałaby semantykę przekazywania
 
 	public:
 
@@ -59,31 +59,31 @@ class TinyCube						// dla późniejszego konkretnego typu
 		ElemType & Element( const int x, const int y, const int z )
 		{ 
 			const auto offset = ( z * fDim[ ky ] + y ) * fDim[ kx ] + x;
-			return fDataBuf[ offset ];  // indeks dolny zwracany przez referencję
+			return fDataBuf[ offset ];  // indeks zwracany przez referencję
 		}
 
 };
 
 
-// Specialization for double
+// Specjalizacja szablonu wyłącznie dla typu double
 template <>
 class TinyCube < double >
 {
 	public:
 		
-		static const int kDims = 3;		// the same for all objects of this class
+		static const int kDims = 3;		// to samo dla wszystkich obiektów tej klasy
 
-		enum EDims { kx, ky, kz };		// shortcuts for 3 dimensions
+		enum EDims { kx, ky, kz };		// skróty dla 3 wymiarów
 	
 	private:
 
-		vector< double >	fDataBuf;		// a vector to store data
+		vector< double >	fDataBuf;		// wektor do przechowywania danych
 		
 		array< int, kDims >	fDim;
 
 	public:
 
-		// Parametric constructor - dx, dy, dz must be > 0
+		// Konstruktor parametryczny - dx, dy, dz muszą być > 0
 		TinyCube( const int dx, const int dy, const int dz )
 			: fDim{ dx, dy, dz }, fDataBuf( dx * dy * dz, 0.0 )
 		{
@@ -92,16 +92,16 @@ class TinyCube < double >
 		}
 
 
-		// Destructor does nothing; data will be deleted by the vector
-		~TinyCube() {} 
+		// Destruktor niczego nie robi. Dane zostaną usunięte przez wektor, jednak
+		//~TinyCube() {}	// jawna definicja destruktora wykluczałaby semantykę przekazywania
 
 	public:
 
-		// Access elements by reference - bi-directional
+		// Uzyskaj dostęp do elementów przez referencję - dwukierunkowe
 		auto & Element( const int x, const int y, const int z ) 
 		{ 
 			const auto offset = ( z * fDim[ ky ] + y ) * fDim[ kx ] + x;
-			return fDataBuf[ offset ];		// subscript returns by reference
+			return fDataBuf[ offset ];		// indeks zwracany przez referencję
 		}
 
 };
@@ -112,7 +112,7 @@ class TinyCube < bool >
 {
 	public:
 
-		static const int kDims = 3;		// the same for all objects of this class
+		static const int kDims = 3;		// to samo dla wszystkich obiektów tej klasy
 		
 		enum EDims { kx, ky, kz };		// shortcuts for 3 dimensions
 	
@@ -138,9 +138,8 @@ class TinyCube < bool >
 		}
 
 
-		// Destructor
-		// does nothing, fDataBuf will be deleted by the unique_ptr
-		~TinyCube() {} 
+		// Destructor does nothing
+		//~TinyCube() {} 
 
 	public:
 

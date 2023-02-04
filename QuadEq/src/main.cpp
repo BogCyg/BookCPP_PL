@@ -25,7 +25,7 @@ using std::cout, std::cerr, std::cin, std::endl;
 
 
 // W C++ istnieją przeciążone funkcje main
-int main( void )
+int main()
 {
 	// Tekst odpowiadający wartościom TQuadEq::EEquationType 
 	const std::string eq_types_text[] = {	"No real roots", 

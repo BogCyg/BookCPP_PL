@@ -98,8 +98,8 @@ class range
 
 			bool operator != ( const range_iter & ri ) const
 			{	
-				// To jest podchwytliwa część – podczas pracy z iteratorami
-				// tylko raz sprawdza !=, więc musi to być traf w celu zatrzymania;
+				// To jest podchwytliwa część – podczas pracy iterator
+				// sprawdza koniec wywołując !=, więc musi to być traf w celu zatrzymania;
 				// Proste != nie zadziała, gdy podczas zwiększania kStart N razy o kSteps
 				// przekroczy wartość kEnd. Stąd też poniższy warunek:
 				return kStep > 0 ? fVal < ri.fVal : fVal > ri.fVal;	

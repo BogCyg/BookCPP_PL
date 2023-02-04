@@ -68,7 +68,6 @@ TQuadEq::EEqType TQuadEq::GetNumOfRoots( const double delta ) const
 //			są niezdefiniowane we wszystkich innych przypadkach niż te powyżej.
 //
 //	
-	
 TQuadEq::EEqType TQuadEq::GetRoots( double & root_1, double & root_2 ) const
 {
 	auto delta( ComputeDelta() );		// wywołaj konstruktor dla typu wbudowanego
