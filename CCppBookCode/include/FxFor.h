@@ -359,13 +359,13 @@ constexpr FxFor< ST, Prec, ACC_TYPE >::operator long() const
 
 // przedrostkowa
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator ++ ()
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator ++ ()
 {
 	* this += 1;
 	return * this;
 }
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator -- ()
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator -- ()
 {
 	* this -= 1;
 	return * this;
@@ -373,14 +373,14 @@ typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TY
 
 // przyrostkowa
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator ++ ( int )
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator ++ ( int )
 {
 	FxType tmp( * this );	// to niestety wymaga tymczasowej kopii
 	* this += 1;
 	return tmp;
 }
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator -- ( int )
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator -- ( int )
 {
 	FxType tmp( * this );	// to niestety wymaga tymczasowej kopii
 	* this -= 1;
@@ -392,28 +392,28 @@ typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE
 // ===================================================
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator + ( FxType f ) const
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator + ( FxType f ) const
 {
 	FxType tmp( * this );
 	return tmp += f;
 }
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator - ( FxType f ) const
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator - ( FxType f ) const
 {
 	f.ChangeSign();
 	return operator + ( f );
 }
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator * ( FxType f ) const
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator * ( FxType f ) const
 {
 	FxType tmp( * this );
 	return tmp *= f;
 }
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator / ( FxType f ) const
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator / ( FxType f ) const
 {
 	FxType tmp( * this );
 	return tmp /= f;
@@ -429,21 +429,21 @@ typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE
 // The LEFT (...) vacated bits are 0-filled.
 //
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator <<= ( int shift )
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator <<= ( int shift )
 {
 	IsPositive() ? fValue <<= shift : fValue <<= shift, MakeNegative();
 	return * this;
 }
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator >>= ( int shift )
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator >>= ( int shift )
 {
 	IsPositive() ? fValue >>= shift : ( fValue &= ~kSignMask ) >>= shift, MakeNegative();
 	return * this;
 }
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator << ( int shift ) const
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator << ( int shift ) const
 {
 	FxType tmp( * this );
 	tmp.fValue <<= shift;
@@ -451,7 +451,7 @@ typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE
 }
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator >> ( int shift ) const
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator >> ( int shift ) const
 {
 	FxType tmp( * this );
 	tmp.fValue >>= shift;
@@ -461,7 +461,7 @@ typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE
 // ===================================================
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator += ( FxType f )
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator += ( FxType f )
 {
 	// Wykonujemy arytmetykę znak-moduł
 	bool first_is_negative	= IsNegative();
@@ -537,14 +537,14 @@ typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TY
 
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator -= ( FxType f )
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator -= ( FxType f )
 {
 	f.ChangeSign();
 	return operator += ( f );
 }
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator *= ( FxType f )
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator *= ( FxType f )
 {
 	// Wykonujemy arytmetykę znak-moduł
 	bool first_is_negative	= IsNegative();
@@ -575,7 +575,7 @@ typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TY
 }
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator /= ( FxType f )
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator /= ( FxType f )
 {
 	if( f.fValue == 0 )
 	{
@@ -609,7 +609,7 @@ typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TY
 
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator - ( void )
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator - ( void )
 {
 	ChangeSign();
 	return * this;
@@ -621,49 +621,49 @@ typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TY
 
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator & ( FxType f ) const
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator & ( FxType f ) const
 {
 	FxType tmp( * this );
 	return tmp &= f;
 }
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator | ( FxType f ) const
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator | ( FxType f ) const
 {
 	FxType tmp( * this );
 	return tmp |= f;
 }
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator ^ ( FxType f ) const
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType FxFor< ST, Prec, ACC_TYPE >::operator ^ ( FxType f ) const
 {
 	FxType tmp( * this );
 	return tmp ^= f;
 }
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator ~ ( void )
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator ~ ( void )
 {
 	fValue = ~ fValue;
 	return * this;
 }
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator &= ( FxType f )
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator &= ( FxType f )
 {
 	fValue &= f.fValue;
 	return * this;
 }
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator |= ( FxType f )
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator |= ( FxType f )
 {
 	fValue |= f.fValue;
 	return * this;
 }
 
 template< typename ST, int Prec, typename ACC_TYPE >
-typename constexpr FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator ^= ( FxType f )
+constexpr typename FxFor< ST, Prec, ACC_TYPE >::FxType & FxFor< ST, Prec, ACC_TYPE >::operator ^= ( FxType f )
 {
 	fValue ^= f.fValue;
 	return * this;

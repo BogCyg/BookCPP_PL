@@ -56,7 +56,6 @@ void SimpleExpression_Test( void )
 
 
 
-
 // -------------------------
 void SyntaxTree_Test( void )
 {
@@ -89,8 +88,7 @@ void SyntaxTree_Test( void )
 
 
 	// Wypisz strukturę drzewa parsowania
-	theRoot->Accept( PrintVisitor() );	// Przekaż tymczasowy obiekt jako argument
-
+	theRoot->Accept( evom( PrintVisitor() ) );	
 
 
 	// ------------------------------

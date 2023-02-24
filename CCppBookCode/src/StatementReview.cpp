@@ -378,9 +378,9 @@ void LoopStatements( void )
 	{
 
 		const size_t kSize = 16;
-		std::array< int, kSize > tab;	// zdefiniuj tablicê wartoœci int
+		std::array< int, kSize > tab;	// zdefiniuj tablicï¿½ wartoï¿½ci int
 
-		// wype³nij wszystkie wartoœci zerami
+		// wypeï¿½nij wszystkie wartoï¿½ci zerami
 		int i = 0;
 		while( i < tab.size() )
 			tab[ i ++ ] = 0;
@@ -394,9 +394,9 @@ void LoopStatements( void )
 	{
 
 		const size_t kSize = 16;
-		std::array< int, kSize > tab;	// zdefiniuj tablicê wartoœci int
+		std::array< int, kSize > tab;	// zdefiniuj tablicï¿½ wartoï¿½ci int
 
-		// wype³nij wszystkie wartoœci zerami – bardziej czytelne
+		// wypeï¿½nij wszystkie wartoï¿½ci zerami ï¿½ bardziej czytelne
 		int i = 0;
 		while( i < tab.size() )
 		{
@@ -519,7 +519,7 @@ void LoopStatements( void )
 
 		/* Read comma separated values */
 		/* However, everything can happen in the file */
-		int r = 0, c = 0;
+		/* int r = 0, c = 0; */
 
 		file_proc_error:
 			printf( "Error reading params from a file. Exiting...\n" );
@@ -593,11 +593,11 @@ void ArrayExample( void )
 	char * message = R"(
 							On the issue of passing arrays into functions, almost all tutorials say
 
-							“You can't pass an array by value because they are not copyable so instead you pass a pointer to its first element”
+							ï¿½You can't pass an array by value because they are not copyable so instead you pass a pointer to its first elementï¿½
 
 							and in doing so they mislead us with a false binary choice. We swallow it so easily because the next thing they tell us is
 
-							“You just have to pass the name of the array and it will automatically decay to a pointer to the first element”.
+							ï¿½You just have to pass the name of the array and it will automatically decay to a pointer to the first elementï¿½.
 
 							As a result the following practice has been canonised:
 							Hide   Copy Code

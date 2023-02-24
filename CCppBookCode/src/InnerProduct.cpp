@@ -17,7 +17,7 @@
 #include <iomanip>
 #include <random>
 #include <numeric>		// dla iloczynu skalarnego
-
+#include <algorithm>
 
 
 

@@ -80,20 +80,20 @@ class HTTP_File_Handle
 			switch( system )
 			{
 				case EHandledSystems::kWindows:
-				fBodyObj = std::make_unique< HTTP_File_Body_Windows >();
-				break;
+					fBodyObj = std::make_unique< HTTP_File_Body_Windows >();
+					break;
 
 				case EHandledSystems::kLinux:
-				fBodyObj = std::make_unique< HTTP_File_Body_Linux >();
-				break;		
+					fBodyObj = std::make_unique< HTTP_File_Body_Linux >();
+					break;		
 
 				case EHandledSystems::kMac:
-				fBodyObj = std::make_unique< HTTP_File_Body_MacOS >();
-				break;		
+					fBodyObj = std::make_unique< HTTP_File_Body_MacOS >();
+					break;		
 
 				default:
-				assert( false );	// nie obsługiwane
-				break;		
+					assert( false );	// nie obsługiwane
+					break;		
 			}
 	
 	

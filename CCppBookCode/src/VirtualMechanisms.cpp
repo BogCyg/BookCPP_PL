@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-
+#include <memory>
 
 
 using std::cout, std::endl;
@@ -324,7 +324,7 @@ struct MPrint_Date_US : public B
 	// Amerykański format daty
 	void Print( void )
 	{
-		std::cout << fMonth << "/" << fDay << '/' << fYear << '\n';
+		std::cout << B::fMonth << "/" << B::fDay << '/' << B::fYear << '\n';
 	}
 };
 
@@ -334,7 +334,7 @@ struct MPrint_Date_Eu : public B
 	// Europejski format daty
 	void Print( void )
 	{
-		std::cout << fDay << "/" << fMonth << '/' << fYear << '\n';
+		std::cout << B::fDay << "/" << B::fMonth << '/' << B::fYear << '\n';
 	}
 };
 

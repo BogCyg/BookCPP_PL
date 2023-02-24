@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <string>
+#include <cmath>
 
 
 #include "Nodes.h"

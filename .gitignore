@@ -17,6 +17,7 @@
 build_linux/
 build_win/
 build_mac/
+build/
 
 FLTK/
 

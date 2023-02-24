@@ -16,11 +16,11 @@ if( WIN32 )
 	message( "Win settings chosen..." )
 elseif( ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin" )
 	set( CMAKE_CXX_FLAGS "-std=c++17 -Wall" )
-	set( CMAKE_CXX_FLAGS_DEBUG "-g -std=c++17 -Wall" )
+	set( CMAKE_CXX_FLAGS_DEBUG "-g -Og -std=c++17 -Wall" )
 	message( "Mac settings chosen..." )
 elseif( UNIX )
-	set( CMAKE_CXX_FLAGS "-std=c++17 -Wall" )
-	set( CMAKE_CXX_FLAGS_DEBUG "-g -std=c++17 -Wall" )
+	set( CMAKE_CXX_FLAGS "-std=c++17 -Wall -pthread" )
+	set( CMAKE_CXX_FLAGS_DEBUG "-g -Og -std=c++17 -Wall -pthread" )
 	message( "Linux settings chosen..." )
 endif()
 
@@ -56,36 +56,56 @@ if( WIN32 )
 					user32.lib
 			)
 
+	# FLTK libraries
+	find_library( 	FLTK_LIBRARY
+			NAMES 			fltkd fltk	fltk_formsd fltk_gld fltk_gl 	libfltk libfltk_forms
+			#PATHS 			../../FLTK/lib/Debug 	../../FLTK/lib/Release 	../../FLTK/lib )
+			PATHS 			../../FLTK/build/lib/Debug 	../../FLTK/build/lib/Release 	../../FLTK/build/lib )	# changed in 2023 after FLTK changed to GitHub
+
+	target_link_libraries( 	${PROJECT_NAME} 
+			PUBLIC 
+				CurrencyCalc_Lib
+				${FLTK_LIBRARY} 
+		)
+
+		
+	# Set the default project 
+	set_property( DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME} )
+
+
 elseif( ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
 
 	find_library( COCOA_LIB Cocoa )
 	target_link_libraries( ${PROJECT_NAME} PUBLIC ${COCOA_LIB} )
 
+
+elseif( UNIX )
+
+
+	# FLTK libraries
+	find_library( 	FLTK_LIBRARY
+			NAMES 			fltk	fltk_forms  fltk_images 	
+			PATHS 			../../FLTK/build/lib )	
+
+	# https://www.fltk.org/doc-1.3/basics.html		
+	#-L/usr/local/lib -lfltk -lXext -lX11 -lm
+
+	find_library( 	SYSTEM_LIBRARY
+			NAMES 			Xext	X11		m	dl	l 	OpenGL	pthread
+			PATHS 			/usr/local/lib )	
+	
+
+	target_link_libraries( 	${PROJECT_NAME} 
+			PUBLIC 
+				CurrencyCalc_Lib
+				${FLTK_LIBRARY} 
+				${SYSTEM_LIBRARY} 		
+				"/usr/lib/x86_64-linux-gnu/libdl.so"
+				)	
+
 endif()
 
 
-
-# Currency Calc library
-find_library( 	CURRENCY_CALC_LIB 
-		NAMES 			CurrencyCalc_Lib 
-		PATHS 			../CurrencyCalc_Lib/lib )
-
-# FLTK libraries
-find_library( 	FLTK_LIBRARY
-		NAMES 			fltkd fltk	fltk_formsd fltk_gld
-		#PATHS 			../../FLTK/lib/Debug 	../../FLTK/lib/Release 	../../FLTK/lib )
-		PATHS 			../../FLTK/build/lib/Debug 	../../FLTK/build/lib/Release 	../../FLTK/build/lib )	# changed in 2023 after FLTK changed to GitHub
-
-target_link_libraries( 	${PROJECT_NAME} 
-			PUBLIC 
-				${CURRENCY_CALC_LIB} 
-				${FLTK_LIBRARY} 
-		)
-
-
-
-# Set the default project 
-set_property( DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME} )
 
 
 message( "CMAKE_BUILD_TYPE is ${CMAKE_BUILD_TYPE}" )

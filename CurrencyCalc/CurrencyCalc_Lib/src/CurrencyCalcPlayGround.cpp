@@ -24,6 +24,7 @@
 
 
 #include "CurrencyCalcPlayGround.h"
+#include "CurrencyExchanger.h"
 
 
 using std::wstring, std::wcout, std::wcin, std::endl;
@@ -55,7 +56,7 @@ namespace CurrExchanger
 	//
 	auto CreateCurExchanger( const wstring & initFileFullPath ) -> CurrExch_Optional
 	{
-		wifstream	inFile( initFileFullPath );
+		wifstream inFile( std::filesystem::path( initFileFullPath ), std::ios::binary );//	inFile( initFileFullPath );
 
 		if( inFile.is_open() == false )
 			return CurrExch_Optional();	// brak pliku ini, brak obiektu, co zwrócić?
@@ -74,6 +75,7 @@ namespace CurrExchanger
 		// Wyświetl dostępne waluty
 		const TCurrencyExchanger::CurrencyMap & cur_map = currencyExchangerObj.GetCurrencyMap();
 
+		setlocale( LC_CTYPE, "pl_PL" ); 
 		wcout << L"Available currencies:" << endl;
 
 		// Użyj powiązania strukturalnego
@@ -147,9 +149,9 @@ namespace CurrExchanger
 	// Wszystkie akcje
 	void Run( void )
 	{
-		namespace fs = std/*::experimental*/::filesystem;
+		namespace fs = std::filesystem;
 
-		wstring iniPath( fs::current_path() / fs::path( initDefaultFileName ) );
+		wstring iniPath( ( fs::current_path() / fs::path( initDefaultFileName ) ).wstring() );
 
 		// Najpierw spróbuj pozyskać bieżący obiekt
 		if( CurrExch_Optional all_my_options { CreateCurExchanger( iniPath ) }; all_my_options )
@@ -194,9 +196,15 @@ namespace OnLine_CurrExchanger
 	wstring local_xml_file_name { L"LastC.xml" };		
 	
 	// Flaga wskazująca bieżący system operacyjny
-	HTTP_File_Handle::EHandledSystems kMyOS { HTTP_File_Handle::EHandledSystems::kWindows };
-
-
+	HTTP_File_Handle::EHandledSystems kMyOS { 
+												#if _WIN32
+													HTTP_File_Handle::EHandledSystems::kWindows
+												#elif __linux__
+													HTTP_File_Handle::EHandledSystems::kLinux
+												#elif macintosh
+													HTTP_File_Handle::EHandledSystems::kMac
+												#endif
+											};
 
 	bool CurExchanger_DownloadCurrencies( const wstring & http_addr, const wstring & local_XML_FullPath )
 	{
@@ -207,19 +215,16 @@ namespace OnLine_CurrExchanger
 
 	void CurExchanger_SaveInitFile( const XML_CurrencyExchanger & obj, const wstring & initFileFullPath )
 	{
+		namespace fs = std::filesystem;	
 		// Zapisz do pliku inicjalizacji
 		// Użyj domyślnego pliku do wczytania walut
-		wofstream	outFile( initFileFullPath );
+		wofstream	outFile( fs::path( initFileFullPath ), std::ios::binary );
+		outFile.imbue( std::locale( "pl_PL.utf8" ) );
 		const XML_CurrencyExchanger::CurrencyMap & cur_map = obj.GetCurrencyMap();
 		transform(	cur_map.cbegin(), cur_map.cend(), 
 					ostream_iterator< TCurrency, wchar_t >( outFile, L"\n" ), 
 					[] ( const XML_CurrencyExchanger::CurrencyMap::value_type & vt ) { return vt.second; } );	
 	}
-
-
-	
-	//using XML_CurrExch_Optional = std::optional< XML_CurrencyExchanger >;
-
 
 
 	// Istnieją dwie opcje zwracania obiektu:
@@ -232,7 +237,7 @@ namespace OnLine_CurrExchanger
 		namespace fs = std::filesystem;		
 
 		// Utwórz nazwę lokalnego pliku XML – jego rodzic jest z initFileFullPath
-		wstring local_xml_full_path( fs::path( initFileFullPath ).parent_path() / local_xml_file_name );
+		wstring local_xml_full_path( ( fs::path( initFileFullPath ).parent_path() / local_xml_file_name ).wstring() );
 
 		if( CurExchanger_DownloadCurrencies( http_XML_FileName, local_xml_full_path ) == true &&
 			currencyExchangerObj.FillCurrencyTableFrom( local_xml_full_path ) == true )
@@ -240,8 +245,8 @@ namespace OnLine_CurrExchanger
 			// Sukces, obiekt zainicjalizowany z internetu
 				
 			// Dodaj walutę referencyjną (PLN) (0xB3 to polska litera ł)
-			currencyExchangerObj.AddCurrency( { L"PLN", L"z\xB3oty-polski", 1.0, 1.0 } );
-			//currencyExchangerObj.AddCurrency( { L"PLN", L"zloty-polski", 1.0, 1.0 } );
+			//currencyExchangerObj.AddCurrency( { L"PLN", L"z\xB3oty-polski", 1.0, 1.0 } );
+			currencyExchangerObj.AddCurrency( { L"PLN", L"złoty-polski", 1.0, 1.0 } );
 
 			// Zaktualizuj plik inicjalizacji przy użyciu nowych danych
 			CurExchanger_SaveInitFile( currencyExchangerObj, initFileFullPath );
@@ -251,12 +256,13 @@ namespace OnLine_CurrExchanger
 			// Nie można zainicjalizować z internetu,
 			// więc, jako ostatnia deska ratunku, poszukajmy pliku inicjalizacji
 			
-			wifstream	inFile( initFileFullPath );
-
+			wifstream	inFile( fs::path( initFileFullPath ), std::ios::binary );
+			
 			if( inFile.is_open() == false )
 				return XML_CurrExch_Optional();	// brak pliku inicjalizacji, zwróć pusty obiekt optional
 
 			// Wczytaj dane z pliku
+			inFile.imbue( std::locale( "pl_PL.utf8" ) );
 			inFile >> currencyExchangerObj;
 		}
 
@@ -267,9 +273,9 @@ namespace OnLine_CurrExchanger
 	// Wszystkie akcje
 	void Run( void )
 	{
-		namespace fs = std/*::experimental*/::filesystem;
+		namespace fs = std::filesystem;
 
-		wstring iniPath( fs::current_path() / fs::path( initDefaultFileName ) );
+		wstring iniPath( ( fs::current_path() / initDefaultFileName ).wstring() );
 
 		// Najpierw spróbuj uzyskać obiekt waluty
 		if( XML_CurrExch_Optional all_my_options { CreateCurExchanger( nbp_addr, iniPath ) }; all_my_options )
@@ -288,3 +294,9 @@ namespace OnLine_CurrExchanger
 }	// koniec przestrzeni nazw CurrExchanger
 
 
+
+// Test a aplikacji
+// int main()
+// {
+// 	CurrExchanger::OnLine_CurrExchanger::Run();
+// }

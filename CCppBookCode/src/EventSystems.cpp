@@ -16,7 +16,7 @@
 #include <list>
 #include <iostream>
 #include <cassert>
-
+#include <memory>
 
 
 
@@ -31,7 +31,7 @@ namespace EventSystem
 
 	public:
 
-		virtual ~THandler() = 0					// virtual dla poprawnego dziedziczenia
+		virtual ~THandler() //= 0					// virtual dla poprawnego dziedziczenia
 		{ std::cout << "~H()" << std::endl; }	// Czysto wirtualne funkcje mogą mieć ciało
 												// Główna funkcja obsługi zdarzenia ==> obiekt funkcyjny
 		virtual void operator () ( void ) = 0;	// Czysto wirtualny w celu zdefiniowania INTERFEJSU dla klas pochodnych

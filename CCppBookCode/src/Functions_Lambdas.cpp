@@ -375,7 +375,8 @@ void multi_print_helper_test( void )
 template < typename ... Args >
 auto make_tuple_and_log( Args && ... vargs )
 {
-	multi_print_helper( ofstream( "mmpp.txt", ios::app ), "\t", vargs ... ) << endl;
+	ofstream o( "mmpp.txt", ios::app );
+	multi_print_helper( o, "\t", vargs ... ) << endl;
 	return make_tuple( vargs ... ); // Call stl::make_tuple
 }
 

@@ -16,7 +16,8 @@
 #include <fstream>
 #include <array>
 #include <cassert>
-
+#include <memory>
+#include <cstring>
 
 
 

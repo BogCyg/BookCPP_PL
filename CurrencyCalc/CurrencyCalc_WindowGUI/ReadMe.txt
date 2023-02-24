@@ -1,5 +1,11 @@
 
-To build a project do as follows:
+To build a project first you need to install FLTK.
+Please, visit 
+https://www.fltk.org/
+and follow the steps to build the FLTK library depending on your OS.
+Please note that FLTK should go to the FLTK directory (capital letters).
+
+Then do as follows:
 
 1. Depending on your OS change directory to the one:
 build_win

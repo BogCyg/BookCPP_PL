@@ -229,8 +229,6 @@ void OpenMP_MultMatrix_Test( void )
 
 void OpenMP_MultMatrix_Test_1( void )
 {
-	const auto kCols { 1024 }, kRows { 1024 };
-
 	const auto N = { 1024, 2048, 4096 };
 
 	std::cout << "Matrix multiplication test ..." << std::endl;
@@ -252,7 +250,7 @@ void OpenMP_MultMatrix_Test_1( void )
 
 
 		std::cout << "Elems: " << dim << std::endl;
-		std::cout << "Middle elem val: " << c[ kCols / 2 ][ kCols / 2 ] << std::endl;
+		std::cout << "Middle elem val: " << c[ dim / 2 ][ dim / 2 ] << std::endl;
 		std::cout << "Computation time: " << exec_time << std::endl << std::endl;
 
 	}

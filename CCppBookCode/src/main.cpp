@@ -21,7 +21,7 @@
 #include <cassert>
 #include <filesystem>
 #include <string>
-
+#include <cmath>
 
 
 
@@ -305,7 +305,7 @@ int main( void )
 				TestFunctionTimeMeasurement();
 
 
-				DisplayPathParts( fs::current_path() );
+				DisplayPathParts( fs::current_path().wstring() );
 
 				RangeTest();
 
@@ -313,7 +313,7 @@ int main( void )
 				fun_perform_timer_test();
 
 
-				CreateDirAndFiles( fs::current_path(), L"Playground" );
+				CreateDirAndFiles( fs::current_path().wstring(), L"Playground" );
 
 
 				regex_test();

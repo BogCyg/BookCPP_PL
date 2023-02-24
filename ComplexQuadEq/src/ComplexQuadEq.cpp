@@ -11,8 +11,9 @@
 
 
 
-
+#include <cmath>
 #include "ComplexQuadEq.h"
+
 
 
 

@@ -17,6 +17,8 @@
 #include <vector>
 #include <string>
 #include <cassert>
+#include <algorithm>
+#include <tuple>
 
 #include <fstream>
 #include <filesystem>
@@ -45,7 +47,7 @@ void PrintDirTree( const fs::path & inDirPath, const wstring & separator = L"" )
 		if( fs::is_directory( file_obj ) )
 		{
 			wcout << separator << file_obj.path().filename() << endl;
-			auto len = wstring( file_obj.path().filename() ).size();
+			auto len = wstring( file_obj.path().filename().wstring() ).size();
 			wcout << separator << wstring( len, L'-' ) << endl;
 
 			PrintDirTree( file_obj, separator + L"\t" );	// recursive call - go inside the tree
@@ -282,7 +284,7 @@ void FileIteratorTest( void )
 		back_inserter( file_zip ),
 
 		[]( const auto & fIter ){ return fs::is_regular_file( fIter ) ?	
-											std::make_tuple( fIter.path(), fs::file_size( fIter ) ) : 
+											std::make_tuple( fIter.path().wstring(), fs::file_size( fIter ) ) : 
 											std::make_tuple( L"", 0 ); }	// unary op for transform
 
 	);

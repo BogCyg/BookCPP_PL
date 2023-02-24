@@ -104,7 +104,7 @@ int main( int argc, char ** argv )
 
 
 /* Recursivly print bits in reverse order thanks to recursion. */
-void ToBinConvert( unsigned val )
+void ToBinConvert( unsigned int val )
 {
 	if( val > 1 )
 		ToBinConvert( val >> 1 );	/* Recursive call */

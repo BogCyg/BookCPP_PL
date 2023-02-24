@@ -48,19 +48,29 @@ void DivOperator::Accept( TVisitor & v ) const
 	v.Visit( * this );
 }
 
+
+template <>
 void NumberLeafNode::Accept( TVisitor & v ) const
 {
 	v.Visit( * this );
 }
 
 
+template <>
+Node_UP NumberLeafNode::Clone( void ) const
+{
+	return std::make_unique< ValueLeafNode< double > >( * this );
+}
+
+
+
 // ----------------------------------------
 
 
-Node_UP NumberLeafNode::Clone( void ) const
-{
-	return std::make_unique< NumberLeafNode >( * this );
-}
+// Node_UP NumberLeafNode::Clone( void ) const
+// {
+// 	return std::make_unique< NumberLeafNode >( * this );
+// }
 
 
 Node_UP PlusOperator::Clone( void ) const

@@ -11,6 +11,7 @@
 
 
 
+#include "ExpressionTreeBuilderInterpreter.h"
 
 
 void SimpleExpression_Test( void );
@@ -19,14 +20,18 @@ void RPN_Value_Test( void );
 void RPN_Tree_Test( void );
 
 
-void main( void )
+int main()
 {
 
-	//SimpleExpression_Test();			
-	//SyntaxTree_Test();
+	SimpleExpression_Test();	
 
+#if BUILD_THE_TREE == 1
+	SyntaxTree_Test();
+#else
 	RPN_Value_Test();
-	//RPN_Tree_Test();
+	RPN_Tree_Test();
+#endif	
+
 
 }
 

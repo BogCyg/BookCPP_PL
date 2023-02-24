@@ -12,6 +12,7 @@
 
 
 // Dołączmy definicję klasy TComplex
+#include <cmath>
 #include "Complex.h"
 
 

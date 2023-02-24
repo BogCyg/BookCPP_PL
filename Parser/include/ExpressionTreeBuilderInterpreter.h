@@ -196,7 +196,7 @@ class ExpressionTreeBuilderInterpreter : public TSimpleExpressionInterpreter
 		//
 		void CreateSubTree( std::unique_ptr< BinOperator > bin_op )
 		{
-#define BUILD_THE_TREE 0
+#define BUILD_THE_TREE 1
 #if BUILD_THE_TREE == 1			
 			
 			assert( fNodeStack.GetStackSize() >= 2 );
@@ -216,6 +216,10 @@ class ExpressionTreeBuilderInterpreter : public TSimpleExpressionInterpreter
 
 };
 
+
+
+
+template< typename T > T & evom( T && t ) { return t; }		// pomocnicza funkcja "anty" move <==> evom
 
 
 

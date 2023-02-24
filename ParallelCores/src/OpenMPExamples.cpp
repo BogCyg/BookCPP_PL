@@ -15,7 +15,7 @@
 #include <iomanip>
 #include <vector>
 #include <string>
-
+#include <algorithm>
 #include <random>
 #include <limits>
 #include <numeric>		// for inner product

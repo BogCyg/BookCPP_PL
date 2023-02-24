@@ -13,6 +13,7 @@
 
 #include "XML_CurrencyExchanger.h"
 #include <fstream>
+#include <filesystem>
 
 using namespace std;
 
@@ -22,12 +23,17 @@ namespace CppBook
 
 bool	XML_CurrencyExchanger::FillCurrencyTableFrom( const wstring & currencyFile )
 {
-
-	wifstream	inFile( currencyFile );
+	wifstream	inFile( std::filesystem::path( currencyFile ), std::ios::binary );
 
 	if( ! inFile.is_open() )
 		return false;				// nie można otworzyć pliku wejściowego
 
+	// Ustaw prawidłowe kodowanie znaków dla tego pliku - z NBP wiemy, że to 88592 (ale ogólnie trzeba sprawdzić)
+	inFile.imbue( std::locale( "pl_PL.iso88592" ) );	// jeśli nie działa to sprawdź zainstalowane "locale" w systemie
+														// Np. na UBUNTU
+														// 		locale -a
+														// jeśli nie ma "pl_PL.iso88592", to zainstaluj
+														// 		sudo locale-gen pl_PL
 
 	// Czytaj linia po linii i szukaj wzorców
 
@@ -111,7 +117,7 @@ bool	XML_CurrencyExchanger::FillCurrencyTableFrom( const wstring & currencyFile 
 				// Jesteśmy gotowi do wstawienia nowego rekordu waluty
 				try
 				{	
-					// oże zgłosić wyjątek, np. pusty ciąg znaków, zły format itd.
+					// Może zgłosić wyjątek, np. pusty ciąg znaków, zły format itd.
 					AddCurrency( { curr_code, curr_name, stod( buy_rate_str ), stod( sell_rate_str ) } );
 				}
 				catch( ... )

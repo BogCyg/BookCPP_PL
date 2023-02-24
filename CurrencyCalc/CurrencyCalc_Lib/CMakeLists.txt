@@ -16,11 +16,11 @@ if( WIN32 )
 	message( "Win settings chosen..." )
 elseif( ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin" )
 	set( CMAKE_CXX_FLAGS "-std=c++17 -Wall" )
-	set( CMAKE_CXX_FLAGS_DEBUG "-g -std=c++17 -Wall" )
+	set( CMAKE_CXX_FLAGS_DEBUG "-g -Og -std=c++17 -Wall" )
 	message( "Mac settings chosen..." )
 elseif( UNIX )
 	set( CMAKE_CXX_FLAGS "-std=c++17 -Wall" )
-	set( CMAKE_CXX_FLAGS_DEBUG "-g -std=c++17 -Wall" )
+	set( CMAKE_CXX_FLAGS_DEBUG "-g -Og -std=c++17 -Wall" )
 	message( "Linux settings chosen..." )
 endif()
 
@@ -46,19 +46,38 @@ add_library( ${PROJECT_NAME} STATIC ${SOURCES} )
 
 # Make sure the compiler can find include files for the library
 # when other libraries or executables link to this one
-target_include_directories ( ${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} )
+target_include_directories ( ${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include )
+
+
+# On Linux we need CURL library for the Internet connection
+if( UNIX )
+
+	find_package( CURL REQUIRED ) 									# first find it
+
+	if( CURL_FOUND )
+		message( "CURL found and linked" )
+		include_directories( ${CURL_INCLUDE_DIR} )						# add CURL's include dir
+		target_link_libraries( ${PROJECT_NAME} ${CURL_LIBRARIES} )		# link to the CURL library
+	elseif()
+		message( "Cannot find CURL - try to install and try again" )
+		# sudo apt-get install curl
+		# sudo apt-get install libssl-dev libcurl4-openssl-dev
+	endif()
+
+
+endif()
 
 
 
-INSTALL(
-  	TARGETS ${PROJECT_NAME}
-  	ARCHIVE DESTINATION ${CMAKE_SOURCE_DIR}/lib
-  	LIBRARY DESTINATION ${CMAKE_SOURCE_DIR}/lib
-  	COMPONENT library
-)
+# INSTALL(
+#   	TARGETS ${PROJECT_NAME}
+#   	ARCHIVE DESTINATION ${CMAKE_SOURCE_DIR}/lib
+#   	LIBRARY DESTINATION ${CMAKE_SOURCE_DIR}/lib
+#   	COMPONENT library
+# )
 
 
-set( CMAKE_VS_INCLUDE_INSTALL_TO_DEFAULT_BUILD 1 )
+#set( CMAKE_VS_INCLUDE_INSTALL_TO_DEFAULT_BUILD 1 )
 
 
 message( "CMAKE_BUILD_TYPE is ${CMAKE_BUILD_TYPE}" )

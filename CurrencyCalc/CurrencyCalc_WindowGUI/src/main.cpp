@@ -10,7 +10,7 @@
 // ==========================================================================
 
 
-#include <FL/FL_ask.H>
+#include <FL/fl_ask.H>
 #include <filesystem>
 
 #include "CurCalc_GUI.h"
@@ -24,12 +24,12 @@ int main()
 
 	namespace fs = std::filesystem;
 	// Pozyskaj pełną ścieżkę do pliku inicjalizacji
-	std::wstring iniPath( fs::current_path() / fs::path( CurrExchanger::initDefaultFileName ) );
+	std::wstring iniPath( ( fs::current_path() / CurrExchanger::initDefaultFileName ).wstring() );
 
 	// Utwórz obiekt wymiany walut
 	auto curExchObj = OL_CE::CreateCurExchanger( OL_CE::nbp_addr, iniPath );
 	if( ! curExchObj )
-		return fl_alert( "Cannot load currency information (no ini file, no Internet) - exiting ..." ), -1;	// Wyjdź
+	 	return fl_alert( "Cannot load currency information (no ini file, no Internet) - exiting ..." ), -1;	// Wyjdź
 
 	// Utwórz obiekt GUI z dostarczonym obiektem wymiany walut
 	CC_GUI	gCC_GUI( * curExchObj );		
@@ -37,7 +37,5 @@ int main()
 	// Uruchom aplikację
 	return gCC_GUI.Create_GUI();
 }
-
-
 
 

@@ -1,4 +1,44 @@
 
+Przykładowy szablon do tworzenia własnych projektów użytkownika.
+
+Zakładając, że twój projekt nazywa się „MyPro”, wykonaj następujące czynności:
+
+1. Utwórz katalog o nazwie „MyPro” i skopiuj do niego wszystkie pliki
+i foldery z „EmptyPro”.
+
+2. W pliku ./MyPro/CMakeLists.txt znajdź linię
+set(PROJECT_NAME PustyPro)
+i zmień „EmptyPro” na nazwę swojego projektu, np. „MyPro” w naszym przykładzie
+set(PROJECT_NAME MyPro)
+
+3. Skopiuj/utwórz WSZYSTKIE swoje pliki źródłowe do ./MyPro/src
+i WSZYSTKIE nagłówki do pliku ./MyPro/include
+
+4. Zbuduj swój projekt zgodnie ze wspólnym schematem (poniżej).
+
+
+=================================
+Aby zbudować projekt, wykonaj następujące czynności:
+
+
+1. W zależności od systemu operacyjnego zmień katalog na ten:
+build_win
+build_linux
+build_mac
+(lub po prostu stwórz swój "build")
+
+2. Otwórz terminal i ustaw bieżący katalog na powyższy.
+
+3. Z poziomu katalogu build_xxx napisz
+cmake ..
+
+4. Przejdź do katalogu build_xxx i uruchom swój projekt.
+
+
+
+=================================
+=================================
+
 The purpose of this project is to provide a template project
 for user's own projects. 
 Assuming your project is named "MyPro", proceed as follows:

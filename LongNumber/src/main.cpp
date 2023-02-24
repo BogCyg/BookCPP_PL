@@ -12,9 +12,9 @@
 
 #include <iostream>
 #include <cassert>
+#include <cmath>
 
-
-
+using std::log;
 
 
 void LongNumbers_Test( void );

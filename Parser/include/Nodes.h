@@ -111,16 +111,13 @@ public:
 	V GetValue( void ) const { return fVal; }
 
 	// Przyjmij wizytatora
-	void Accept( TVisitor & v ) const override
-	{
-		v.Visit( * this );
-	}
+	void Accept( TVisitor & v ) const override;
 
 public:
 
 	// Stwórz swoją kopię
 	Node_UP Clone( void ) const override;
-
+	
 };
 
 

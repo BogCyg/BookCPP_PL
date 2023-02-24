@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <fstream>
 #include <iterator>
+#include <cmath>
 
 #include "range.h"
 

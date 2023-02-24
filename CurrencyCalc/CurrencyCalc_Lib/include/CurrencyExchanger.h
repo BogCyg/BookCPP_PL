@@ -123,5 +123,6 @@ class TCurrencyExchanger
 };
 
 
+
 }		// Koniec przestrzeni nazw CppBook
 

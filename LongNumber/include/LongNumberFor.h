@@ -17,6 +17,7 @@
 #include <iostream>
 #include <algorithm>
 #include <exception>
+#include <cstring>
 
 
 using std::string;
@@ -192,7 +193,7 @@ class TLongNumberFor
 		{
 			public:
 
-				using MotherClass = typename TLongNumberFor< MAX_NUMBERS > ;
+				using MotherClass = TLongNumberFor< MAX_NUMBERS > ;
 
 			private:
 
@@ -287,7 +288,7 @@ class TLongNumberFor
 
 /////////////////////////////////////////////////////////////////////////////////
 // Operator wstawiania
-template < typename auto MAX_NUMBERS >
+template < auto MAX_NUMBERS >
 ostream & operator << ( ostream & o, const TLongNumberFor< MAX_NUMBERS > & longNumb )
 {
 	for( auto i { TLongNumberFor< MAX_NUMBERS >::kMaxNumbers - 1 }; i >= 0; -- i )
@@ -298,7 +299,7 @@ ostream & operator << ( ostream & o, const TLongNumberFor< MAX_NUMBERS > & longN
 
 /////////////////////////////////////////////////////////////////////////////////
 // Operator wyodrębniania
-template < typename auto MAX_NUMBERS >
+template < auto MAX_NUMBERS >
 istream & operator >> ( istream & i, TLongNumberFor< MAX_NUMBERS > & longNumb )
 {
 	string str;

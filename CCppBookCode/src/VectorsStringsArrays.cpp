@@ -18,11 +18,13 @@
 #include <iostream>
 #include <iterator>
 #include <random>
+#include <memory>
 
 #include <cassert>
 
 #include <array>
 #include <time.h>
+
 
 #include "range.h"
 
@@ -195,7 +197,7 @@ void String_Test_1( void )
 	// ----------
 
 	// We create a vector of strings and enter the first one
-	// To enter one \ we need to put \\  
+	/* To enter one \ we need to put \\ */ 
 	vector< string > paths { "C:\\Projects\\data.csv" };
 
 	// Split full_path into path core and file name 

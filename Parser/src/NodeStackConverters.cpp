@@ -16,6 +16,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 
 #include "ExpressionTreeBuilderInterpreter.h"
@@ -250,7 +251,7 @@ void RPN_Tree_Test( void )
 
 
 	// Print structure of the parsing tree
-	theRoot->Accept( PrintVisitor() );
+	theRoot->Accept( evom( PrintVisitor() ) );
 
 
 	// Evaluate the expression

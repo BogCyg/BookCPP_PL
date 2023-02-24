@@ -1,17 +1,20 @@
 
 To build a project do as follows:
 
-1. Depending on your OS change directory to the one:
-build_win
-build_linux
-build_mac
+1. Create and open a build directory, e.g. from the CurrencyCalc level:
+mkdir build
+cd build
 
-2. Open terminal and set current directory to the above one.
-
-3. type 
+2.type 
 cmake ..
 
-4. Go to the build_xxx directory and launch your project.
+3. Go to the build directory and 
+- if using Visual Studio, launch your project
+- if using Visual Studio Code, open folder
+- if in the Linux terminal, type:
+    make
+
+    
 
 
 

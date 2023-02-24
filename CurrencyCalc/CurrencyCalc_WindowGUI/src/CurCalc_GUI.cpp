@@ -15,9 +15,9 @@
 
 
 // grupa dyrektyw #include (FLTK & SL)
-#include <FL/Fl.h>
-#include <FL/Fl_Box.h>
-#include <FL/Fl_Window.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Box.H>
+#include <FL/Fl_Window.H>
 #include <FL/Fl_Double_Window.H>
 
 #include <FL/Fl_Button.H>
@@ -253,8 +253,6 @@ int CC_GUI::Create_GUI( void )
 	const int kChoiceWidget_h = kEdit_h;
 	
 	
-	const XCE::CurrencyMap & theMap = fXML_CurrencyExchanger.GetCurrencyMap();
-
 	vector< Fl_Menu_Item >	menuItemVec;
 
 
