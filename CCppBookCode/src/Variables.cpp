@@ -1,5 +1,13 @@
 // ==========================================================================
 //
+// Oprogramowanie napisane przez prof. Bogusława Cyganka do użytku z książką:
+// ==> Programowanie w języku C++. Wprowadzenie dla inżynierów. PWN 2023 <==
+//
+// Oprogramowanie jest dostarczane w stanie takim, w jakim jest, i do celów edukacyjnych
+// bez żadnych gwarancji ani odpowiedzialności za jego użycie w jakiejkolwiek aplikacji.
+//
+// ==========================================================================
+//
 // Software written by Boguslaw Cyganek (C) to be used with the book:
 // INTRODUCTION TO PROGRAMMING WITH C++ FOR ENGINEERS
 // Published by Wiley, 2020
@@ -20,7 +28,7 @@
 #include <cstring>	// for memset
 #include <string>
 #include <limits>	// dla limitów typów prostych
-
+#include <locale>
 #include <cmath>	// for math function
 
 
@@ -122,25 +130,22 @@ void MoreOnBasicTypes( void )
 	cout	<< "We " << ( longFitFlag ? "can" : "cannot" ) 
 			<< " store 11 digits using the long type" << endl;
 
-#if _WIN32
-	// We need this in Windows to print Unicode characters in the console window
-	auto old_console_mode =	_setmode( _fileno(stdout), _O_U16TEXT );
-#endif
 
-	wchar_t pl_letter = L'¥';
+	// Musimy ustawić odpowiedni tryb wyświetlania znaków międzynarodowych
+	std::string prev_locale = std::setlocale( LC_CTYPE, "pl_PL" );
+
+	wchar_t pl_letter = L'Ł';
 	wcout << pl_letter << L" needs " << sizeof( pl_letter ) << L" bytes." << endl;
 	
-	wstring holiday_pl( L"œwiêto" );
+	wstring holiday_pl( L"Święto" );
 
 	// Nie możemy tu użyć sizeof - musimy wywołać size()
 	size_t holiday_pl_len = holiday_pl.size();
 
 	wcout << holiday_pl << L" has " << holiday_pl_len << L" characters\n";
 
-#if _WIN32
-	// Restore the previous mode of the console 
-	setmode( _fileno(stdout), old_console_mode );
-#endif
+	if( prev_locale.length() > 0 )
+		std::setlocale( LC_CTYPE, prev_locale.c_str() );	// Przywróć poprzedni tryb wyświetlania
 
 }
 

@@ -12,8 +12,8 @@ set( CMAKE_BUILD_TYPE Debug )
 #[[ADD_DEFINITIONS(-g++ -O2 -fsigned-char -freg-struct-return -Wall -W -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Winline -Werror)]]
 
 if( WIN32 )
-	set( CMAKE_CXX_FLAGS "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /std:c++17 /D_UNICODE /DUNICODE" )
-	set( CMAKE_CXX_FLAGS_DEBUG "/MDd /Zi /Ob0 /Od /RTC1 /std:c++17 /D_UNICODE /DUNICODE" )
+	set( CMAKE_CXX_FLAGS "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /std:c++17 /Za /D_UNICODE /DUNICODE" )
+	set( CMAKE_CXX_FLAGS_DEBUG "/MDd /Zi /Ob0 /Od /RTC1 /std:c++17 /Za /D_UNICODE /DUNICODE" )
 	message( "Win settings chosen..." )
 elseif( ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin" )
 	set( CMAKE_CXX_FLAGS "-std=c++17 -Wall" )
