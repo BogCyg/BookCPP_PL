@@ -260,7 +260,7 @@ const C GetCircleArea( const C radius )
 
 // Zwraca n-ty element ciągu Fibonacciego.
 // Funkcja rekurencyjna
-const int	FiboRecursive( const int n )
+int	FiboRecursive( const int n )
 {
 	assert( n < 100 );	// "bezpiecznik" chroniący przed przepełnieniem stosu
 

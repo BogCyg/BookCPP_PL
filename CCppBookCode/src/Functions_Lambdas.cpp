@@ -83,7 +83,7 @@ void LambdaTestFun_0( void )
 	generate_n( back_inserter( vec ), 10, rand );
 
 	// Print only if element less than 100
-	copy_if( vec.begin(), vec.end(), ostream_iterator< int >( cout, " " ), [] ( auto x ) { return x < 100; } );
+	copy_if( vec.begin(), vec.end(), ostream_iterator< int >( cout, " " ), [] ( auto x ) { return /*x < 100*/x % 2 != 0; } );
 
 
 	cout << endl;
@@ -100,7 +100,7 @@ void LambdaTestFun_1( void )
 	// Fill odd_vals with odd values
 	char counter {};
 	transform( odd_vals.begin(), odd_vals.end(), odd_vals.begin(), 
-			// Caption [& counter] used to pass counter by reference
+			// Capture [& counter] used to pass counter by reference
 			// auto & is an empty placeholder for the argument passed by transform
 			[& counter]( auto & ){ return 2 * counter ++ + 1; } 
 	);
@@ -128,14 +128,14 @@ void LambdaTestFun_2( void )
 	std::srand( (unsigned int) time( 0 ) );		// seed random generator 
 
 	// Generated value can be from 0 .. max_val-1
-	// We could use default caption [=] to access RAND_MAX;
+	// We could use default capture [=] to access RAND_MAX;
 	// However, a better way is to create a local copy rm
 	// via the "init capture" (generalized captures).
 	// -> int to explicitly convert return value from double to int
 	auto rand_index = [ rm = RAND_MAX ] ( const int max_val ) -> int 
 	{ 
-		return	static_cast< double >( std::rand() * max_val )	// static_cast to make
-			/	static_cast< double >( rm + 1 );				// division on double
+		return static_cast< double >( std::rand() ) * max_val		// static_cast to make
+				/ ( static_cast< double >( rm ) + 1. );				// division on double
 	};
 
 
@@ -192,12 +192,12 @@ void LambdaTestFun_3( void )
 		string	operator() ( const int kPasswordLen = 8 )
 		{
 			// Generated value can be from 0 .. max_val-1
-			// Caption [=] to access RAND_MAX
+			// Capture [=] to access RAND_MAX
 			// -> int to explicitly convert return value from double to int
 			auto rand_index = [=] ( const int max_val ) -> int 
 			{ 
-				return	static_cast< double >( rand() * max_val ) 
-					/	static_cast< double >( RAND_MAX + 1 ); 
+				return static_cast< double >( std::rand() ) * max_val		// static_cast to make
+						 / ( static_cast< double >( RAND_MAX ) + 1. );		// division on double
 			};
 
 			string pwd;

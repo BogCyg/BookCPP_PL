@@ -97,7 +97,7 @@ namespace CppBook
 	// Zagnieżdżona przestrzeń nazw
 	namespace LTimer
 	{
-		const int kIterations = 10;
+		/*const*/ int kIterations = 10;
 
 		///////////////////////////////////////////////////////////
 		// Lambda do pomiaru czasu wykonywania funkcji przyjmującej dowolny
